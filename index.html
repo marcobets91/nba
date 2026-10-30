@@ -5,10 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Visualizador de Apuestas NBA - Edges & Filtros</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
     <script>
-        tailwind.config = {
-            darkMode: 'class',
-        }
+        tailwind.config = { darkMode: 'class' }
     </script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
@@ -22,7 +21,7 @@
             <h1 class="text-3xl font-black tracking-tight flex items-center gap-3">
                 <i class="fa-solid fa-basketball text-amber-500"></i> NBA Betting Visualizer & Edges
             </h1>
-            <p class="text-slate-500 dark:text-slate-400 text-sm mt-1">Panel de análisis cuantitativo con filtros avanzados y ponderación ATS</p>
+            <p class="text-slate-500 dark:text-slate-400 text-sm mt-1">Actualización automática desde GitHub CSV</p>
         </div>
         
         <div class="flex items-center gap-3">
@@ -41,7 +40,12 @@
         </div>
     </header>
 
-    <div id="view-dashboard" class="space-y-6">
+    <div id="loading" class="text-center py-20">
+        <i class="fa-solid fa-spinner fa-spin text-4xl text-amber-500 mb-3"></i>
+        <p class="text-slate-500 font-bold">Cargando y procesando archivos CSV desde GitHub...</p>
+    </div>
+
+    <div id="mainContent" class="hidden space-y-6">
         <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-300 dark:border-slate-800 shadow-sm grid grid-cols-1 md:grid-cols-4 lg:grid-cols-6 gap-4 items-end">
             <div>
                 <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">Buscar equipo</label>
@@ -99,12 +103,24 @@
 
     <div id="view-models" class="hidden space-y-6">
         <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-300 dark:border-slate-800 shadow-xl">
-            <h2 class="text-xl font-bold text-slate-900 dark:text-white mb-2 flex items-center gap-2">
-                <i class="fa-solid fa-ranking-star text-amber-500"></i> Calificación de Modelos (Fórmula ATS 60%)
-            </h2>
-            <p class="text-sm text-slate-500 dark:text-slate-400 mb-6">Haz clic en los encabezados para ordenar por variable. Activa o desactiva modelos para recalcular los consensos en tiempo real.</p>
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-4">
+                <div>
+                    <h2 class="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                        <i class="fa-solid fa-ranking-star text-amber-500"></i> Calificación de Modelos (Fórmula ATS 60%)
+                    </h2>
+                    <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Haz clic en los encabezados para ordenar por variable.</p>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button onclick="setAllModels(true)" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1.5 rounded-lg text-xs font-bold transition shadow">
+                        <i class="fa-solid fa-check-double mr-1"></i> Activar Todos
+                    </button>
+                    <button onclick="setAllModels(false)" class="bg-slate-600 hover:bg-slate-700 text-white px-3 py-1.5 rounded-lg text-xs font-bold transition shadow">
+                        <i class="fa-solid fa-xmark mr-1"></i> Desactivar Todos
+                    </button>
+                </div>
+            </div>
             
-            <div class="overflow-x-auto">
+            <div class="overflow-x-auto mt-4">
                 <table class="w-full text-left border-collapse">
                     <thead>
                         <tr class="border-b border-slate-200 dark:border-slate-800 text-xs text-slate-500 uppercase tracking-wider bg-slate-50 dark:bg-slate-950">
@@ -124,442 +140,188 @@
     </div>
 
     <script>
-        const modelStats = {
-  "Line": {
-    "ats": 0.0,
-    "abs_err": 12.8028,
-    "bias": 0.02817,
-    "mean_square": 425.789,
-    "score": 39.58,
-    "active": true
-  },
-  "Sagarin Rating": {
-    "ats": 0.46479,
-    "abs_err": 11.8513,
-    "bias": 1.44676,
-    "mean_square": 234.473,
-    "score": 86.88,
-    "active": true
-  },
-  "Opening Line": {
-    "ats": 0.5,
-    "abs_err": 11.4085,
-    "bias": 2.12676,
-    "mean_square": 221.993,
-    "score": 90.51,
-    "active": true
-  },
-  "ESPN BPI": {
-    "ats": 0.4507,
-    "abs_err": 11.5541,
-    "bias": 1.83915,
-    "mean_square": 231.915,
-    "score": 85.5,
-    "active": true
-  },
-  "D Ratings.com": {
-    "ats": 0.41176,
-    "abs_err": 11.6225,
-    "bias": 1.51549,
-    "mean_square": 230.385,
-    "score": 81.56,
-    "active": true
-  },
-  "Sonny Moore": {
-    "ats": 0.4507,
-    "abs_err": 12.0004,
-    "bias": 2.68465,
-    "mean_square": 246.095,
-    "score": 85.29,
-    "active": true
-  },
-  "Sagarin Predictor": {
-    "ats": 0.49296,
-    "abs_err": 11.7141,
-    "bias": 1.48085,
-    "mean_square": 231.096,
-    "score": 89.78,
-    "active": true
-  },
-  "Massey Ratings": {
-    "ats": 0.50704,
-    "abs_err": 11.7535,
-    "bias": 2.23859,
-    "mean_square": 241.25,
-    "score": 91.12,
-    "active": true
-  },
-  "Sagarin Golden Mean": {
-    "ats": 0.47887,
-    "abs_err": 11.7641,
-    "bias": 1.71254,
-    "mean_square": 234.028,
-    "score": 88.31,
-    "active": true
-  },
-  "Game Time Decision": {
-    "ats": 0.50746,
-    "abs_err": 11.8873,
-    "bias": 1.94366,
-    "mean_square": 237.775,
-    "score": 91.15,
-    "active": true
-  },
-  "Versus Sports Simulator": {
-    "ats": 0.59155,
-    "abs_err": 12.0237,
-    "bias": 1.41465,
-    "mean_square": 249.705,
-    "score": 99.69,
-    "active": true
-  },
-  "DirectorOfInformation.com": {
-    "ats": 0.50704,
-    "abs_err": 12.3686,
-    "bias": 1.31141,
-    "mean_square": 253.042,
-    "score": 91.04,
-    "active": true
-  },
-  "Sagarin Recent": {
-    "ats": 0.50704,
-    "abs_err": 12.2708,
-    "bias": -0.05901,
-    "mean_square": 250.58,
-    "score": 91.18,
-    "active": true
-  },
-  "Dokter Entropy": {
-    "ats": 0.46479,
-    "abs_err": 11.8285,
-    "bias": 1.60197,
-    "mean_square": 238.667,
-    "score": 86.87,
-    "active": true
-  },
-  "Dunkel Index": {
-    "ats": 0.45455,
-    "abs_err": 14.2355,
-    "bias": 6.26236,
-    "mean_square": 324.115,
-    "score": 84.71,
-    "active": true
-  },
-  "Computer Adjusted": {
-    "ats": 0.47887,
-    "abs_err": 65.6687,
-    "bias": 52.54507,
-    "mean_square": 114166.0,
-    "score": 48.57,
-    "active": true
-  },
-  "Talisman Red": {
-    "ats": 0.4507,
-    "abs_err": 14.2769,
-    "bias": 6.25944,
-    "mean_square": 314.388,
-    "score": 84.31,
-    "active": true
-  }
-};
-        const matchesData = [
-  {
-    "id": 1,
-    "road": {
-      "name": "Chicago Bulls",
-      "abbr": "CHI",
-      "logo": "https://cdn.nba.com/logos/nba/1610612741/global/L/logo.svg"
-    },
-    "home": {
-      "name": "Boston Celtics",
-      "abbr": "BOS",
-      "logo": "https://cdn.nba.com/logos/nba/1610612738/global/L/logo.svg"
-    },
-    "lineopen": 14.5,
-    "line": 15.0,
-    "predictions": {
-      "Sagarin Rating": 11.31,
-      "Sagarin Recent": 8.64,
-      "Sagarin Predictor": 12.91,
-      "Sagarin Golden Mean": 11.71,
-      "DirectorOfInformation.com": 7.83,
-      "Sonny Moore": 15.83,
-      "Dunkel Index": 23.448,
-      "Dokter Entropy": 10.83,
-      "Talisman Red": 16.31,
-      "Massey Ratings": 13.24,
-      "ESPN BPI": 15.08138639
-    }
-  },
-  {
-    "id": 2,
-    "road": {
-      "name": "Detroit Pistons",
-      "abbr": "DET",
-      "logo": "https://cdn.nba.com/logos/nba/1610612765/global/L/logo.svg"
-    },
-    "home": {
-      "name": "Brooklyn Nets",
-      "abbr": "BKN",
-      "logo": "https://cdn.nba.com/logos/nba/1610612751/global/L/logo.svg"
-    },
-    "lineopen": -8.0,
-    "line": -8.0,
-    "predictions": {
-      "Sagarin Rating": -8.84,
-      "Sagarin Recent": -5.13,
-      "Sagarin Predictor": -9.82,
-      "Sagarin Golden Mean": -11.07,
-      "DirectorOfInformation.com": -18.63,
-      "Sonny Moore": -13.29,
-      "Dunkel Index": -19.559,
-      "Dokter Entropy": -9.37,
-      "Talisman Red": 15.7,
-      "Massey Ratings": -10.28,
-      "ESPN BPI": -6.939788854
-    }
-  },
-  {
-    "id": 3,
-    "road": {
-      "name": "Houston Rockets",
-      "abbr": "HOU",
-      "logo": "https://cdn.nba.com/logos/nba/1610612745/global/L/logo.svg"
-    },
-    "home": {
-      "name": "Dallas Mavericks",
-      "abbr": "DAL",
-      "logo": "https://cdn.nba.com/logos/nba/1610612742/global/L/logo.svg"
-    },
-    "lineopen": -6.0,
-    "line": -6.5,
-    "predictions": {
-      "Sagarin Rating": -3.81,
-      "Sagarin Recent": -3.03,
-      "Sagarin Predictor": -3.88,
-      "Sagarin Golden Mean": -4.23,
-      "DirectorOfInformation.com": -3.93,
-      "Sonny Moore": -6.39,
-      "Dunkel Index": -7.322,
-      "Dokter Entropy": -3.44,
-      "Talisman Red": 7.65,
-      "Massey Ratings": -5.0,
-      "ESPN BPI": -4.53847723
-    }
-  },
-  {
-    "id": 4,
-    "road": {
-      "name": "Los Angeles Lakers",
-      "abbr": "LAL",
-      "logo": "https://cdn.nba.com/logos/nba/1610612747/global/L/logo.svg"
-    },
-    "home": {
-      "name": "Golden State Warriors",
-      "abbr": "GSW",
-      "logo": "https://cdn.nba.com/logos/nba/1610612744/global/L/logo.svg"
-    },
-    "lineopen": -2.5,
-    "line": -3.0,
-    "predictions": {
-      "Sagarin Rating": -1.75,
-      "Sagarin Recent": -3.5,
-      "Sagarin Predictor": -1.49,
-      "Sagarin Golden Mean": -1.59,
-      "DirectorOfInformation.com": -6.87,
-      "Sonny Moore": -5.49,
-      "Dunkel Index": -8.515,
-      "Dokter Entropy": -0.84,
-      "Talisman Red": 2.57,
-      "Massey Ratings": -2.01,
-      "ESPN BPI": -4.350122201
-    }
-  },
-  {
-    "id": 5,
-    "road": {
-      "name": "Indiana Pacers",
-      "abbr": "IND",
-      "logo": "https://cdn.nba.com/logos/nba/1610612754/global/L/logo.svg"
-    },
-    "home": {
-      "name": "Miami Heat",
-      "abbr": "MIA",
-      "logo": "https://cdn.nba.com/logos/nba/1610612748/global/L/logo.svg"
-    },
-    "lineopen": 5.0,
-    "line": 8.5,
-    "predictions": {
-      "Sagarin Rating": 1.86,
-      "Sagarin Recent": 2.34,
-      "Sagarin Predictor": 1.57,
-      "Sagarin Golden Mean": 2.52,
-      "DirectorOfInformation.com": 4.89,
-      "Sonny Moore": 3.01,
-      "Dunkel Index": 6.923,
-      "Dokter Entropy": 3.88,
-      "Talisman Red": 7.11,
-      "Massey Ratings": 5.12,
-      "ESPN BPI": 8.2349170479
-    }
-  },
-  {
-    "id": 6,
-    "road": {
-      "name": "LA Clippers",
-      "abbr": "LAC",
-      "logo": "https://cdn.nba.com/logos/nba/1610612746/global/L/logo.svg"
-    },
-    "home": {
-      "name": "Minnesota Timberwolves",
-      "abbr": "MIN",
-      "logo": "https://cdn.nba.com/logos/nba/1610612750/global/L/logo.svg"
-    },
-    "lineopen": 7.5,
-    "line": 7.0,
-    "predictions": {
-      "Sagarin Rating": 9.39,
-      "Sagarin Recent": 3.0,
-      "Sagarin Predictor": 11.55,
-      "Sagarin Golden Mean": 11.11,
-      "DirectorOfInformation.com": -4.91,
-      "Sonny Moore": 9.39,
-      "Dunkel Index": 11.363,
-      "Dokter Entropy": 5.15,
-      "Talisman Red": 4.98,
-      "Massey Ratings": 6.22,
-      "ESPN BPI": 11.544666415
-    }
-  },
-  {
-    "id": 7,
-    "road": {
-      "name": "New York Knicks",
-      "abbr": "NYK",
-      "logo": "https://cdn.nba.com/logos/nba/1610612752/global/L/logo.svg"
-    },
-    "home": {
-      "name": "Philadelphia 76ers",
-      "abbr": "PHI",
-      "logo": "https://cdn.nba.com/logos/nba/1610612755/global/L/logo.svg"
-    },
-    "lineopen": 1.5,
-    "line": -2.0,
-    "predictions": {
-      "Sagarin Rating": 2.74,
-      "Sagarin Recent": 3.2,
-      "Sagarin Predictor": 2.18,
-      "Sagarin Golden Mean": 3.34,
-      "DirectorOfInformation.com": 8.81,
-      "Sonny Moore": 0.81,
-      "Dunkel Index": -1.377,
-      "Dokter Entropy": -0.1,
-      "Talisman Red": 6.49,
-      "Massey Ratings": -3.91,
-      "ESPN BPI": 1.976451739
-    }
-  },
-  {
-    "id": 8,
-    "road": {
-      "name": "Denver Nuggets",
-      "abbr": "DEN",
-      "logo": "https://cdn.nba.com/logos/nba/1610612743/global/L/logo.svg"
-    },
-    "home": {
-      "name": "Phoenix Suns",
-      "abbr": "PHX",
-      "logo": "https://cdn.nba.com/logos/nba/1610612756/global/L/logo.svg"
-    },
-    "lineopen": -4.0,
-    "line": -4.5,
-    "predictions": {
-      "Sagarin Rating": -0.28,
-      "Sagarin Recent": 2.99,
-      "Sagarin Predictor": -1.74,
-      "Sagarin Golden Mean": -0.22,
-      "DirectorOfInformation.com": 8.81,
-      "Sonny Moore": 0.76,
-      "Dunkel Index": -2.63,
-      "Dokter Entropy": 0.55,
-      "Talisman Red": 2.63,
-      "Massey Ratings": -0.13,
-      "ESPN BPI": -1.25259083
-    }
-  },
-  {
-    "id": 9,
-    "road": {
-      "name": "Orlando Magic",
-      "abbr": "ORL",
-      "logo": "https://cdn.nba.com/logos/nba/1610612753/global/L/logo.svg"
-    },
-    "home": {
-      "name": "Toronto Raptors",
-      "abbr": "TOR",
-      "logo": "https://cdn.nba.com/logos/nba/1610612761/global/L/logo.svg"
-    },
-    "lineopen": 5.0,
-    "line": 5.5,
-    "predictions": {
-      "Sagarin Rating": 6.71,
-      "Sagarin Recent": 7.95,
-      "Sagarin Predictor": 6.61,
-      "Sagarin Golden Mean": 5.22,
-      "DirectorOfInformation.com": 4.89,
-      "Sonny Moore": 7.59,
-      "Dunkel Index": 5.633,
-      "Dokter Entropy": 4.53,
-      "Talisman Red": 6.18,
-      "Massey Ratings": 7.85,
-      "ESPN BPI": 1.4892230453
-    }
-  },
-  {
-    "id": 10,
-    "road": {
-      "name": "Charlotte Hornets",
-      "abbr": "CHA",
-      "logo": "https://cdn.nba.com/logos/nba/1610612766/global/L/logo.svg"
-    },
-    "home": {
-      "name": "Washington Wizards",
-      "abbr": "WAS",
-      "logo": "https://cdn.nba.com/logos/nba/1610612764/global/L/logo.svg"
-    },
-    "lineopen": -1.5,
-    "line": -1.5,
-    "predictions": {
-      "Sagarin Rating": 1.25,
-      "Sagarin Recent": 1.5,
-      "Sagarin Predictor": 1.75,
-      "Sagarin Golden Mean": 0.62,
-      "DirectorOfInformation.com": -0.99,
-      "Sonny Moore": -0.09,
-      "Dunkel Index": -8.571,
-      "Dokter Entropy": -0.49,
-      "Talisman Red": 9.78,
-      "Massey Ratings": -4.88,
-      "ESPN BPI": 0.897847817
-    }
-  }
-];
+        let modelStats = {};
+        let matchesData = [];
+
+        const nbaTeamsMeta = {
+            "Atlanta": {name: "Atlanta Hawks", abbr: "ATL", id: 1610612737},
+            "Boston": {name: "Boston Celtics", abbr: "BOS", id: 1610612738},
+            "Brooklyn": {name: "Brooklyn Nets", abbr: "BKN", id: 1610612751},
+            "Charlotte": {name: "Charlotte Hornets", abbr: "CHA", id: 1610612766},
+            "Chicago": {name: "Chicago Bulls", abbr: "CHI", id: 1610612741},
+            "Cleveland": {name: "Cleveland Cavaliers", abbr: "CLE", id: 1610612739},
+            "Dallas": {name: "Dallas Mavericks", abbr: "DAL", id: 1610612742},
+            "Denver": {name: "Denver Nuggets", abbr: "DEN", id: 1610612743},
+            "Detroit": {name: "Detroit Pistons", abbr: "DET", id: 1610612765},
+            "Golden State": {name: "Golden State Warriors", abbr: "GSW", id: 1610612744},
+            "Houston": {name: "Houston Rockets", abbr: "HOU", id: 1610612745},
+            "Indiana": {name: "Indiana Pacers", abbr: "IND", id: 1610612754},
+            "LA Clippers": {name: "LA Clippers", abbr: "LAC", id: 1610612746},
+            "Clippers": {name: "LA Clippers", abbr: "LAC", id: 1610612746},
+            "LA Lakers": {name: "Los Angeles Lakers", abbr: "LAL", id: 1610612747},
+            "Lakers": {name: "Los Angeles Lakers", abbr: "LAL", id: 1610612747},
+            "Memphis": {name: "Memphis Grizzlies", abbr: "MEM", id: 1610612763},
+            "Miami": {name: "Miami Heat", "abbr": "MIA", id: 1610612748},
+            "Milwaukee": {name: "Milwaukee Bucks", abbr: "MIL", id: 1610612749},
+            "Minnesota": {name: "Minnesota Timberwolves", abbr: "MIN", id: 1610612750},
+            "New Orleans": {name: "New Orleans Pelicans", abbr: "NOP", id: 1610612740},
+            "New York": {name: "New York Knicks", abbr: "NYK", id: 1610612752},
+            "Knicks": {name: "New York Knicks", abbr: "NYK", id: 1610612752},
+            "Oklahoma City": {name: "Oklahoma City Thunder", abbr: "OKC", id: 1610612760},
+            "Orlando": {name: "Orlando Magic", abbr: "ORL", id: 1610612753},
+            "Philadelphia": {name: "Philadelphia 76ers", abbr: "PHI", id: 1610612755},
+            "Phoenix": {name: "Phoenix Suns", abbr: "PHX", id: 1610612756},
+            "Portland": {name: "Portland Trail Blazers", abbr: "POR", id: 1610612757},
+            "Sacramento": {name: "Sacramento Kings", abbr: "SAC", id: 1610612758},
+            "San Antonio": {name: "San Antonio Spurs", abbr: "SAS", id: 1610612759},
+            "Toronto": {name: "Toronto Raptors", abbr: "TOR", id: 1610612761},
+            "Utah": {name: "Utah Jazz", abbr: "UTA", id: 1610612762},
+            "Washington": {name: "Washington Wizards", abbr: "WAS", id: 1610612764}
+        };
+
+        function getTeamInfo(teamName) {
+            let cleaned = String(teamName).trim();
+            if (nbaTeamsMeta[cleaned]) {
+                let t = nbaTeamsMeta[cleaned];
+                return { name: t.name, abbr: t.abbr, logo: `https://cdn.nba.com/logos/nba/${t.id}/global/L/logo.svg` };
+            }
+            return { name: cleaned, abbr: cleaned.substring(0,3).toUpperCase(), logo: "https://cdn.nba.com/logos/nba/1610612738/global/L/logo.svg" };
+        }
+
+        const modelColumnMapping = {
+            'linesag': 'Sagarin Rating',
+            'linesage': 'Sagarin Recent',
+            'linesagp': 'Sagarin Predictor',
+            'linesaggm': 'Sagarin Golden Mean',
+            'linedoi': 'DirectorOfInformation.com',
+            'linemoore': 'Sonny Moore',
+            'linedunkel': 'Dunkel Index',
+            'linedok': 'Dokter Entropy',
+            'linetalis': 'Talisman Red',
+            'linemassey': 'Massey Ratings',
+            'lineespn': 'ESPN BPI'
+        };
+
+        async function loadCSVData() {
+            try {
+                const [resText, predsText] = await Promise.all([
+                    fetch('nbaresults.csv').then(r => r.text()),
+                    fetch('nbapreds.csv').then(r => r.text())
+                ]);
+
+                let resData = Papa.parse(resText, { header: true, skipEmptyLines: true }).data;
+                let predsData = Papa.parse(predsText, { header: true, skipEmptyLines: true }).data;
+
+                processResults(resData);
+                processPreds(predsData);
+
+                loadSavedModelPreferences();
+                document.getElementById('loading').classList.add('hidden');
+                document.getElementById('mainContent').classList.remove('hidden');
+                updateEdgeLabel();
+                applyFilters();
+            } catch (err) {
+                console.error("Error cargando los CSV:", err);
+                document.getElementById('loading').innerHTML = `<p class="text-red-500 font-bold">Error al cargar los CSV. Asegúrate de que 'nbaresults.csv' y 'nbapreds.csv' estén en la misma carpeta en GitHub.</p>`;
+            }
+        }
+
+        function processResults(rows) {
+            let validRows = rows.filter(r => r.System && r.System.trim() !== '' && r.System.trim() !== 'System Average');
+            
+            let atsArr = validRows.map(r => parseFloat(r['ATS']) || 0);
+            let errArr = validRows.map(r => parseFloat(r['Absolute Error']) || 0);
+            let biasArr = validRows.map(r => Math.abs(parseFloat(r['Bias']) || 0));
+            let msArr = validRows.map(r => parseFloat(r['Mean Square']) || 0);
+
+            let max_ats = Math.max(...atsArr);
+            let min_err = Math.min(...errArr), max_err = Math.max(...errArr);
+            let min_bias = Math.min(...biasArr), max_bias = Math.max(...biasArr);
+            let min_ms = Math.min(...msArr), max_ms = Math.max(...msArr);
+
+            validRows.forEach(row => {
+                let sys = row['System'].trim();
+                let ats = parseFloat(row['ATS']) || 0.0;
+                let err = parseFloat(row['Absolute Error']) || max_err;
+                let bias_val = parseFloat(row['Bias']) || 0.0;
+                let abs_b = Math.abs(bias_val);
+                let ms = parseFloat(row['Mean Square']) || max_ms;
+
+                let term_ats = 0.6 * (max_ats > 0 ? (ats / max_ats) : 0);
+                let term_err = 0.15 * ((max_err - err) / (max_err - min_err + 1e-9));
+                let term_bias = 0.05 * ((max_bias - abs_b) / (max_bias - min_bias + 1e-9));
+                let term_ms = 0.20 * ((max_ms - ms) / (max_ms - min_ms + 1e-9));
+
+                let score = (term_ats + term_err + term_bias + term_ms) * 100;
+
+                modelStats[sys] = {
+                    ats: ats,
+                    abs_err: err,
+                    bias: bias_val,
+                    mean_square: ms,
+                    score: Math.round(score * 100) / 100,
+                    active: true
+                };
+            });
+        }
+
+        function processPreds(rows) {
+            rows.forEach((row, idx) => {
+                if (!row['road'] || !row['home']) return;
+                let road_info = getTeamInfo(row['road']);
+                let home_info = getTeamInfo(row['home']);
+
+                let preds_dict = {};
+                for (let col in modelColumnMapping) {
+                    if (row[col] !== undefined && row[col] !== '' && !isNaN(row[col])) {
+                        preds_dict[modelColumnMapping[col]] = parseFloat(row[col]);
+                    }
+                }
+
+                matchesData.push({
+                    id: idx + 1,
+                    road: road_info,
+                    home: home_info,
+                    lineopen: parseFloat(row['lineopen']) || 0,
+                    line: parseFloat(row['line']) || 0,
+                    predictions: preds_dict
+                });
+            });
+        }
 
         let currentSortColumn = 'score';
         let currentSortAsc = false;
+
+        function loadSavedModelPreferences() {
+            try {
+                const saved = localStorage.getItem('nba_model_preferences');
+                if (saved) {
+                    const parsed = JSON.parse(saved);
+                    for (let sys in parsed) {
+                        if (modelStats[sys]) modelStats[sys].active = parsed[sys];
+                    }
+                }
+            } catch (e) {}
+        }
+
+        function saveModelPreferences() {
+            try {
+                let prefs = {};
+                for (let sys in modelStats) prefs[sys] = modelStats[sys].active;
+                localStorage.setItem('nba_model_preferences', JSON.stringify(prefs));
+            } catch (e) {}
+        }
 
         function toggleTheme() {
             const html = document.documentElement;
             const themeIcon = document.getElementById('themeIcon');
             const themeText = document.getElementById('themeText');
             if (html.classList.contains('dark')) {
-                html.classList.remove('dark');
-                html.classList.add('light');
+                html.classList.remove('dark'); html.classList.add('light');
                 themeIcon.className = "fa-solid fa-moon text-amber-500";
                 themeText.innerText = "Modo Oscuro";
             } else {
-                html.classList.remove('light');
-                html.classList.add('dark');
+                html.classList.remove('light'); html.classList.add('dark');
                 themeIcon.className = "fa-solid fa-sun text-amber-400";
                 themeText.innerText = "Modo Claro";
             }
@@ -610,16 +372,10 @@
             const tbody = document.getElementById('modelsTableBody');
             tbody.innerHTML = '';
             
-            let modelsArray = Object.keys(modelStats).map(sys => {
-                return { name: sys, ...modelStats[sys] };
-            });
-
+            let modelsArray = Object.keys(modelStats).map(sys => ({ name: sys, ...modelStats[sys] }));
             modelsArray.sort((a, b) => {
-                let valA = a[currentSortColumn];
-                let valB = b[currentSortColumn];
-                if (typeof valA === 'string') {
-                    return currentSortAsc ? valA.localeCompare(valB) : valB.localeCompare(valA);
-                }
+                let valA = a[currentSortColumn], valB = b[currentSortColumn];
+                if (typeof valA === 'string') return currentSortAsc ? valA.localeCompare(valB) : valB.localeCompare(valA);
                 return currentSortAsc ? valA - valB : valB - valA;
             });
 
@@ -627,9 +383,7 @@
                 const tr = document.createElement('tr');
                 tr.className = "hover:bg-slate-50 dark:hover:bg-slate-800/50 transition";
                 tr.innerHTML = `
-                    <td class="p-3">
-                        <input type="checkbox" ${m.active ? 'checked' : ''} onchange="toggleModel('${m.name}', this.checked)" class="w-4 h-4 rounded text-amber-600 focus:ring-amber-500 bg-white dark:bg-slate-900 border-slate-300 dark:border-slate-700 cursor-pointer">
-                    </td>
+                    <td class="p-3"><input type="checkbox" ${m.active ? 'checked' : ''} onchange="toggleModel('${m.name}', this.checked)" class="w-4 h-4 rounded text-amber-600 focus:ring-amber-500 bg-white dark:bg-slate-900 border-slate-300 dark:border-slate-700 cursor-pointer"></td>
                     <td class="p-3 font-semibold text-slate-900 dark:text-white">${m.name}</td>
                     <td class="p-3 text-center"><span class="px-2.5 py-1 rounded-full text-xs font-black bg-amber-100 dark:bg-amber-500/20 text-amber-700 dark:text-amber-400 border border-amber-300 dark:border-amber-500/30">${m.score} pts</span></td>
                     <td class="p-3 text-center text-slate-700 dark:text-slate-300">${(m.ats * 100).toFixed(1)}%</td>
@@ -643,6 +397,14 @@
 
         function toggleModel(sys, status) {
             modelStats[sys].active = status;
+            saveModelPreferences();
+            applyFilters();
+        }
+
+        function setAllModels(status) {
+            for (let sys in modelStats) modelStats[sys].active = status;
+            saveModelPreferences();
+            renderModelsTable();
             applyFilters();
         }
 
@@ -653,9 +415,7 @@
             const lineMoveFilter = document.getElementById('filterLineMove').value;
             const sortOption = document.getElementById('filterSort').value;
 
-            let activeCount = 0;
-            let totalCount = 0;
-            let weightSumTotal = 0;
+            let activeCount = 0, totalCount = 0, weightSumTotal = 0;
             let activeWeights = {};
 
             for (let sys in modelStats) {
@@ -669,28 +429,19 @@
             }
 
             document.getElementById('activeModelsCount').innerText = activeCount;
-
-            for (let sys in activeWeights) {
-                activeWeights[sys] = activeWeights[sys] / weightSumTotal;
-            }
+            for (let sys in activeWeights) activeWeights[sys] = activeWeights[sys] / weightSumTotal;
 
             let processedMatches = [];
-
             matchesData.forEach((match) => {
-                let weightedSum = 0;
-                let wTotal = 0;
-                let modelPredictionsHTML = '';
+                let weightedSum = 0, wTotal = 0, modelPredictionsHTML = '';
 
                 for (let model in match.predictions) {
                     let val = match.predictions[model];
                     let isModelActive = modelStats[model] && modelStats[model].active;
-
                     if (isModelActive) {
-                        let w = activeWeights[model];
-                        weightedSum += val * w;
-                        wTotal += w;
+                        weightedSum += val * activeWeights[model];
+                        wTotal += activeWeights[model];
                     }
-
                     let formattedVal = val > 0 ? '+' + val.toFixed(2) : val.toFixed(2);
                     modelPredictionsHTML += `
                         <div class="bg-slate-100 dark:bg-slate-950 border ${isModelActive ? 'border-amber-400 dark:border-amber-500/50 text-amber-900 dark:text-amber-300' : 'border-slate-200 dark:border-slate-800 text-slate-400 opacity-40'} px-3 py-2 rounded-xl text-center">
@@ -711,9 +462,7 @@
                 if ((edge > 0 && lineDiff > 0) || (edge < 0 && lineDiff < 0)) lineMoveType = 'toward';
                 else if (lineDiff !== 0) lineMoveType = 'away';
 
-                processedMatches.push({
-                    match, weightedAvg, edge, absEdge, edgeSide, edgePick, modelPredictionsHTML, lineMoveType
-                });
+                processedMatches.push({ match, weightedAvg, edge, absEdge, edgeSide, edgePick, modelPredictionsHTML, lineMoveType });
             });
 
             let filtered = processedMatches.filter(item => {
@@ -722,11 +471,9 @@
                                     item.match.road.abbr.toLowerCase().includes(searchQuery) ||
                                     item.match.home.abbr.toLowerCase().includes(searchQuery);
                 if (!matchesSearch) return false;
-
                 if (item.absEdge < minEdge) return false;
                 if (sideFilter !== 'all' && item.edgeSide !== sideFilter) return false;
                 if (lineMoveFilter !== 'all' && item.lineMoveType !== lineMoveFilter) return false;
-
                 return true;
             });
 
@@ -758,37 +505,22 @@
                         <div class="flex justify-between items-center mb-5 border-b border-slate-200 dark:border-slate-800 pb-4">
                             <div class="flex items-center gap-3">
                                 <img src="${m.road.logo}" class="w-12 h-12 object-contain" alt="${m.road.name}">
-                                <div>
-                                    <h3 class="font-bold text-base text-slate-900 dark:text-white">${m.road.name}</h3>
-                                    <span class="text-xs text-slate-500">Visitante</span>
-                                </div>
+                                <div><h3 class="font-bold text-base text-slate-900 dark:text-white">${m.road.name}</h3><span class="text-xs text-slate-500">Visitante</span></div>
                             </div>
                             <div class="text-center px-2">
                                 <span class="text-[10px] font-black tracking-widest text-slate-500 bg-slate-100 dark:bg-slate-950 px-2 py-1 rounded border border-slate-200 dark:border-slate-800">VS</span>
                                 <div class="text-xs font-semibold text-amber-600 dark:text-amber-400 mt-1">Línea: ${m.line > 0 ? '+' + m.line : m.line}</div>
                             </div>
                             <div class="flex items-center gap-3 text-right">
-                                <div>
-                                    <h3 class="font-bold text-base text-slate-900 dark:text-white">${m.home.name}</h3>
-                                    <span class="text-xs text-slate-500">Local</span>
-                                </div>
+                                <div><h3 class="font-bold text-base text-slate-900 dark:text-white">${m.home.name}</h3><span class="text-xs text-slate-500">Local</span></div>
                                 <img src="${m.home.logo}" class="w-12 h-12 object-contain" alt="${m.home.name}">
                             </div>
                         </div>
 
                         <div class="grid grid-cols-3 gap-3 mb-5 bg-slate-50 dark:bg-slate-950 p-4 rounded-xl border border-slate-200 dark:border-slate-800 text-center">
-                            <div>
-                                <span class="text-[10px] text-slate-500 uppercase font-bold">Línea Open</span>
-                                <div class="text-base font-bold text-slate-700 dark:text-slate-300 mt-0.5">${m.lineopen}</div>
-                            </div>
-                            <div>
-                                <span class="text-[10px] text-slate-500 uppercase font-bold">Consenso Ponderado</span>
-                                <div class="text-base font-bold text-amber-600 dark:text-amber-400 mt-0.5">${item.weightedAvg.toFixed(2)}</div>
-                            </div>
-                            <div>
-                                <span class="text-[10px] text-slate-500 uppercase font-bold">Edge Valor</span>
-                                <div class="text-base font-bold ${item.absEdge >= 2 ? 'text-emerald-600 dark:text-emerald-400 font-extrabold' : 'text-slate-700 dark:text-slate-300'} mt-0.5">+${item.absEdge.toFixed(2)}</div>
-                            </div>
+                            <div><span class="text-[10px] text-slate-500 uppercase font-bold">Línea Open</span><div class="text-base font-bold text-slate-700 dark:text-slate-300 mt-0.5">${m.lineopen}</div></div>
+                            <div><span class="text-[10px] text-slate-500 uppercase font-bold">Consenso Ponderado</span><div class="text-base font-bold text-amber-600 dark:text-amber-400 mt-0.5">${item.weightedAvg.toFixed(2)}</div></div>
+                            <div><span class="text-[10px] text-slate-500 uppercase font-bold">Edge Valor</span><div class="text-base font-bold ${item.absEdge >= 2 ? 'text-emerald-600 dark:text-emerald-400 font-extrabold' : 'text-slate-700 dark:text-slate-300'} mt-0.5">+${item.absEdge.toFixed(2)}</div></div>
                         </div>
 
                         <div class="bg-gradient-to-r from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-4 mb-5 relative">
@@ -806,9 +538,7 @@
                             </div>
                         </div>
 
-                        <div class="mb-2">
-                            <span class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Modelos Incluidos:</span>
-                        </div>
+                        <div class="mb-2"><span class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Modelos Incluidos:</span></div>
                         <div class="grid grid-cols-2 md:grid-cols-4 gap-2 max-h-36 overflow-y-auto pr-1">
                             ${item.modelPredictionsHTML}
                         </div>
@@ -818,10 +548,7 @@
             });
         }
 
-        document.addEventListener('DOMContentLoaded', () => {
-            updateEdgeLabel();
-            applyFilters();
-        });
+        document.addEventListener('DOMContentLoaded', loadCSVData);
     </script>
 </body>
 </html>
