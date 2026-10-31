@@ -44,7 +44,8 @@
 
     <div id="loading" class="text-center py-20">
         <i class="fa-solid fa-spinner fa-spin text-4xl text-amber-500 mb-3"></i>
-        <p class="text-slate-500 font-bold">Cargando y procesando archivos CSV desde GitHub...</p>
+        <p class="text-slate-500 font-bold">Cargando y procesando archivos CSV...</p>
+        <p id="loadingDetails" class="text-xs text-slate-400 mt-2 font-mono"></p>
     </div>
 
     <!-- VISTA 1: DASHBOARD DE PREDICCIONES -->
@@ -213,18 +214,19 @@
             "Washington": {name: "Washington Wizards", abbr: "WAS", id: 1610612764}
         };
 
-        // Función de normalización canónica para unificar nombres de modelos
         function canonicalModelName(name) {
             if (!name) return '';
             let n = String(name).trim().toLowerCase();
-            if (n.includes('sagarin rating') || n === 'sag' || n === 'linesag' || n === 'sagarin') return 'Sagarin';
+            
             if (n.includes('sagarin predictor') || n === 'spts' || n === 'linesagp') return 'Sagarin Predictor';
             if (n.includes('sagarin golden mean') || n === 'sgm' || n === 'linesaggm') return 'Sagarin Golden Mean';
             if (n.includes('sagarin recent') || n === 'srec' || n === 'linesage') return 'Sagarin Recent';
+            if (n.includes('sagarin') || n === 'sag' || n === 'linesag') return 'Sagarin';
+            
             if (n.includes('moore') || n === 'mor' || n === 'linemoore') return 'Moore';
             if (n.includes('espn') || n === 'lineespn') return 'ESPN BPI';
             if (n.includes('game time decision') || n === 'gtd' || n === 'linegtd') return 'Game Time Decision';
-            if (n.includes('dok') || n === 'linedok') return 'Dokter';
+            if (n.includes('dok') || n === 'linedok' || n === 'dokter') return 'Dokter';
             if (n.includes('dunkel') || n === 'dunk' || n === 'linedunkel') return 'Dunkel';
             if (n.includes('massey') || n === 'mass' || n === 'linemassey') return 'Massey Ratings';
             if (n.includes('versus') || n === 'vss' || n === 'linevss') return 'Versus Sports Simulator';
@@ -233,6 +235,7 @@
             if (n.includes('director') || n === 'doi' || n === 'linedoi') return 'Director of Information';
             if (n.includes('adjusted') || n === 'cadj' || n === 'linecadj') return 'Computer Adjusted line';
             if (n.includes('sam') || n === 'linesam') return 'Sam';
+            
             return name.trim();
         }
 
@@ -257,11 +260,30 @@
 
         const excludedModels = ['opening line', 'line', 'opening', 'system average', 'average', 'lineopen', 'avg'];
 
+        async function fetchCSV(filename) {
+            // Intento 1: Ruta relativa directa
+            try {
+                let res = await fetch(filename);
+                if (res.ok) return await res.text();
+            } catch (e) {}
+
+            // Intento 2: Ruta absoluta basada en la ubicación actual
+            try {
+                let baseUrl = window.location.href.substring(0, window.location.href.lastIndexOf('/') + 1);
+                let res = await fetch(baseUrl + filename);
+                if (res.ok) return await res.text();
+            } catch (e) {}
+
+            throw new Error(`No se pudo descargar '${filename}'. Verifica que esté en el repositorio.`);
+        }
+
         async function loadCSVData() {
             try {
+                document.getElementById('loadingDetails').innerText = "Descargando nbaresults.csv y nbapreds.csv...";
+                
                 const [resText, predsText] = await Promise.all([
-                    fetch('nbaresults.csv').then(r => r.text()),
-                    fetch('nbapreds.csv').then(r => r.text())
+                    fetchCSV('nbaresults.csv'),
+                    fetchCSV('nbapreds.csv')
                 ]);
 
                 let resData = Papa.parse(resText, { header: true, skipEmptyLines: true }).data;
@@ -276,8 +298,16 @@
                 updateEdgeLabel();
                 applyFilters();
             } catch (err) {
-                console.error("Error cargando los CSV:", err);
-                document.getElementById('loading').innerHTML = `<p class="text-red-500 font-bold">Error al cargar los CSV. Asegúrate de que 'nbaresults.csv' y 'nbapreds.csv' estén en la misma carpeta en GitHub.</p>`;
+                console.error("Error detallado cargando los CSV:", err);
+                document.getElementById('loading').innerHTML = `
+                    <div class="p-6 bg-red-50 dark:bg-red-950/30 border border-red-300 dark:border-red-800 rounded-2xl max-w-lg mx-auto">
+                        <i class="fa-solid fa-triangle-exclamation text-3xl text-red-500 mb-3"></i>
+                        <h3 class="font-bold text-red-600 dark:text-red-400 text-base mb-1">Error al cargar los CSV</h3>
+                        <p class="text-xs text-slate-600 dark:text-slate-400 mb-3">GitHub Pages no pudo leer 'nbaresults.csv' o 'nbapreds.csv'.</p>
+                        <p class="text-[11px] font-mono bg-white dark:bg-slate-900 p-2 rounded border border-red-200 dark:border-red-900 text-red-500 overflow-x-auto">${err.message}</p>
+                        <p class="text-xs text-slate-500 mt-3">💡 Tip: Presiona <code>Ctrl + F5</code> para limpiar la caché de tu navegador y forzar la recarga.</p>
+                    </div>
+                `;
             }
         }
 
@@ -307,7 +337,7 @@
             validRows.forEach(row => {
                 let actualSysKey = Object.keys(row).find(k => k.trim().toLowerCase() === 'system');
                 let rawSys = row[actualSysKey].trim();
-                let sys = canonicalModelName(rawSys); // Unificación canónica
+                let sys = canonicalModelName(rawSys);
 
                 let ats = getVal(row, 'ATS');
                 let err = getVal(row, 'Absolute Error') || max_err;
@@ -348,7 +378,6 @@
 
                 let preds_dict = {};
                 
-                // Mapear columnas usando modelColumnMapping y canonicalModelName
                 keys.forEach(k => {
                     let cleanK = k.trim().toLowerCase();
                     if (!['road', 'home', 'line', 'lineopen', 'date'].includes(cleanK) && !excludedModels.includes(cleanK)) {
