@@ -214,6 +214,15 @@
             "Washington": {name: "Washington Wizards", abbr: "WAS", id: 1610612764}
         };
 
+        function getTeamInfo(teamName) {
+            let cleaned = String(teamName).trim();
+            if (nbaTeamsMeta[cleaned]) {
+                let t = nbaTeamsMeta[cleaned];
+                return { name: t.name, abbr: t.abbr, logo: `https://cdn.nba.com/logos/nba/${t.id}/global/L/logo.svg` };
+            }
+            return { name: cleaned, abbr: cleaned.substring(0,3).toUpperCase(), logo: "https://cdn.nba.com/logos/nba/1610612738/global/L/logo.svg" };
+        }
+
         function canonicalModelName(name) {
             if (!name) return '';
             let n = String(name).trim().toLowerCase();
@@ -261,54 +270,89 @@
         const excludedModels = ['opening line', 'line', 'opening', 'system average', 'average', 'lineopen', 'avg'];
 
         async function fetchCSV(filename) {
-            // Intento 1: Ruta relativa directa
             try {
                 let res = await fetch(filename);
                 if (res.ok) return await res.text();
             } catch (e) {}
 
-            // Intento 2: Ruta absoluta basada en la ubicación actual
             try {
                 let baseUrl = window.location.href.substring(0, window.location.href.lastIndexOf('/') + 1);
                 let res = await fetch(baseUrl + filename);
                 if (res.ok) return await res.text();
             } catch (e) {}
 
-            throw new Error(`No se pudo descargar '${filename}'. Verifica que esté en el repositorio.`);
+            throw new Error(`No se pudo descargar '${filename}' automáticamente.`);
         }
 
         async function loadCSVData() {
             try {
-                document.getElementById('loadingDetails').innerText = "Descargando nbaresults.csv y nbapreds.csv...";
+                document.getElementById('loadingDetails').innerText = "Intentando cargar nbaresults.csv y nbapreds.csv...";
                 
                 const [resText, predsText] = await Promise.all([
                     fetchCSV('nbaresults.csv'),
                     fetchCSV('nbapreds.csv')
                 ]);
 
-                let resData = Papa.parse(resText, { header: true, skipEmptyLines: true }).data;
-                let predsData = Papa.parse(predsText, { header: true, skipEmptyLines: true }).data;
-
-                processResults(resData);
-                processPreds(predsData);
-
-                loadSavedModelPreferences();
-                document.getElementById('loading').classList.add('hidden');
-                document.getElementById('view-dashboard').classList.remove('hidden');
-                updateEdgeLabel();
-                applyFilters();
+                processData(resText, predsText);
             } catch (err) {
-                console.error("Error detallado cargando los CSV:", err);
-                document.getElementById('loading').innerHTML = `
-                    <div class="p-6 bg-red-50 dark:bg-red-950/30 border border-red-300 dark:border-red-800 rounded-2xl max-w-lg mx-auto">
-                        <i class="fa-solid fa-triangle-exclamation text-3xl text-red-500 mb-3"></i>
-                        <h3 class="font-bold text-red-600 dark:text-red-400 text-base mb-1">Error al cargar los CSV</h3>
-                        <p class="text-xs text-slate-600 dark:text-slate-400 mb-3">GitHub Pages no pudo leer 'nbaresults.csv' o 'nbapreds.csv'.</p>
-                        <p class="text-[11px] font-mono bg-white dark:bg-slate-900 p-2 rounded border border-red-200 dark:border-red-900 text-red-500 overflow-x-auto">${err.message}</p>
-                        <p class="text-xs text-slate-500 mt-3">💡 Tip: Presiona <code>Ctrl + F5</code> para limpiar la caché de tu navegador y forzar la recarga.</p>
-                    </div>
-                `;
+                console.error("Error al cargar mediante fetch:", err);
+                showManualUploadFallback();
             }
+        }
+
+        function showManualUploadFallback() {
+            document.getElementById('loading').innerHTML = `
+                <div class="p-8 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-800 rounded-3xl max-w-xl mx-auto shadow-xl text-center">
+                    <i class="fa-solid fa-cloud-arrow-up text-4xl text-amber-500 mb-4"></i>
+                    <h3 class="font-bold text-xl text-slate-900 dark:text-white mb-2">Carga Manual de Respaldos</h3>
+                    <p class="text-sm text-slate-500 dark:text-slate-400 mb-6">GitHub Pages bloqueó la descarga automática. Selecciona tus archivos CSV locales para iniciar al instante:</p>
+                    
+                    <div class="space-y-4 text-left">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">Archivo nbaresults.csv</label>
+                            <input type="file" id="fileResults" accept=".csv" class="w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-bold file:bg-amber-50 file:text-amber-700 dark:file:bg-amber-500/20 dark:file:text-amber-300 hover:file:bg-amber-100 border border-slate-300 dark:border-slate-800 rounded-xl p-2 bg-slate-50 dark:bg-slate-950 cursor-pointer">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">Archivo nbapreds.csv</label>
+                            <input type="file" id="filePreds" accept=".csv" class="w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-bold file:bg-amber-50 file:text-amber-700 dark:file:bg-amber-500/20 dark:file:text-amber-300 hover:file:bg-amber-100 border border-slate-300 dark:border-slate-800 rounded-xl p-2 bg-slate-50 dark:bg-slate-950 cursor-pointer">
+                        </div>
+                    </div>
+
+                    <button onclick="handleManualUpload()" class="mt-6 w-full bg-amber-600 hover:bg-amber-700 text-white font-bold py-3 rounded-xl transition shadow-lg">
+                        <i class="fa-solid fa-play mr-2"></i> Procesar y Cargar Dashboard
+                    </button>
+                </div>
+            `;
+        }
+
+        function handleManualUpload() {
+            const fRes = document.getElementById('fileResults').files[0];
+            const fPred = document.getElementById('filePreds').files[0];
+
+            if (!fRes || !fPred) {
+                alert("Por favor selecciona ambos archivos CSV.");
+                return;
+            }
+
+            Promise.all([fRes.text(), fPred.text()]).then(([resText, predsText]) => {
+                processData(resText, predsText);
+            }).catch(err => {
+                alert("Error al leer los archivos: " + err);
+            });
+        }
+
+        function processData(resText, predsText) {
+            let resData = Papa.parse(resText, { header: true, skipEmptyLines: true }).data;
+            let predsData = Papa.parse(predsText, { header: true, skipEmptyLines: true }).data;
+
+            processResults(resData);
+            processPreds(predsData);
+
+            loadSavedModelPreferences();
+            document.getElementById('loading').classList.add('hidden');
+            document.getElementById('view-dashboard').classList.remove('hidden');
+            updateEdgeLabel();
+            applyFilters();
         }
 
         function processResults(rows) {
