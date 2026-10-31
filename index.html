@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Visualizador de Apuestas NBA - Edges & Filtros</title>
+    <title>NBA Betting</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
     <script>
@@ -19,9 +19,8 @@
     <header class="mb-6 flex flex-col md:flex-row justify-between items-center gap-4 border-b border-slate-300 dark:border-slate-800 pb-6">
         <div>
             <h1 class="text-3xl font-black tracking-tight flex items-center gap-3">
-                <i class="fa-solid fa-basketball text-amber-500"></i> NBA Betting Visualizer & Edges
+                <i class="fa-solid fa-basketball text-amber-500"></i> NBA Betting
             </h1>
-            <p class="text-slate-500 dark:text-slate-400 text-sm mt-1">Actualización automática desde GitHub CSV</p>
         </div>
         
         <div class="flex items-center gap-3">
@@ -327,7 +326,8 @@
                 for (let col in modelColumnMapping) {
                     let foundKey = keys.find(k => k.trim().toLowerCase() === col.toLowerCase());
                     if (foundKey && row[foundKey] !== undefined && row[foundKey] !== '' && !isNaN(row[foundKey])) {
-                        preds_dict[modelColumnMapping[col]] = parseFloat(row[foundKey]);
+                        let displayName = modelColumnMapping[col];
+                        preds_dict[displayName] = parseFloat(row[foundKey]);
                     }
                 }
 
@@ -354,7 +354,9 @@
                 if (saved) {
                     const parsed = JSON.parse(saved);
                     for (let sys in parsed) {
-                        if (modelStats[sys]) modelStats[sys].active = parsed[sys];
+                        // Buscar coincidencia exacta o insensible a mayúsculas para sincronizar
+                        let matchedKey = Object.keys(modelStats).find(k => k.toLowerCase() === sys.toLowerCase());
+                        if (matchedKey) modelStats[matchedKey].active = parsed[sys];
                     }
                 }
             } catch (e) {}
@@ -479,7 +481,7 @@
                 const tr = document.createElement('tr');
                 tr.className = "hover:bg-slate-50 dark:hover:bg-slate-800/50 transition";
                 tr.innerHTML = `
-                    <td class="p-3"><input type="checkbox" ${m.active ? 'checked' : ''} onchange="toggleModel('${m.name}', this.checked)" class="w-4 h-4 rounded text-amber-600 focus:ring-amber-500 bg-white dark:bg-slate-900 border-slate-300 dark:border-slate-700 cursor-pointer"></td>
+                    <td class="p-3"><input type="checkbox" ${m.active ? 'checked' : ''} onchange="toggleModel('${m.name.replace(/'/g, "\\'")}', this.checked)" class="w-4 h-4 rounded text-amber-600 focus:ring-amber-500 bg-white dark:bg-slate-900 border-slate-300 dark:border-slate-700 cursor-pointer"></td>
                     <td class="p-3 font-semibold text-slate-900 dark:text-white">${m.name}</td>
                     <td class="p-3 text-center"><span class="px-2.5 py-1 rounded-full text-xs font-black bg-amber-100 dark:bg-amber-500/20 text-amber-700 dark:text-amber-400 border border-amber-300 dark:border-amber-500/30">${m.score} pts</span></td>
                     <td class="p-3 text-center text-slate-700 dark:text-slate-300">${(m.ats * 100).toFixed(1)}%</td>
@@ -492,7 +494,13 @@
         }
 
         function toggleModel(sys, status) {
-            modelStats[sys].active = status;
+            if (modelStats[sys]) {
+                modelStats[sys].active = status;
+            } else {
+                // Búsqueda flexible por si acaso
+                let foundKey = Object.keys(modelStats).find(k => k.toLowerCase() === sys.toLowerCase());
+                if (foundKey) modelStats[foundKey].active = status;
+            }
             saveModelPreferences();
             applyFilters();
         }
@@ -534,19 +542,25 @@
                 let totalActiveModelsEvaluating = 0;
 
                 let activePredictions = [];
-                for (let model in match.predictions) {
-                    let val = match.predictions[model];
-                    let isModelActive = modelStats[model] && modelStats[model].active;
+                for (let modelName in match.predictions) {
+                    let val = match.predictions[modelName];
+                    
+                    // Buscar estado activo en modelStats buscando coincidencia exacta o insensible a mayúsculas
+                    let statKey = Object.keys(modelStats).find(k => k.toLowerCase() === modelName.toLowerCase());
+                    let isModelActive = statKey && modelStats[statKey].active;
+
                     if (isModelActive) {
-                        weightedSum += val * activeWeights[model];
-                        wTotal += activeWeights[model];
+                        let w = activeWeights[statKey] || (1 / (activeCount || 1));
+                        weightedSum += val * w;
+                        wTotal += w;
                         totalActiveModelsEvaluating++;
-                        activePredictions.push({ model, val });
+                        activePredictions.push({ model: modelName, val });
                     }
+
                     let formattedVal = val > 0 ? '+' + val.toFixed(2) : val.toFixed(2);
                     modelPredictionsHTML += `
                         <div class="bg-slate-100 dark:bg-slate-950 border ${isModelActive ? 'border-amber-400 dark:border-amber-500/50 text-amber-900 dark:text-amber-300' : 'border-slate-200 dark:border-slate-800 text-slate-400 opacity-40'} px-3 py-2 rounded-xl text-center">
-                            <div class="text-[10px] uppercase font-bold truncate">${model}</div>
+                            <div class="text-[10px] uppercase font-bold truncate">${modelName}</div>
                             <div class="text-sm font-extrabold mt-0.5">${formattedVal}</div>
                         </div>
                     `;
