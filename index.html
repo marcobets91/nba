@@ -237,6 +237,13 @@
             'linesam': 'Sam Model'
         };
 
+        // Palabras no deseadas que NO son modelos
+        const excludedModels = ['opening line', 'line', 'opening', 'system average', 'average'];
+
+        function cleanModelName(str) {
+            return String(str || '').trim().replace(/^line\s*/i, '');
+        }
+
         async function loadCSVData() {
             try {
                 const [resText, predsText] = await Promise.all([
@@ -264,7 +271,9 @@
         function processResults(rows) {
             let validRows = rows.filter(r => {
                 let sysKey = Object.keys(r).find(k => k.trim().toLowerCase() === 'system');
-                return sysKey && r[sysKey] && r[sysKey].trim() !== '' && r[sysKey].trim() !== 'System Average';
+                if (!sysKey || !r[sysKey]) return false;
+                let val = r[sysKey].trim().toLowerCase();
+                return val !== '' && !excludedModels.includes(val);
             });
             
             let getVal = (r, colName) => {
@@ -331,6 +340,17 @@
                     }
                 }
 
+                // Capturar también otras columnas numéricas que no sean road, home, line, lineopen
+                keys.forEach(k => {
+                    let cleanK = k.trim().toLowerCase();
+                    if (!['road', 'home', 'line', 'lineopen', 'date'].includes(cleanK) && !excludedModels.includes(cleanK)) {
+                        if (!preds_dict[k] && row[k] !== undefined && row[k] !== '' && !isNaN(row[k])) {
+                            let displayName = modelColumnMapping[cleanK] || k.trim();
+                            preds_dict[displayName] = parseFloat(row[k]);
+                        }
+                    }
+                });
+
                 let baseLine = lineKey ? (parseFloat(row[lineKey]) || 0) : 0;
 
                 matchesData.push({
@@ -354,8 +374,7 @@
                 if (saved) {
                     const parsed = JSON.parse(saved);
                     for (let sys in parsed) {
-                        // Buscar coincidencia exacta o insensible a mayúsculas para sincronizar
-                        let matchedKey = Object.keys(modelStats).find(k => k.toLowerCase() === sys.toLowerCase());
+                        let matchedKey = Object.keys(modelStats).find(k => k.toLowerCase().trim() === sys.toLowerCase().trim());
                         if (matchedKey) modelStats[matchedKey].active = parsed[sys];
                     }
                 }
@@ -494,12 +513,11 @@
         }
 
         function toggleModel(sys, status) {
-            if (modelStats[sys]) {
+            let matchedKey = Object.keys(modelStats).find(k => k.toLowerCase().trim() === sys.toLowerCase().trim());
+            if (matchedKey) {
+                modelStats[matchedKey].active = status;
+            } else if (modelStats[sys]) {
                 modelStats[sys].active = status;
-            } else {
-                // Búsqueda flexible por si acaso
-                let foundKey = Object.keys(modelStats).find(k => k.toLowerCase() === sys.toLowerCase());
-                if (foundKey) modelStats[foundKey].active = status;
             }
             saveModelPreferences();
             applyFilters();
@@ -545,9 +563,10 @@
                 for (let modelName in match.predictions) {
                     let val = match.predictions[modelName];
                     
-                    // Buscar estado activo en modelStats buscando coincidencia exacta o insensible a mayúsculas
-                    let statKey = Object.keys(modelStats).find(k => k.toLowerCase() === modelName.toLowerCase());
-                    let isModelActive = statKey && modelStats[statKey].active;
+                    // Emparejamiento flexible de Sam Model y otros modelos
+                    let statKey = Object.keys(modelStats).find(k => k.toLowerCase().trim() === modelName.toLowerCase().trim() || 
+                                                                   k.toLowerCase().includes('sam') && modelName.toLowerCase().includes('sam'));
+                    let isModelActive = statKey ? modelStats[statKey].active : false;
 
                     if (isModelActive) {
                         let w = activeWeights[statKey] || (1 / (activeCount || 1));
@@ -558,10 +577,12 @@
                     }
 
                     let formattedVal = val > 0 ? '+' + val.toFixed(2) : val.toFixed(2);
+                    let shortName = modelName.replace('Rating', '').replace('Predictor', 'P').replace('Model', '').trim();
+                    
                     modelPredictionsHTML += `
-                        <div class="bg-slate-100 dark:bg-slate-950 border ${isModelActive ? 'border-amber-400 dark:border-amber-500/50 text-amber-900 dark:text-amber-300' : 'border-slate-200 dark:border-slate-800 text-slate-400 opacity-40'} px-3 py-2 rounded-xl text-center">
-                            <div class="text-[10px] uppercase font-bold truncate">${modelName}</div>
-                            <div class="text-sm font-extrabold mt-0.5">${formattedVal}</div>
+                        <div class="bg-slate-100 dark:bg-slate-950 border ${isModelActive ? 'border-amber-400 dark:border-amber-500/60 text-amber-900 dark:text-amber-300 font-bold' : 'border-slate-200 dark:border-slate-800/80 text-slate-400 opacity-30'} p-1.5 rounded-lg text-center transition">
+                            <div class="text-[9px] uppercase font-bold truncate leading-tight" title="${modelName}">${shortName}</div>
+                            <div class="text-xs font-black mt-0.5">${formattedVal}</div>
                         </div>
                     `;
                 }
@@ -579,6 +600,20 @@
                     }
                 });
 
+                // Construir la visualización del espectro de puntos (Solo modelos activos)
+                let spectrumDotsHTML = '';
+                if (activePredictions.length > 0) {
+                    let diffs = activePredictions.map(p => p.val - match.customLine);
+                    let maxDiff = Math.max(6, Math.max(...diffs.map(d => Math.abs(d))));
+                    
+                    activePredictions.forEach(p => {
+                        let diff = p.val - match.customLine;
+                        let percent = 50 + (diff / maxDiff) * 45; // 50% es la línea central
+                        percent = Math.max(5, Math.min(95, percent));
+                        spectrumDotsHTML += `<div class="absolute w-3 h-3 bg-amber-500 dark:bg-amber-400 rounded-full border border-slate-900 transform -translate-x-1/2 -translate-y-1/2 opacity-85 shadow" style="left: ${percent}%; top: 50%;" title="${p.model}: ${p.val > 0 ? '+' + p.val : p.val}"></div>`;
+                    });
+                }
+
                 let edgePick = edge > 0 ? `Cover ${match.home.abbr} (${match.customLine > 0 ? '-' + match.customLine : '+' + Math.abs(match.customLine)})` : `Cover ${match.road.abbr} (${match.customLine > 0 ? '+' + match.customLine : '-' + Math.abs(match.customLine)})`;
 
                 let lineDiff = match.customLine - match.lineopen;
@@ -586,7 +621,7 @@
                 if ((edge > 0 && lineDiff > 0) || (edge < 0 && lineDiff < 0)) lineMoveType = 'toward';
                 else if (lineDiff !== 0) lineMoveType = 'away';
 
-                processedMatches.push({ match, weightedAvg, edge, absEdge, edgeSide, edgePick, modelPredictionsHTML, lineMoveType, agreeingModelsCount, totalActiveModelsEvaluating });
+                processedMatches.push({ match, weightedAvg, edge, absEdge, edgeSide, edgePick, modelPredictionsHTML, lineMoveType, agreeingModelsCount, totalActiveModelsEvaluating, spectrumDotsHTML });
             });
 
             let filtered = processedMatches.filter(item => {
@@ -647,14 +682,16 @@
                             <div><span class="text-[10px] text-slate-500 uppercase font-bold">Edge Valor</span><div class="text-base font-bold ${item.absEdge >= 2 ? 'text-emerald-600 dark:text-emerald-400 font-extrabold' : 'text-slate-700 dark:text-slate-300'} mt-0.5">+${item.absEdge.toFixed(2)}</div></div>
                         </div>
 
+                        <!-- VISUALIZACIÓN ESPECTRO DE MODELOS ACTIVOS -->
                         <div class="bg-gradient-to-r from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-4 mb-5 relative">
                             <div class="flex justify-between text-[11px] text-slate-500 dark:text-slate-400 mb-2 font-semibold uppercase">
                                 <span><i class="fa-solid fa-caret-left mr-1"></i> ${m.road.abbr}</span>
-                                <span class="text-amber-600 dark:text-amber-400 font-bold">Línea Actual: ${m.customLine}</span>
+                                <span class="text-amber-600 dark:text-amber-400 font-bold">Línea: ${m.customLine}</span>
                                 <span>${m.home.abbr} <i class="fa-solid fa-caret-right ml-1"></i></span>
                             </div>
-                            <div class="h-4 w-full bg-slate-200 dark:bg-slate-800 rounded-full relative overflow-hidden flex items-center">
-                                <div class="absolute bg-amber-500 h-full w-1.5 rounded" style="left: 50%;"></div>
+                            <div class="h-6 w-full bg-slate-200 dark:bg-slate-800 rounded-lg relative overflow-hidden flex items-center shadow-inner">
+                                <div class="absolute bg-slate-400 dark:bg-slate-600 h-full w-0.5" style="left: 50%;"></div>
+                                ${item.spectrumDotsHTML}
                             </div>
                             <div class="mt-3 flex items-center justify-between text-xs text-slate-700 dark:text-slate-300">
                                 <span class="font-bold text-amber-600 dark:text-amber-400">Pick Recomendado:</span>
@@ -668,7 +705,7 @@
                         </div>
 
                         <div class="mb-2"><span class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Modelos Incluidos:</span></div>
-                        <div class="grid grid-cols-2 md:grid-cols-4 gap-2 max-h-36 overflow-y-auto pr-1">
+                        <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-1.5 max-h-48 overflow-y-auto pr-1">
                             ${item.modelPredictionsHTML}
                         </div>
                     </div>
