@@ -224,25 +224,25 @@
         }
 
         // =========================================================================
-        // DICCIONARIO MAESTRO ESTRICTO (Relación exacta CSV de Resultados <-> Predicciones)
+        // DICCIONARIO MAESTRO LIMPIO Y EXACTO (Sin modelos vacíos/fantasma)
         // =========================================================================
         const modelDictionary = {
-            "Sagarin": { name: "Sagarin", keys: ["sag", "linesag", "sagarin"] },
-            "Sagarin Predictor": { name: "Sagarin Predictor", keys: ["spts", "linesagp", "sagarin predictor"] },
-            "Sagarin Golden Mean": { name: "Sagarin Golden Mean", keys: ["sgm", "linesaggm", "sagarin golden mean"] },
-            "Sagarin Recent": { name: "Sagarin Recent", keys: ["srec", "linesage", "sagarin recent"] },
-            "Moore": { name: "Moore", keys: ["mor", "linemoore", "moore"] },
-            "ESPN BPI": { name: "ESPN BPI", keys: ["espn", "lineespn", "espn bpi"] },
-            "Game Time Decision": { name: "Game Time Decision", keys: ["gtd", "linegtd", "line_gtd", "game time decision"] },
-            "Dokter": { name: "Dokter", keys: ["dok", "linedok", "dokter"] },
-            "Dunkel": { name: "Dunkel", keys: ["dunk", "linedunkel", "dunkel"] },
-            "Massey Ratings": { name: "Massey Ratings", keys: ["mass", "linemassey", "massey", "massey ratings"] },
-            "Versus Sports Simulator": { name: "Versus Sports Simulator", keys: ["vss", "linevss", "line_vss", "versus", "versus sports simulator"] },
-            "Logical Approach": { name: "Logical Approach", keys: ["la", "linela", "logical approach"] },
-            "Talisman Red": { name: "Talisman Red", keys: ["tr", "linetalis", "talisman red"] },
-            "Director of Information": { name: "Director of Information", keys: ["doi", "linedoi", "director of information"] },
-            "Computer Adjusted line": { name: "Computer Adjusted line", keys: ["cadj", "linecadj", "computer adjusted line"] },
-            "Sam": { name: "Sam", keys: ["sam", "linesam"] }
+            "Sagarin Rating": { name: "Sagarin Rating", key: "linesag" },
+            "Sagarin Recent": { name: "Sagarin Recent", key: "linesage" },
+            "Sagarin Predictor": { name: "Sagarin Predictor", key: "linesagp" },
+            "Sagarin Golden Mean": { name: "Sagarin Golden Mean", key: "linesaggm" },
+            "DirectorOfInformation.com": { name: "DirectorOfInformation.com", key: "linedoi" },
+            "Sonny Moore": { name: "Sonny Moore", key: "linemoore" },
+            "Logical Approach": { name: "Logical Approach", key: "linelogic" },
+            "Dunkel Index": { name: "Dunkel Index", key: "linedunkel" },
+            "Dokter Entropy": { name: "Dokter Entropy", key: "linedok" },
+            "Versus Sports Simulator": { name: "Versus Sports Simulator", key: "linepugh" },
+            "Consensus": { name: "Consensus", key: "linedonc" },
+            "Talisman Red": { name: "Talisman Red", key: "linetalis" },
+            "Massey Ratings": { name: "Massey Ratings", key: "linemassey" },
+            "ESPN BPI": { name: "ESPN BPI", key: "lineespn" },
+            "Computer Adjusted": { name: "Computer Adjusted", key: "lineca" },
+            "Sam": { name: "Sam", key: "linesam" }
         };
 
         function getCanonicalName(rawSystemName) {
@@ -250,7 +250,12 @@
             let clean = String(rawSystemName).trim().toLowerCase();
             for (let canonical in modelDictionary) {
                 let entry = modelDictionary[canonical];
-                if (entry.keys.includes(clean) || canonical.toLowerCase() === clean) {
+                if (canonical.toLowerCase() === clean || entry.key === clean || rawSystemName.trim() === canonical) {
+                    return canonical;
+                }
+            }
+            for (let canonical in modelDictionary) {
+                if (clean.includes(canonical.toLowerCase().replace('.com', '').trim())) {
                     return canonical;
                 }
             }
@@ -262,14 +267,14 @@
             let clean = String(headerKey).trim().toLowerCase();
             for (let canonical in modelDictionary) {
                 let entry = modelDictionary[canonical];
-                if (entry.keys.includes(clean)) {
+                if (entry.key === clean) {
                     return canonical;
                 }
             }
             return null;
         }
 
-        const excludedModels = ['opening line', 'line', 'opening', 'system average', 'average', 'lineopen', 'avg', 'date', 'road', 'home', 'visitor', 'local', 'spread'];
+        const excludedHeaders = ['linepower', 'lineavg', 'std', 'line_avgdiff', 'opening line', 'line', 'opening', 'system average', 'average', 'lineopen', 'avg', 'date', 'road', 'home', 'visitor', 'local', 'spread'];
 
         async function fetchCSV(filename) {
             try {
@@ -437,7 +442,7 @@
                 
                 keys.forEach(k => {
                     let cleanK = k.trim().toLowerCase();
-                    let isExcluded = excludedModels.some(ex => cleanK === ex);
+                    let isExcluded = excludedHeaders.includes(cleanK);
                     if (!isExcluded) {
                         let canonical = getCanonicalNameFromPredHeader(k);
                         if (canonical && row[k] !== undefined && row[k] !== '' && !isNaN(row[k])) {
