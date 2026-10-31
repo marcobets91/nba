@@ -190,7 +190,6 @@
             return { name: cleaned, abbr: cleaned.substring(0,3).toUpperCase(), logo: "https://cdn.nba.com/logos/nba/1610612738/global/L/logo.svg" };
         }
 
-        // Mapeo actualizado incluyendo la columna 'linesam' para Sam Model
         const modelColumnMapping = {
             'linesag': 'Sagarin Rating',
             'linesage': 'Sagarin Recent',
@@ -231,12 +230,20 @@
         }
 
         function processResults(rows) {
-            let validRows = rows.filter(r => r.System && r.System.trim() !== '' && r.System.trim() !== 'System Average');
+            let validRows = rows.filter(r => {
+                let sysKey = Object.keys(r).find(k => k.trim().toLowerCase() === 'system');
+                return sysKey && r[sysKey] && r[sysKey].trim() !== '' && r[sysKey].trim() !== 'System Average';
+            });
             
-            let atsArr = validRows.map(r => parseFloat(r['ATS']) || 0);
-            let errArr = validRows.map(r => parseFloat(r['Absolute Error']) || 0);
-            let biasArr = validRows.map(r => Math.abs(parseFloat(r['Bias']) || 0));
-            let msArr = validRows.map(r => parseFloat(r['Mean Square']) || 0);
+            let getVal = (r, colName) => {
+                let key = Object.keys(r).find(k => k.trim().toLowerCase() === colName.toLowerCase());
+                return key ? parseFloat(r[key]) || 0 : 0;
+            };
+
+            let atsArr = validRows.map(r => getVal(r, 'ATS'));
+            let errArr = validRows.map(r => getVal(r, 'Absolute Error'));
+            let biasArr = validRows.map(r => Math.abs(getVal(r, 'Bias')));
+            let msArr = validRows.map(r => getVal(r, 'Mean Square'));
 
             let max_ats = Math.max(...atsArr);
             let min_err = Math.min(...errArr), max_err = Math.max(...errArr);
@@ -244,12 +251,13 @@
             let min_ms = Math.min(...msArr), max_ms = Math.max(...msArr);
 
             validRows.forEach(row => {
-                let sys = row['System'].trim();
-                let ats = parseFloat(row['ATS']) || 0.0;
-                let err = parseFloat(row['Absolute Error']) || max_err;
-                let bias_val = parseFloat(row['Bias']) || 0.0;
+                let actualSysKey = Object.keys(row).find(k => k.trim().toLowerCase() === 'system');
+                let sys = row[actualSysKey].trim();
+                let ats = getVal(row, 'ATS');
+                let err = getVal(row, 'Absolute Error') || max_err;
+                let bias_val = getVal(row, 'Bias');
                 let abs_b = Math.abs(bias_val);
-                let ms = parseFloat(row['Mean Square']) || max_ms;
+                let ms = getVal(row, 'Mean Square') || max_ms;
 
                 let term_ats = 0.6 * (max_ats > 0 ? (ats / max_ats) : 0);
                 let term_err = 0.15 * ((max_err - err) / (max_err - min_err + 1e-9));
@@ -271,23 +279,34 @@
 
         function processPreds(rows) {
             rows.forEach((row, idx) => {
-                if (!row['road'] || !row['home']) return;
-                let road_info = getTeamInfo(row['road']);
-                let home_info = getTeamInfo(row['home']);
+                let keys = Object.keys(row);
+                let roadKey = keys.find(k => k.trim().toLowerCase() === 'road');
+                let homeKey = keys.find(k => k.trim().toLowerCase() === 'home');
+                let lineOpenKey = keys.find(k => k.trim().toLowerCase() === 'lineopen');
+                let lineKey = keys.find(k => k.trim().toLowerCase() === 'line');
+
+                if (!roadKey || !homeKey || !row[roadKey] || !row[homeKey]) return;
+
+                let road_info = getTeamInfo(row[roadKey]);
+                let home_info = getTeamInfo(row[homeKey]);
 
                 let preds_dict = {};
                 for (let col in modelColumnMapping) {
-                    if (row[col] !== undefined && row[col] !== '' && !isNaN(row[col])) {
-                        preds_dict[modelColumnMapping[col]] = parseFloat(row[col]);
+                    let foundKey = keys.find(k => k.trim().toLowerCase() === col.toLowerCase());
+                    if (foundKey && row[foundKey] !== undefined && row[foundKey] !== '' && !isNaN(row[foundKey])) {
+                        preds_dict[modelColumnMapping[col]] = parseFloat(row[foundKey]);
                     }
                 }
+
+                let baseLine = lineKey ? (parseFloat(row[lineKey]) || 0) : 0;
 
                 matchesData.push({
                     id: idx + 1,
                     road: road_info,
                     home: home_info,
-                    lineopen: parseFloat(row['lineopen']) || 0,
-                    line: parseFloat(row['line']) || 0,
+                    lineopen: lineOpenKey ? (parseFloat(row[lineOpenKey]) || 0) : 0,
+                    line: baseLine,
+                    customLine: baseLine, // Línea editable en tiempo real
                     predictions: preds_dict
                 });
             });
@@ -360,6 +379,15 @@
             document.getElementById('filterSort').value = 'edge_desc';
             updateEdgeLabel();
             applyFilters();
+        }
+
+        function updateCustomLine(matchId, newval) {
+            let m = matchesData.find(item => item.id === matchId);
+            if(m) {
+                m.customLine = parseFloat(newval);
+                document.getElementById(`line-val-${matchId}`).innerText = m.customLine > 0 ? '+' + m.customLine : m.customLine;
+                applyFilters();
+            }
         }
 
         function sortTable(column) {
@@ -438,13 +466,19 @@
             let processedMatches = [];
             matchesData.forEach((match) => {
                 let weightedSum = 0, wTotal = 0, modelPredictionsHTML = '';
+                let agreeingModelsCount = 0;
+                let totalActiveModelsEvaluating = 0;
 
+                // Primero calculamos el promedio ponderado usando customLine como base
+                let activePredictions = [];
                 for (let model in match.predictions) {
                     let val = match.predictions[model];
                     let isModelActive = modelStats[model] && modelStats[model].active;
                     if (isModelActive) {
                         weightedSum += val * activeWeights[model];
                         wTotal += activeWeights[model];
+                        totalActiveModelsEvaluating++;
+                        activePredictions.push({ model, val });
                     }
                     let formattedVal = val > 0 ? '+' + val.toFixed(2) : val.toFixed(2);
                     modelPredictionsHTML += `
@@ -455,18 +489,28 @@
                     `;
                 }
 
-                let weightedAvg = wTotal > 0 ? (weightedSum / wTotal) : match.line;
-                let edge = weightedAvg - match.line;
+                let weightedAvg = wTotal > 0 ? (weightedSum / wTotal) : match.customLine;
+                let edge = weightedAvg - match.customLine;
                 let absEdge = Math.abs(edge);
                 let edgeSide = edge > 0 ? 'home' : 'road';
-                let edgePick = edge > 0 ? `Cover ${match.home.abbr} (${match.line > 0 ? '-' + match.line : '+' + Math.abs(match.line)})` : `Cover ${match.road.abbr} (${match.line > 0 ? '+' + match.line : '-' + Math.abs(match.line)})`;
 
-                let lineDiff = match.line - match.lineopen;
+                // Contar cuántos modelos activos apoyan el mismo lado del pick
+                activePredictions.forEach(item => {
+                    let modelEdge = item.val - match.customLine;
+                    let modelSide = modelEdge > 0 ? 'home' : 'road';
+                    if (modelSide === edgeSide) {
+                        agreeingModelsCount++;
+                    }
+                });
+
+                let edgePick = edge > 0 ? `Cover ${match.home.abbr} (${match.customLine > 0 ? '-' + match.customLine : '+' + Math.abs(match.customLine)})` : `Cover ${match.road.abbr} (${match.customLine > 0 ? '+' + match.customLine : '-' + Math.abs(match.customLine)})`;
+
+                let lineDiff = match.customLine - match.lineopen;
                 let lineMoveType = 'any';
                 if ((edge > 0 && lineDiff > 0) || (edge < 0 && lineDiff < 0)) lineMoveType = 'toward';
                 else if (lineDiff !== 0) lineMoveType = 'away';
 
-                processedMatches.push({ match, weightedAvg, edge, absEdge, edgeSide, edgePick, modelPredictionsHTML, lineMoveType });
+                processedMatches.push({ match, weightedAvg, edge, absEdge, edgeSide, edgePick, modelPredictionsHTML, lineMoveType, agreeingModelsCount, totalActiveModelsEvaluating });
             });
 
             let filtered = processedMatches.filter(item => {
@@ -484,8 +528,8 @@
             filtered.sort((a, b) => {
                 if (sortOption === 'edge_desc') return b.absEdge - a.absEdge;
                 if (sortOption === 'edge_asc') return a.absEdge - b.absEdge;
-                if (sortOption === 'line_desc') return b.match.line - a.match.line;
-                if (sortOption === 'line_asc') return a.match.line - b.match.line;
+                if (sortOption === 'line_desc') return b.match.customLine - a.match.customLine;
+                if (sortOption === 'line_asc') return a.match.customLine - b.match.customLine;
                 return 0;
             });
 
@@ -513,12 +557,21 @@
                             </div>
                             <div class="text-center px-2">
                                 <span class="text-[10px] font-black tracking-widest text-slate-500 bg-slate-100 dark:bg-slate-950 px-2 py-1 rounded border border-slate-200 dark:border-slate-800">VS</span>
-                                <div class="text-xs font-semibold text-amber-600 dark:text-amber-400 mt-1">Línea: ${m.line > 0 ? '+' + m.line : m.line}</div>
+                                <div class="text-xs font-semibold text-amber-600 dark:text-amber-400 mt-1">Línea: <span id="line-val-${m.id}">${m.customLine > 0 ? '+' + m.customLine : m.customLine}</span></div>
                             </div>
                             <div class="flex items-center gap-3 text-right">
                                 <div><h3 class="font-bold text-base text-slate-900 dark:text-white">${m.home.name}</h3><span class="text-xs text-slate-500">Local</span></div>
                                 <img src="${m.home.logo}" class="w-12 h-12 object-contain" alt="${m.home.name}">
                             </div>
+                        </div>
+
+                        <!-- CONTROL DESLIZANTE PARA AJUSTAR LA LÍNEA EN TIEMPO REAL -->
+                        <div class="mb-5 bg-slate-50 dark:bg-slate-950 p-3 rounded-xl border border-slate-200 dark:border-slate-800">
+                            <div class="flex justify-between items-center mb-1 text-xs font-bold text-slate-500 uppercase">
+                                <span>Ajustar Línea (Vivo)</span>
+                                <span class="text-amber-600 dark:text-amber-400">${m.customLine}</span>
+                            </div>
+                            <input type="range" min="${m.line - 10}" max="${m.line + 10}" step="0.5" value="${m.customLine}" oninput="updateCustomLine(${m.id}, this.value)" class="w-full accent-amber-500 cursor-pointer">
                         </div>
 
                         <div class="grid grid-cols-3 gap-3 mb-5 bg-slate-50 dark:bg-slate-950 p-4 rounded-xl border border-slate-200 dark:border-slate-800 text-center">
@@ -530,7 +583,7 @@
                         <div class="bg-gradient-to-r from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-4 mb-5 relative">
                             <div class="flex justify-between text-[11px] text-slate-500 dark:text-slate-400 mb-2 font-semibold uppercase">
                                 <span><i class="fa-solid fa-caret-left mr-1"></i> ${m.road.abbr}</span>
-                                <span class="text-amber-600 dark:text-amber-400 font-bold">Línea Mercado: ${m.line}</span>
+                                <span class="text-amber-600 dark:text-amber-400 font-bold">Línea Actual: ${m.customLine}</span>
                                 <span>${m.home.abbr} <i class="fa-solid fa-caret-right ml-1"></i></span>
                             </div>
                             <div class="h-4 w-full bg-slate-200 dark:bg-slate-800 rounded-full relative overflow-hidden flex items-center">
@@ -538,7 +591,12 @@
                             </div>
                             <div class="mt-3 flex items-center justify-between text-xs text-slate-700 dark:text-slate-300">
                                 <span class="font-bold text-amber-600 dark:text-amber-400">Pick Recomendado:</span>
-                                <span class="bg-amber-100 dark:bg-amber-500/20 border border-amber-300 dark:border-amber-500/40 text-amber-800 dark:text-amber-300 px-3 py-1 rounded-lg font-black">${item.edgePick}</span>
+                                <div class="flex items-center gap-2">
+                                    <span class="bg-emerald-100 dark:bg-emerald-500/20 border border-emerald-300 dark:border-emerald-500/40 text-emerald-800 dark:text-emerald-300 px-2 py-0.5 rounded text-[11px] font-bold" title="Modelos apoyando este lado">
+                                        <i class="fa-solid fa-users mr-1"></i> ${item.agreeingModelsCount}/${item.totalActiveModelsEvaluating}
+                                    </span>
+                                    <span class="bg-amber-100 dark:bg-amber-500/20 border border-amber-300 dark:border-amber-500/40 text-amber-800 dark:text-amber-300 px-3 py-1 rounded-lg font-black">${item.edgePick}</span>
+                                </div>
                             </div>
                         </div>
 
