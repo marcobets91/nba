@@ -224,26 +224,33 @@
         }
 
         // =========================================================================
-        // DICCIONARIO MAESTRO LIMPIO Y EXACTO (Sin modelos vacíos/fantasma)
+        // MAPEO CON ABREVIATURAS PERSONALIZADAS Y LIMPIAS
         // =========================================================================
         const modelDictionary = {
-            "Sagarin Rating": { name: "Sagarin Rating", key: "linesag" },
-            "Sagarin Recent": { name: "Sagarin Recent", key: "linesage" },
-            "Sagarin Predictor": { name: "Sagarin Predictor", key: "linesagp" },
-            "Sagarin Golden Mean": { name: "Sagarin Golden Mean", key: "linesaggm" },
-            "DirectorOfInformation.com": { name: "DirectorOfInformation.com", key: "linedoi" },
-            "Sonny Moore": { name: "Sonny Moore", key: "linemoore" },
-            "Logical Approach": { name: "Logical Approach", key: "linelogic" },
-            "Dunkel Index": { name: "Dunkel Index", key: "linedunkel" },
-            "Dokter Entropy": { name: "Dokter Entropy", key: "linedok" },
-            "Versus Sports Simulator": { name: "Versus Sports Simulator", key: "linepugh" },
-            "Consensus": { name: "Consensus", key: "linedonc" },
-            "Talisman Red": { name: "Talisman Red", key: "linetalis" },
-            "Massey Ratings": { name: "Massey Ratings", key: "linemassey" },
-            "ESPN BPI": { name: "ESPN BPI", key: "lineespn" },
-            "Computer Adjusted": { name: "Computer Adjusted", key: "lineca" },
-            "Sam": { name: "Sam", key: "linesam" }
+            "Sagarin Rating": { name: "Sagarin Rating", short: "SAG", key: "linesag" },
+            "Sagarin Recent": { name: "Sagarin Recent", short: "SAG REC", key: "linesage" },
+            "Sagarin Predictor": { name: "Sagarin Predictor", short: "SAG P", key: "linesagp" },
+            "Sagarin Golden Mean": { name: "Sagarin Golden Mean", short: "SAG GM", key: "linesaggm" },
+            "DirectorOfInformation.com": { name: "DirectorOfInformation.com", short: "DOI", key: "linedoi" },
+            "Sonny Moore": { name: "Sonny Moore", short: "MOORE", key: "linemoore" },
+            "Logical Approach": { name: "Logical Approach", short: "LOGIC", key: "linelogic" },
+            "Dunkel Index": { name: "Dunkel Index", short: "DUNKEL", key: "linedunkel" },
+            "Dokter Entropy": { name: "Dokter Entropy", short: "DOKTER", key: "linedok" },
+            "Versus Sports Simulator": { name: "Versus Sports Simulator", short: "VSS", key: "linepugh" },
+            "Consensus": { name: "Consensus", short: "CONS", key: "linedonc" },
+            "Talisman Red": { name: "Talisman Red", short: "TALIS", key: "linetalis" },
+            "Massey Ratings": { name: "Massey Ratings", short: "MASSEY", key: "linemassey" },
+            "ESPN BPI": { name: "ESPN BPI", short: "ESPN", key: "lineespn" },
+            "Computer Adjusted": { name: "Computer Adjusted", short: "CADJ", key: "lineca" },
+            "Sam": { name: "Sam", short: "SAM", key: "linesam" }
         };
+
+        function getShortName(canonicalName) {
+            if (modelDictionary[canonicalName] && modelDictionary[canonicalName].short) {
+                return modelDictionary[canonicalName].short;
+            }
+            return canonicalName;
+        }
 
         function getCanonicalName(rawSystemName) {
             if (!rawSystemName) return null;
@@ -668,11 +675,11 @@
                     }
 
                     let formattedVal = val > 0 ? '+' + val.toFixed(2) : val.toFixed(2);
-                    let shortName = modelName.replace('Rating', '').replace('Predictor', 'P').replace('Model', '').trim();
+                    let shortName = getShortName(modelName);
                     
                     modelPredictionsHTML += `
                         <div class="bg-slate-100 dark:bg-slate-950 border ${isModelActive ? 'border-amber-400 dark:border-amber-500/60 text-amber-900 dark:text-amber-300 font-bold' : 'border-slate-200 dark:border-slate-800/80 text-slate-400 opacity-30'} p-1.5 rounded-lg text-center transition">
-                            <div class="text-[9px] uppercase font-bold truncate leading-tight" title="${modelName}">${shortName}</div>
+                            <div class="text-[10px] uppercase font-black truncate leading-tight tracking-wider" title="${modelName}">${shortName}</div>
                             <div class="text-xs font-black mt-0.5">${formattedVal}</div>
                         </div>
                     `;
@@ -691,6 +698,7 @@
                     }
                 });
 
+                // PELOTITAS DE BÁSQUETBOL EN EL ESPECTRO
                 let spectrumDotsHTML = '';
                 if (activePredictions.length > 0) {
                     let diffs = activePredictions.map(p => p.val - match.customLine);
@@ -700,7 +708,11 @@
                         let diff = p.val - match.customLine;
                         let percent = 50 + (diff / maxDiff) * 45;
                         percent = Math.max(5, Math.min(95, percent));
-                        spectrumDotsHTML += `<div class="absolute w-3 h-3 bg-amber-500 dark:bg-amber-400 rounded-full border border-slate-900 transform -translate-x-1/2 -translate-y-1/2 opacity-85 shadow" style="left: ${percent}%; top: 50%;" title="${p.model}: ${p.val > 0 ? '+' + p.val : p.val}"></div>`;
+                        spectrumDotsHTML += `
+                            <div class="absolute transform -translate-x-1/2 -translate-y-1/2 transition-all duration-300 hover:scale-125 z-10" style="left: ${percent}%; top: 50%;" title="${p.model}: ${p.val > 0 ? '+' + p.val : p.val}">
+                                <i class="fa-solid fa-basketball text-amber-500 dark:text-amber-400 text-sm drop-shadow-md"></i>
+                            </div>
+                        `;
                     });
                 }
 
