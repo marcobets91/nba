@@ -213,49 +213,46 @@
             "Washington": {name: "Washington Wizards", abbr: "WAS", id: 1610612764}
         };
 
-        function getTeamInfo(teamName) {
-            let cleaned = String(teamName).trim();
-            if (nbaTeamsMeta[cleaned]) {
-                let t = nbaTeamsMeta[cleaned];
-                return { name: t.name, abbr: t.abbr, logo: `https://cdn.nba.com/logos/nba/${t.id}/global/L/logo.svg` };
-            }
-            return { name: cleaned, abbr: cleaned.substring(0,3).toUpperCase(), logo: "https://cdn.nba.com/logos/nba/1610612738/global/L/logo.svg" };
+        // Función de normalización canónica para unificar nombres de modelos
+        function canonicalModelName(name) {
+            if (!name) return '';
+            let n = String(name).trim().toLowerCase();
+            if (n.includes('sagarin rating') || n === 'sag' || n === 'linesag' || n === 'sagarin') return 'Sagarin';
+            if (n.includes('sagarin predictor') || n === 'spts' || n === 'linesagp') return 'Sagarin Predictor';
+            if (n.includes('sagarin golden mean') || n === 'sgm' || n === 'linesaggm') return 'Sagarin Golden Mean';
+            if (n.includes('sagarin recent') || n === 'srec' || n === 'linesage') return 'Sagarin Recent';
+            if (n.includes('moore') || n === 'mor' || n === 'linemoore') return 'Moore';
+            if (n.includes('espn') || n === 'lineespn') return 'ESPN BPI';
+            if (n.includes('game time decision') || n === 'gtd' || n === 'linegtd') return 'Game Time Decision';
+            if (n.includes('dok') || n === 'linedok') return 'Dokter';
+            if (n.includes('dunkel') || n === 'dunk' || n === 'linedunkel') return 'Dunkel';
+            if (n.includes('massey') || n === 'mass' || n === 'linemassey') return 'Massey Ratings';
+            if (n.includes('versus') || n === 'vss' || n === 'linevss') return 'Versus Sports Simulator';
+            if (n.includes('logical') || n === 'la' || n === 'linela') return 'Logical Approach';
+            if (n.includes('talisman') || n === 'tr' || n === 'linetalis') return 'Talisman Red';
+            if (n.includes('director') || n === 'doi' || n === 'linedoi') return 'Director of Information';
+            if (n.includes('adjusted') || n === 'cadj' || n === 'linecadj') return 'Computer Adjusted line';
+            if (n.includes('sam') || n === 'linesam') return 'Sam';
+            return name.trim();
         }
 
-        // Mapeo exacto de las 16 columnas y abreviaturas del archivo
         const modelColumnMapping = {
-            'sag': 'Sagarin',
-            'linesag': 'Sagarin',
-            'spts': 'Sagarin Predictor',
-            'linesagp': 'Sagarin Predictor',
-            'sgm': 'Sagarin Golden Mean',
-            'linesaggm': 'Sagarin Golden Mean',
-            'srec': 'Sagarin Recent',
-            'linesage': 'Sagarin Recent',
-            'mor': 'Moore',
-            'linemoore': 'Moore',
-            'espn': 'ESPN BPI',
-            'lineespn': 'ESPN BPI',
-            'gtd': 'Game Time Decision',
-            'linegtd': 'Game Time Decision',
-            'dok': 'Dokter',
-            'linedok': 'Dokter',
-            'dunk': 'Dunkel',
-            'linedunkel': 'Dunkel',
-            'mass': 'Massey Ratings',
-            'linemassey': 'Massey Ratings',
-            'vss': 'Versus Sports Simulator',
-            'linevss': 'Versus Sports Simulator',
-            'la': 'Logical Approach',
-            'linela': 'Logical Approach',
-            'tr': 'Talisman Red',
-            'linetalis': 'Talisman Red',
-            'doi': 'Director of Information',
-            'linedoi': 'Director of Information',
-            'cadj': 'Computer Adjusted line',
-            'linecadj': 'Computer Adjusted line',
-            'sam': 'Sam',
-            'linesam': 'Sam'
+            'sag': 'Sagarin', 'linesag': 'Sagarin', 'sagarin': 'Sagarin',
+            'spts': 'Sagarin Predictor', 'linesagp': 'Sagarin Predictor',
+            'sgm': 'Sagarin Golden Mean', 'linesaggm': 'Sagarin Golden Mean',
+            'srec': 'Sagarin Recent', 'linesage': 'Sagarin Recent',
+            'mor': 'Moore', 'linemoore': 'Moore', 'moore': 'Moore',
+            'espn': 'ESPN BPI', 'lineespn': 'ESPN BPI',
+            'gtd': 'Game Time Decision', 'linegtd': 'Game Time Decision',
+            'dok': 'Dokter', 'linedok': 'Dokter', 'dokter': 'Dokter',
+            'dunk': 'Dunkel', 'linedunkel': 'Dunkel', 'dunkel': 'Dunkel',
+            'mass': 'Massey Ratings', 'linemassey': 'Massey Ratings', 'massey ratings': 'Massey Ratings',
+            'vss': 'Versus Sports Simulator', 'linevss': 'Versus Sports Simulator', 'versus sports simulator': 'Versus Sports Simulator',
+            'la': 'Logical Approach', 'linela': 'Logical Approach', 'logical approach': 'Logical Approach',
+            'tr': 'Talisman Red', 'linetalis': 'Talisman Red', 'talisman red': 'Talisman Red',
+            'doi': 'Director of Information', 'linedoi': 'Director of Information', 'director of information': 'Director of Information',
+            'cadj': 'Computer Adjusted line', 'linecadj': 'Computer Adjusted line', 'computer adjusted line': 'Computer Adjusted line',
+            'sam': 'Sam', 'linesam': 'Sam'
         };
 
         const excludedModels = ['opening line', 'line', 'opening', 'system average', 'average', 'lineopen', 'avg'];
@@ -309,7 +306,9 @@
 
             validRows.forEach(row => {
                 let actualSysKey = Object.keys(row).find(k => k.trim().toLowerCase() === 'system');
-                let sys = row[actualSysKey].trim();
+                let rawSys = row[actualSysKey].trim();
+                let sys = canonicalModelName(rawSys); // Unificación canónica
+
                 let ats = getVal(row, 'ATS');
                 let err = getVal(row, 'Absolute Error') || max_err;
                 let bias_val = getVal(row, 'Bias');
@@ -348,13 +347,19 @@
                 let home_info = getTeamInfo(row[homeKey]);
 
                 let preds_dict = {};
-                for (let col in modelColumnMapping) {
-                    let foundKey = keys.find(k => k.trim().toLowerCase() === col.toLowerCase());
-                    if (foundKey && row[foundKey] !== undefined && row[foundKey] !== '' && !isNaN(row[foundKey])) {
-                        let displayName = modelColumnMapping[col];
-                        preds_dict[displayName] = parseFloat(row[foundKey]);
+                
+                // Mapear columnas usando modelColumnMapping y canonicalModelName
+                keys.forEach(k => {
+                    let cleanK = k.trim().toLowerCase();
+                    if (!['road', 'home', 'line', 'lineopen', 'date'].includes(cleanK) && !excludedModels.includes(cleanK)) {
+                        if (row[k] !== undefined && row[k] !== '' && !isNaN(row[k])) {
+                            let mappedName = modelColumnMapping[cleanK] || canonicalModelName(k);
+                            if (mappedName) {
+                                preds_dict[mappedName] = parseFloat(row[k]);
+                            }
+                        }
                     }
-                }
+                });
 
                 let baseLine = lineKey ? (parseFloat(row[lineKey]) || 0) : 0;
 
@@ -379,7 +384,8 @@
                 if (saved) {
                     const parsed = JSON.parse(saved);
                     for (let sys in parsed) {
-                        let matchedKey = Object.keys(modelStats).find(k => k.toLowerCase().trim() === sys.toLowerCase().trim());
+                        let canonical = canonicalModelName(sys);
+                        let matchedKey = Object.keys(modelStats).find(k => canonicalModelName(k) === canonical);
                         if (matchedKey) modelStats[matchedKey].active = parsed[sys];
                     }
                 }
@@ -518,7 +524,8 @@
         }
 
         function toggleModel(sys, status) {
-            let matchedKey = Object.keys(modelStats).find(k => k.toLowerCase().trim() === sys.toLowerCase().trim());
+            let canonical = canonicalModelName(sys);
+            let matchedKey = Object.keys(modelStats).find(k => canonicalModelName(k) === canonical);
             if (matchedKey) {
                 modelStats[matchedKey].active = status;
             } else if (modelStats[sys]) {
@@ -567,9 +574,9 @@
                 let activePredictions = [];
                 for (let modelName in match.predictions) {
                     let val = match.predictions[modelName];
+                    let canonical = canonicalModelName(modelName);
                     
-                    let statKey = Object.keys(modelStats).find(k => k.toLowerCase().trim() === modelName.toLowerCase().trim() || 
-                                                                   k.toLowerCase().includes('sam') && modelName.toLowerCase().includes('sam'));
+                    let statKey = Object.keys(modelStats).find(k => canonicalModelName(k) === canonical);
                     let isModelActive = statKey ? modelStats[statKey].active : false;
 
                     if (isModelActive) {
