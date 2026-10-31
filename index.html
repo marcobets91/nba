@@ -223,51 +223,33 @@
             return { name: cleaned, abbr: cleaned.substring(0,3).toUpperCase(), logo: "https://cdn.nba.com/logos/nba/1610612738/global/L/logo.svg" };
         }
 
+        // Normalizador universal inteligente por coincidencia de palabras clave parciales
         function canonicalModelName(name) {
             if (!name) return '';
-            let n = String(name).trim().toLowerCase();
+            let n = String(name).trim().toLowerCase().replace(/[_-\s]+/g, '');
             
-            if (n.includes('sagarin predictor') || n === 'spts' || n === 'linesagp') return 'Sagarin Predictor';
-            if (n.includes('sagarin golden mean') || n === 'sgm' || n === 'linesaggm') return 'Sagarin Golden Mean';
-            if (n.includes('sagarin recent') || n === 'srec' || n === 'linesage') return 'Sagarin Recent';
-            if (n.includes('sagarin') || n === 'sag' || n === 'linesag') return 'Sagarin';
+            if (n.includes('sagarin') && n.includes('predictor')) return 'Sagarin Predictor';
+            if (n.includes('sagarin') && (n.includes('golden') || n.includes('mean'))) return 'Sagarin Golden Mean';
+            if (n.includes('sagarin') && (n.includes('recent') || n.includes('rec'))) return 'Sagarin Recent';
+            if (n.includes('sagarin')) return 'Sagarin';
             
-            if (n.includes('moore') || n === 'mor' || n === 'linemoore') return 'Moore';
-            if (n.includes('espn') || n === 'lineespn') return 'ESPN BPI';
-            if (n.includes('game time decision') || n === 'gtd' || n === 'linegtd') return 'Game Time Decision';
-            if (n.includes('dok') || n === 'linedok' || n === 'dokter') return 'Dokter';
-            if (n.includes('dunkel') || n === 'dunk' || n === 'linedunkel') return 'Dunkel';
-            if (n.includes('massey') || n === 'mass' || n === 'linemassey') return 'Massey Ratings';
-            if (n.includes('versus') || n === 'vss' || n === 'linevss') return 'Versus Sports Simulator';
-            if (n.includes('logical') || n === 'la' || n === 'linela') return 'Logical Approach';
-            if (n.includes('talisman') || n === 'tr' || n === 'linetalis') return 'Talisman Red';
-            if (n.includes('director') || n === 'doi' || n === 'linedoi') return 'Director of Information';
-            if (n.includes('adjusted') || n === 'cadj' || n === 'linecadj') return 'Computer Adjusted line';
-            if (n.includes('sam') || n === 'linesam') return 'Sam';
+            if (n.includes('gametime') || n.includes('gtd')) return 'Game Time Decision';
+            if (n.includes('versus') || n.includes('vss')) return 'Versus Sports Simulator';
+            if (n.includes('moore') || n.includes('mor')) return 'Moore';
+            if (n.includes('espn') || n.includes('bpi')) return 'ESPN BPI';
+            if (n.includes('dok') || n.includes('dokter')) return 'Dokter';
+            if (n.includes('dunkel') || n.includes('dunk')) return 'Dunkel';
+            if (n.includes('massey')) return 'Massey Ratings';
+            if (n.includes('logical')) return 'Logical Approach';
+            if (n.includes('talisman')) return 'Talisman Red';
+            if (n.includes('director')) return 'Director of Information';
+            if (n.includes('adjusted') || n.includes('cadj')) return 'Computer Adjusted line';
+            if (n.includes('sam')) return 'Sam';
             
-            return name.trim();
+            return String(name).trim();
         }
 
-        const modelColumnMapping = {
-            'sag': 'Sagarin', 'linesag': 'Sagarin', 'sagarin': 'Sagarin',
-            'spts': 'Sagarin Predictor', 'linesagp': 'Sagarin Predictor',
-            'sgm': 'Sagarin Golden Mean', 'linesaggm': 'Sagarin Golden Mean',
-            'srec': 'Sagarin Recent', 'linesage': 'Sagarin Recent',
-            'mor': 'Moore', 'linemoore': 'Moore', 'moore': 'Moore',
-            'espn': 'ESPN BPI', 'lineespn': 'ESPN BPI',
-            'gtd': 'Game Time Decision', 'linegtd': 'Game Time Decision',
-            'dok': 'Dokter', 'linedok': 'Dokter', 'dokter': 'Dokter',
-            'dunk': 'Dunkel', 'linedunkel': 'Dunkel', 'dunkel': 'Dunkel',
-            'mass': 'Massey Ratings', 'linemassey': 'Massey Ratings', 'massey ratings': 'Massey Ratings',
-            'vss': 'Versus Sports Simulator', 'linevss': 'Versus Sports Simulator', 'versus sports simulator': 'Versus Sports Simulator',
-            'la': 'Logical Approach', 'linela': 'Logical Approach', 'logical approach': 'Logical Approach',
-            'tr': 'Talisman Red', 'linetalis': 'Talisman Red', 'talisman red': 'Talisman Red',
-            'doi': 'Director of Information', 'linedoi': 'Director of Information', 'director of information': 'Director of Information',
-            'cadj': 'Computer Adjusted line', 'linecadj': 'Computer Adjusted line', 'computer adjusted line': 'Computer Adjusted line',
-            'sam': 'Sam', 'linesam': 'Sam'
-        };
-
-        const excludedModels = ['opening line', 'line', 'opening', 'system average', 'average', 'lineopen', 'avg'];
+        const excludedModels = ['opening line', 'line', 'opening', 'system average', 'average', 'lineopen', 'avg', 'date', 'road', 'home'];
 
         async function fetchCSV(filename) {
             try {
@@ -360,7 +342,7 @@
                 let sysKey = Object.keys(r).find(k => k.trim().toLowerCase() === 'system');
                 if (!sysKey || !r[sysKey]) return false;
                 let val = r[sysKey].trim().toLowerCase();
-                return val !== '' && !excludedModels.includes(val);
+                return val !== '' && !excludedModels.some(ex => val.includes(ex));
             });
             
             let getVal = (r, colName) => {
@@ -410,10 +392,19 @@
         function processPreds(rows) {
             rows.forEach((row, idx) => {
                 let keys = Object.keys(row);
-                let roadKey = keys.find(k => k.trim().toLowerCase() === 'road');
-                let homeKey = keys.find(k => k.trim().toLowerCase() === 'home');
-                let lineOpenKey = keys.find(k => k.trim().toLowerCase() === 'lineopen');
-                let lineKey = keys.find(k => k.trim().toLowerCase() === 'line');
+                let roadKey = keys.find(k => {
+                    let lk = k.trim().toLowerCase();
+                    return lk === 'road' || lk === 'visitor' || lk === 'visita';
+                });
+                let homeKey = keys.find(k => {
+                    let lk = k.trim().toLowerCase();
+                    return lk === 'home' || lk === 'local';
+                });
+                let lineOpenKey = keys.find(k => k.trim().toLowerCase().includes('open'));
+                let lineKey = keys.find(k => {
+                    let lk = k.trim().toLowerCase();
+                    return lk === 'line' || lk === 'spread';
+                });
 
                 if (!roadKey || !homeKey || !row[roadKey] || !row[homeKey]) return;
 
@@ -424,12 +415,11 @@
                 
                 keys.forEach(k => {
                     let cleanK = k.trim().toLowerCase();
-                    if (!['road', 'home', 'line', 'lineopen', 'date'].includes(cleanK) && !excludedModels.includes(cleanK)) {
-                        if (row[k] !== undefined && row[k] !== '' && !isNaN(row[k])) {
-                            let mappedName = modelColumnMapping[cleanK] || canonicalModelName(k);
-                            if (mappedName) {
-                                preds_dict[mappedName] = parseFloat(row[k]);
-                            }
+                    let isExcluded = excludedModels.some(ex => cleanK.includes(ex));
+                    if (!isExcluded && row[k] !== undefined && row[k] !== '' && !isNaN(row[k])) {
+                        let mappedName = canonicalModelName(k);
+                        if (mappedName) {
+                            preds_dict[mappedName] = parseFloat(row[k]);
                         }
                     }
                 });
@@ -440,7 +430,7 @@
                     id: idx + 1,
                     road: road_info,
                     home: home_info,
-                    lineopen: lineOpenKey ? (parseFloat(row[lineOpenKey]) || 0) : 0,
+                    lineopen: lineOpenKey ? (parseFloat(row[lineOpenKey]) || 0) : baseLine,
                     line: baseLine,
                     customLine: baseLine,
                     predictions: preds_dict
@@ -520,7 +510,6 @@
             document.getElementById('filterSearch').value = '';
             document.getElementById('filterMinEdge').value = 0;
             document.getElementById('filterSide').value = 'all';
-            document.getElementById('filterLineMove').value = 'all';
             document.getElementById('filterSort').value = 'edge_desc';
             updateEdgeLabel();
             applyFilters();
