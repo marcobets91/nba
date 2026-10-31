@@ -33,6 +33,9 @@
                 <button onclick="switchTab('dashboard')" id="tab-dashboard" class="px-4 py-2 rounded-lg text-sm font-bold transition bg-amber-600 text-white shadow">
                     <i class="fa-solid fa-chart-line mr-2"></i> Predicciones
                 </button>
+                <button onclick="switchTab('lines')" id="tab-lines" class="px-4 py-2 rounded-lg text-sm font-bold transition text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white">
+                    <i class="fa-solid fa-pen-to-square mr-2"></i> Líneas
+                </button>
                 <button onclick="switchTab('models')" id="tab-models" class="px-4 py-2 rounded-lg text-sm font-bold transition text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white">
                     <i class="fa-solid fa-sliders mr-2"></i> Modelos
                 </button>
@@ -102,7 +105,37 @@
         <div id="matchesContainer" class="grid grid-cols-1 lg:grid-cols-2 gap-6"></div>
     </div>
 
-    <!-- VISTA 2: GESTIÓN DE MODELOS -->
+    <!-- VISTA 2: GESTIÓN DE LÍNEAS -->
+    <div id="view-lines" class="hidden space-y-6">
+        <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-300 dark:border-slate-800 shadow-xl">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-4">
+                <div>
+                    <h2 class="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                        <i class="fa-solid fa-pen-to-square text-amber-500"></i> Gestión Rápida de Líneas
+                    </h2>
+                    <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Modifica las líneas de los partidos mediante texto de forma cómoda. Los cambios se aplicarán al volver al Dashboard.</p>
+                </div>
+                <button onclick="resetAllLines()" class="bg-slate-600 hover:bg-slate-700 text-white px-3 py-1.5 rounded-lg text-xs font-bold transition shadow">
+                    <i class="fa-solid fa-rotate-left mr-1"></i> Restaurar Originales
+                </button>
+            </div>
+            
+            <div class="overflow-x-auto mt-4">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="border-b border-slate-200 dark:border-slate-800 text-xs text-slate-500 uppercase tracking-wider bg-slate-50 dark:bg-slate-950">
+                            <th class="p-3">Partido (Visitante vs Local)</th>
+                            <th class="p-3 text-center">Línea Original (CSV)</th>
+                            <th class="p-3 text-center">Línea Actual (Editable)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="linesTableBody" class="divide-y divide-slate-200 dark:divide-slate-800 text-sm"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- VISTA 3: GESTIÓN DE MODELOS -->
     <div id="view-models" class="hidden space-y-6">
         <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-300 dark:border-slate-800 shadow-xl">
             <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-4">
@@ -306,7 +339,7 @@
                     home: home_info,
                     lineopen: lineOpenKey ? (parseFloat(row[lineOpenKey]) || 0) : 0,
                     line: baseLine,
-                    customLine: baseLine, // Línea editable en tiempo real
+                    customLine: baseLine,
                     predictions: preds_dict
                 });
             });
@@ -351,16 +384,23 @@
         }
 
         function switchTab(tab) {
+            document.getElementById('view-dashboard').classList.add('hidden');
+            document.getElementById('view-lines').classList.add('hidden');
+            document.getElementById('view-models').classList.add('hidden');
+            document.getElementById('tab-dashboard').className = "px-4 py-2 rounded-lg text-sm font-bold transition text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white";
+            document.getElementById('tab-lines').className = "px-4 py-2 rounded-lg text-sm font-bold transition text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white";
+            document.getElementById('tab-models').className = "px-4 py-2 rounded-lg text-sm font-bold transition text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white";
+
             if(tab === 'dashboard') {
                 document.getElementById('view-dashboard').classList.remove('hidden');
-                document.getElementById('view-models').classList.add('hidden');
                 document.getElementById('tab-dashboard').className = "px-4 py-2 rounded-lg text-sm font-bold transition bg-amber-600 text-white shadow";
-                document.getElementById('tab-models').className = "px-4 py-2 rounded-lg text-sm font-bold transition text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white";
                 applyFilters();
+            } else if(tab === 'lines') {
+                document.getElementById('view-lines').classList.remove('hidden');
+                document.getElementById('tab-lines').className = "px-4 py-2 rounded-lg text-sm font-bold transition bg-amber-600 text-white shadow";
+                renderLinesTable();
             } else {
-                document.getElementById('view-dashboard').classList.add('hidden');
                 document.getElementById('view-models').classList.remove('hidden');
-                document.getElementById('tab-dashboard').className = "px-4 py-2 rounded-lg text-sm font-bold transition text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white";
                 document.getElementById('tab-models').className = "px-4 py-2 rounded-lg text-sm font-bold transition bg-amber-600 text-white shadow";
                 renderModelsTable();
             }
@@ -381,13 +421,37 @@
             applyFilters();
         }
 
-        function updateCustomLine(matchId, newval) {
+        function renderLinesTable() {
+            const tbody = document.getElementById('linesTableBody');
+            tbody.innerHTML = '';
+            matchesData.forEach(m => {
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-50 dark:hover:bg-slate-800/50 transition";
+                tr.innerHTML = `
+                    <td class="p-3 font-semibold text-slate-900 dark:text-white flex items-center gap-3">
+                        <img src="${m.road.logo}" class="w-7 h-7 object-contain"> <span>${m.road.name}</span> 
+                        <span class="text-xs text-slate-400 font-normal">vs</span> 
+                        <img src="${m.home.logo}" class="w-7 h-7 object-contain"> <span>${m.home.name}</span>
+                    </td>
+                    <td class="p-3 text-center text-slate-600 dark:text-slate-400 font-bold">${m.line}</td>
+                    <td class="p-3 text-center">
+                        <input type="number" step="0.5" value="${m.customLine}" onchange="setCustomLine(${m.id}, this.value)" class="w-28 bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-lg px-3 py-1.5 text-center font-bold text-amber-600 dark:text-amber-400 focus:outline-none focus:border-amber-500">
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function setCustomLine(matchId, val) {
             let m = matchesData.find(item => item.id === matchId);
-            if(m) {
-                m.customLine = parseFloat(newval);
-                document.getElementById(`line-val-${matchId}`).innerText = m.customLine > 0 ? '+' + m.customLine : m.customLine;
-                applyFilters();
+            if(m && !isNaN(val)) {
+                m.customLine = parseFloat(val);
             }
+        }
+
+        function resetAllLines() {
+            matchesData.forEach(m => m.customLine = m.line);
+            renderLinesTable();
         }
 
         function sortTable(column) {
@@ -469,7 +533,6 @@
                 let agreeingModelsCount = 0;
                 let totalActiveModelsEvaluating = 0;
 
-                // Primero calculamos el promedio ponderado usando customLine como base
                 let activePredictions = [];
                 for (let model in match.predictions) {
                     let val = match.predictions[model];
@@ -494,7 +557,6 @@
                 let absEdge = Math.abs(edge);
                 let edgeSide = edge > 0 ? 'home' : 'road';
 
-                // Contar cuántos modelos activos apoyan el mismo lado del pick
                 activePredictions.forEach(item => {
                     let modelEdge = item.val - match.customLine;
                     let modelSide = modelEdge > 0 ? 'home' : 'road';
@@ -557,21 +619,12 @@
                             </div>
                             <div class="text-center px-2">
                                 <span class="text-[10px] font-black tracking-widest text-slate-500 bg-slate-100 dark:bg-slate-950 px-2 py-1 rounded border border-slate-200 dark:border-slate-800">VS</span>
-                                <div class="text-xs font-semibold text-amber-600 dark:text-amber-400 mt-1">Línea: <span id="line-val-${m.id}">${m.customLine > 0 ? '+' + m.customLine : m.customLine}</span></div>
+                                <div class="text-xs font-semibold text-amber-600 dark:text-amber-400 mt-1">Línea: ${m.customLine > 0 ? '+' + m.customLine : m.customLine}</div>
                             </div>
                             <div class="flex items-center gap-3 text-right">
                                 <div><h3 class="font-bold text-base text-slate-900 dark:text-white">${m.home.name}</h3><span class="text-xs text-slate-500">Local</span></div>
                                 <img src="${m.home.logo}" class="w-12 h-12 object-contain" alt="${m.home.name}">
                             </div>
-                        </div>
-
-                        <!-- CONTROL DESLIZANTE PARA AJUSTAR LA LÍNEA EN TIEMPO REAL -->
-                        <div class="mb-5 bg-slate-50 dark:bg-slate-950 p-3 rounded-xl border border-slate-200 dark:border-slate-800">
-                            <div class="flex justify-between items-center mb-1 text-xs font-bold text-slate-500 uppercase">
-                                <span>Ajustar Línea (Vivo)</span>
-                                <span class="text-amber-600 dark:text-amber-400">${m.customLine}</span>
-                            </div>
-                            <input type="range" min="${m.line - 10}" max="${m.line + 10}" step="0.5" value="${m.customLine}" oninput="updateCustomLine(${m.id}, this.value)" class="w-full accent-amber-500 cursor-pointer">
                         </div>
 
                         <div class="grid grid-cols-3 gap-3 mb-5 bg-slate-50 dark:bg-slate-950 p-4 rounded-xl border border-slate-200 dark:border-slate-800 text-center">
