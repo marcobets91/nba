@@ -224,7 +224,7 @@
         }
 
         // =========================================================================
-        // MAPEO CON ABREVIATURAS PERSONALIZADAS Y LIMPIAS
+        // DICCIONARIO MAESTRO CON AGHATA GG INCLUIDO
         // =========================================================================
         const modelDictionary = {
             "Sagarin Rating": { name: "Sagarin Rating", short: "SAG", key: "linesag" },
@@ -242,7 +242,8 @@
             "Massey Ratings": { name: "Massey Ratings", short: "MASSEY", key: "linemassey" },
             "ESPN BPI": { name: "ESPN BPI", short: "ESPN", key: "lineespn" },
             "Computer Adjusted": { name: "Computer Adjusted", short: "CADJ", key: "lineca" },
-            "Sam": { name: "Sam", short: "SAM", key: "linesam" }
+            "Sam": { name: "Sam", short: "SAM", key: "linesam" },
+            "aghata.gg": { name: "aghata.gg", short: "AGHATA", key: "lineagatha" }
         };
 
         function getShortName(canonicalName) {
@@ -262,7 +263,7 @@
                 }
             }
             for (let canonical in modelDictionary) {
-                if (clean.includes(canonical.toLowerCase().replace('.com', '').trim())) {
+                if (clean.includes(canonical.toLowerCase().replace('.com', '').replace('.gg', '').trim())) {
                     return canonical;
                 }
             }
