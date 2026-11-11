@@ -223,6 +223,7 @@
             return { name: cleaned, abbr: cleaned.substring(0,3).toUpperCase(), logo: "https://cdn.nba.com/logos/nba/1610612738/global/L/logo.svg" };
         }
 
+        // ABREVIATURAS LIMPIAS PARA CADA MODELO
         const knownShorts = {
             "agatha.gg": "AGHATA",
             "aghata.gg": "AGHATA",
@@ -253,13 +254,20 @@
             return clean.substring(0, 6).toUpperCase();
         }
 
-        function normalizeHeaderKey(header) {
-            let clean = String(header).trim().toLowerCase();
-            if (clean.includes("agath") || clean.includes("aghata")) return "agatha.gg";
-            return clean;
-        }
+        // LISTA ESTRICTA DE COLUMNAS QUE NUNCA DEBEN SER TRATADAS COMO MODELOS
+        const excludedHeaders = [
+            'line', 'lineopen', 'opening line', 'linepower', 'lineavg', 'std', 
+            'line_avgdiff', 'opening', 'system average', 'average', 'avg', 
+            'date', 'road', 'home', 'visitor', 'visita', 'local', 'spread', 'system'
+        ];
 
-        const excludedHeaders = ['linepower', 'lineavg', 'std', 'line_avgdiff', 'opening line', 'line', 'opening', 'system average', 'average', 'lineopen', 'avg', 'date', 'road', 'home', 'visitor', 'local', 'spread'];
+        function isValidModelName(name) {
+            if (!name) return false;
+            let clean = String(name).trim().toLowerCase();
+            if (excludedHeaders.includes(clean)) return false;
+            if (clean.includes('line') && clean.length < 8) return false;
+            return true;
+        }
 
         async function fetchCSV(filename) {
             try {
@@ -342,10 +350,11 @@
                 return key ? parseFloat(r[key]) || 0 : 0;
             };
 
-            // PROCESAR TODOS LOS MODELOS SIN DESCARTAR NINGUNO POR NOMBRE
             let validRows = rows.filter(r => {
                 let sysKey = Object.keys(r).find(k => k.trim().toLowerCase() === 'system');
-                return sysKey && r[sysKey] && String(r[sysKey]).trim().length > 0;
+                if (!sysKey || !r[sysKey]) return false;
+                let val = String(r[sysKey]).trim();
+                return isValidModelName(val);
             });
 
             let atsArr = validRows.map(r => getVal(r, 'ATS'));
@@ -362,9 +371,9 @@
                 let sysKey = Object.keys(row).find(k => k.trim().toLowerCase() === 'system');
                 let rawSys = String(row[sysKey]).trim();
                 
-                // Normalizar agatha/aghata si aplica
                 let modelName = rawSys;
-                if (rawSys.toLowerCase().includes("agath") || rawSys.toLowerCase().includes("aghata")) {
+                let lower = rawSys.toLowerCase();
+                if (lower.includes("agath") || lower.includes("aghata")) {
                     modelName = "agatha.gg";
                 }
 
@@ -381,7 +390,7 @@
 
                 let score = (term_ats + term_err + term_bias + term_ms) * 100;
 
-                // REGLA: Activos automáticamente si ATS >= 50%
+                // ACTIVACIÓN AUTOMÁTICA SI ATS >= 50%
                 let activeByDefault = ats >= 0.50;
 
                 modelStats[modelName] = {
@@ -412,19 +421,18 @@
                 
                 keys.forEach(k => {
                     let cleanK = k.trim().toLowerCase();
-                    if (!excludedHeaders.includes(cleanK)) {
+                    if (!excludedHeaders.includes(cleanK) && isValidModelName(k)) {
                         let normalizedKey = cleanK;
                         if (cleanK.includes('agath') || cleanK.includes('aghata')) {
                             normalizedKey = 'agatha.gg';
                         }
                         
-                        // Buscar el nombre del modelo que coincide en modelStats
                         let matchedModelName = Object.keys(modelStats).find(m => {
                             let mLower = m.toLowerCase();
                             return mLower === normalizedKey || cleanK.includes(mLower.replace('line', '').replace('.gg', '').replace('.com', '').trim());
                         }) || normalizedKey;
 
-                        if (row[k] !== undefined && row[k] !== '' && !isNaN(row[k])) {
+                        if (modelStats[matchedModelName] && row[k] !== undefined && row[k] !== '' && !isNaN(row[k])) {
                             preds_dict[matchedModelName] = parseFloat(row[k]);
                         }
                     }
