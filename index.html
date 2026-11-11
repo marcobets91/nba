@@ -224,7 +224,7 @@
         }
 
         // =========================================================================
-        // DICCIONARIO MAESTRO CON AGHATA GG INCLUIDO
+        // DICCIONARIO MAESTRO CON AGHATA GG INCLUIDO Y RECONOCIDO
         // =========================================================================
         const modelDictionary = {
             "Sagarin Rating": { name: "Sagarin Rating", short: "SAG", key: "linesag" },
@@ -413,13 +413,16 @@
 
                 let score = (term_ats + term_err + term_bias + term_ms) * 100;
 
+                // ACTIVACIÓN AUTOMÁTICA SI ATS > 0.50 (50%)
+                let activeByDefault = ats > 0.50;
+
                 modelStats[canonicalSys] = {
                     ats: ats,
                     abs_err: err,
                     bias: bias_val,
                     mean_square: ms,
                     score: Math.round(score * 100) / 100,
-                    active: true
+                    active: activeByDefault
                 };
             });
         }
