@@ -1,21 +1,21 @@
 book,date,road,home,road_spread,road_handle,road_bets
-DraftKings,Nov 11,Washington,Indiana,3.5,35,53
-DraftKings,Nov 11,Cleveland,New York,4.5,15,21
-DraftKings,Nov 11,Boston,Toronto,-5.5,83,70
-DraftKings,Nov 11,Brooklyn,New Orleans,3.5,32,49
-DraftKings,Nov 11,San Antonio,Chicago,-15.5,45,75
-DraftKings,Nov 11,Denver,Memphis,-4.5,79,66
-DraftKings,Nov 11,LA Lakers,Milwaukee,-14.5,79,74
-DraftKings,Nov 11,Orlando,Utah,-4.5,59,64
-DraftKings,Nov 11,Golden State,Houston,6.5,71,70
-DraftKings,Nov 11,Oklahoma City,Portland,2.5,47,67
-Circa,Nov 11,Washington,Indiana,2.5,76,25
-Circa,Nov 11,Cleveland,New York,4,72,40
-Circa,Nov 11,Boston,Toronto,-5.5,51,43
-Circa,Nov 11,Brooklyn,New Orleans,3.5,1,20
-Circa,Nov 11,San Antonio,Chicago,-15.5,31,64
-Circa,Nov 11,Denver,Memphis,-4,100,83
-Circa,Nov 11,LA Lakers,Milwaukee,-14.5,74,75
-Circa,Nov 11,Orlando,Utah,-4,3,40
-Circa,Nov 11,Golden State,Houston,6.5,57,55
-Circa,Nov 11,Oklahoma City,Portland,2,92,80
+DraftKings,nov-11,Washington,Indiana,3.5,56,58
+DraftKings,nov-11,Cleveland,New York,4.5,15,24
+DraftKings,nov-11,Boston,Toronto,-5.5,77,71
+DraftKings,nov-11,Brooklyn,New Orleans,2.5,36,48
+DraftKings,nov-11,San Antonio,Chicago,-15.5,48,73
+DraftKings,nov-11,Denver,Memphis,-4.5,65,59
+DraftKings,nov-11,LA Lakers,Milwaukee,-14.5,78,76
+DraftKings,nov-11,Orlando,Utah,-4.5,57,62
+DraftKings,nov-11,Golden State,Houston,6.5,66,65
+DraftKings,nov-11,Oklahoma City,Portland,2.5,58,66
+Circa,nov-11,Washington,Indiana,3,53,20
+Circa,nov-11,Cleveland,New York,5,56,46
+Circa,nov-11,Boston,Toronto,-5.5,51,43
+Circa,nov-11,Brooklyn,New Orleans,2.5,75,40
+Circa,nov-11,San Antonio,Chicago,-15.5,83,63
+Circa,nov-11,Denver,Memphis,-4,57,78
+Circa,nov-11,LA Lakers,Milwaukee,-14.5,74,79
+Circa,nov-11,Orlando,Utah,-4.5,3,40
+Circa,nov-11,Golden State,Houston,6.5,57,54
+Circa,nov-11,Oklahoma City,Portland,2.5,93,77
