@@ -223,63 +223,40 @@
             return { name: cleaned, abbr: cleaned.substring(0,3).toUpperCase(), logo: "https://cdn.nba.com/logos/nba/1610612738/global/L/logo.svg" };
         }
 
-        // =========================================================================
-        // DICCIONARIO MAESTRO CON AGHATA GG INCLUIDO Y RECONOCIDO
-        // =========================================================================
-        const modelDictionary = {
-            "Sagarin Rating": { name: "Sagarin Rating", short: "SAG", key: "linesag" },
-            "Sagarin Recent": { name: "Sagarin Recent", short: "SAG REC", key: "linesage" },
-            "Sagarin Predictor": { name: "Sagarin Predictor", short: "SAG P", key: "linesagp" },
-            "Sagarin Golden Mean": { name: "Sagarin Golden Mean", short: "SAG GM", key: "linesaggm" },
-            "DirectorOfInformation.com": { name: "DirectorOfInformation.com", short: "DOI", key: "linedoi" },
-            "Sonny Moore": { name: "Sonny Moore", short: "MOORE", key: "linemoore" },
-            "Logical Approach": { name: "Logical Approach", short: "LOGIC", key: "linelogic" },
-            "Dunkel Index": { name: "Dunkel Index", short: "DUNKEL", key: "linedunkel" },
-            "Dokter Entropy": { name: "Dokter Entropy", short: "DOKTER", key: "linedok" },
-            "Versus Sports Simulator": { name: "Versus Sports Simulator", short: "VSS", key: "linepugh" },
-            "Consensus": { name: "Consensus", short: "CONS", key: "linedonc" },
-            "Talisman Red": { name: "Talisman Red", short: "TALIS", key: "linetalis" },
-            "Massey Ratings": { name: "Massey Ratings", short: "MASSEY", key: "linemassey" },
-            "ESPN BPI": { name: "ESPN BPI", short: "ESPN", key: "lineespn" },
-            "Computer Adjusted": { name: "Computer Adjusted", short: "CADJ", key: "lineca" },
-            "Sam": { name: "Sam", short: "SAM", key: "linesam" },
-            "aghata.gg": { name: "aghata.gg", short: "AGHATA", key: "lineagatha" }
+        const knownShorts = {
+            "agatha.gg": "AGHATA",
+            "aghata.gg": "AGHATA",
+            "Sagarin Rating": "SAG",
+            "Sagarin Recent": "SAG REC",
+            "Sagarin Predictor": "SAG P",
+            "Sagarin Golden Mean": "SAG GM",
+            "DirectorOfInformation.com": "DOI",
+            "Sonny Moore": "MOORE",
+            "Logical Approach": "LOGIC",
+            "Dunkel Index": "DUNKEL",
+            "Dokter Entropy": "DOKTER",
+            "Versus Sports Simulator": "VSS",
+            "Consensus": "CONS",
+            "Talisman Red": "TALIS",
+            "Massey Ratings": "MASSEY",
+            "ESPN BPI": "ESPN",
+            "Computer Adjusted": "CADJ",
+            "Sam": "SAM"
         };
 
-        function getShortName(canonicalName) {
-            if (modelDictionary[canonicalName] && modelDictionary[canonicalName].short) {
-                return modelDictionary[canonicalName].short;
-            }
-            return canonicalName;
+        function getShortName(rawName) {
+            if (!rawName) return "MOD";
+            let clean = String(rawName).trim();
+            if (knownShorts[clean]) return knownShorts[clean];
+            let lower = clean.toLowerCase();
+            if (lower.includes("agath") || lower.includes("aghata")) return "AGHATA";
+            return clean.substring(0, 6).toUpperCase();
         }
 
-        function getCanonicalName(rawSystemName) {
-            if (!rawSystemName) return null;
-            let clean = String(rawSystemName).trim().toLowerCase();
-            for (let canonical in modelDictionary) {
-                let entry = modelDictionary[canonical];
-                if (canonical.toLowerCase() === clean || entry.key === clean || rawSystemName.trim() === canonical) {
-                    return canonical;
-                }
-            }
-            for (let canonical in modelDictionary) {
-                if (clean.includes(canonical.toLowerCase().replace('.com', '').replace('.gg', '').trim())) {
-                    return canonical;
-                }
-            }
-            return null;
-        }
-
-        function getCanonicalNameFromPredHeader(headerKey) {
-            if (!headerKey) return null;
-            let clean = String(headerKey).trim().toLowerCase();
-            for (let canonical in modelDictionary) {
-                let entry = modelDictionary[canonical];
-                if (entry.key === clean) {
-                    return canonical;
-                }
-            }
-            return null;
+        function normalizeHeaderKey(header) {
+            let clean = String(header).trim().toLowerCase();
+            if (clean.includes("agath") || clean.includes("aghata")) return "agatha.gg";
+            return clean;
         }
 
         const excludedHeaders = ['linepower', 'lineavg', 'std', 'line_avgdiff', 'opening line', 'line', 'opening', 'system average', 'average', 'lineopen', 'avg', 'date', 'road', 'home', 'visitor', 'local', 'spread'];
@@ -301,13 +278,11 @@
 
         async function loadCSVData() {
             try {
-                document.getElementById('loadingDetails').innerText = "Intentando cargar nbaresults.csv y nbapreds.csv...";
-                
+                document.getElementById('loadingDetails').innerText = "Cargando nbaresults.csv y nbapreds.csv...";
                 const [resText, predsText] = await Promise.all([
                     fetchCSV('nbaresults.csv'),
                     fetchCSV('nbapreds.csv')
                 ]);
-
                 processData(resText, predsText);
             } catch (err) {
                 console.error("Error al cargar mediante fetch:", err);
@@ -320,21 +295,19 @@
                 <div class="p-8 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-800 rounded-3xl max-w-xl mx-auto shadow-xl text-center">
                     <i class="fa-solid fa-cloud-arrow-up text-4xl text-amber-500 mb-4"></i>
                     <h3 class="font-bold text-xl text-slate-900 dark:text-white mb-2">Carga Manual de Respaldos</h3>
-                    <p class="text-sm text-slate-500 dark:text-slate-400 mb-6">GitHub Pages bloqueó la descarga automática. Selecciona tus archivos CSV locales para iniciar al instante:</p>
-                    
+                    <p class="text-sm text-slate-500 dark:text-slate-400 mb-6">Selecciona tus archivos CSV locales para iniciar al instante:</p>
                     <div class="space-y-4 text-left">
                         <div>
                             <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">Archivo nbaresults.csv</label>
-                            <input type="file" id="fileResults" accept=".csv" class="w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-bold file:bg-amber-50 file:text-amber-700 dark:file:bg-amber-500/20 dark:file:text-amber-300 hover:file:bg-amber-100 border border-slate-300 dark:border-slate-800 rounded-xl p-2 bg-slate-50 dark:bg-slate-950 cursor-pointer">
+                            <input type="file" id="fileResults" accept=".csv" class="w-full text-sm border border-slate-300 dark:border-slate-800 rounded-xl p-2 bg-slate-50 dark:bg-slate-950">
                         </div>
                         <div>
                             <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">Archivo nbapreds.csv</label>
-                            <input type="file" id="filePreds" accept=".csv" class="w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-bold file:bg-amber-50 file:text-amber-700 dark:file:bg-amber-500/20 dark:file:text-amber-300 hover:file:bg-amber-100 border border-slate-300 dark:border-slate-800 rounded-xl p-2 bg-slate-50 dark:bg-slate-950 cursor-pointer">
+                            <input type="file" id="filePreds" accept=".csv" class="w-full text-sm border border-slate-300 dark:border-slate-800 rounded-xl p-2 bg-slate-50 dark:bg-slate-950">
                         </div>
                     </div>
-
-                    <button onclick="handleManualUpload()" class="mt-6 w-full bg-amber-600 hover:bg-amber-700 text-white font-bold py-3 rounded-xl transition shadow-lg">
-                        <i class="fa-solid fa-play mr-2"></i> Procesar y Cargar Dashboard
+                    <button onclick="handleManualUpload()" class="mt-6 w-full bg-amber-600 hover:bg-amber-700 text-white font-bold py-3 rounded-xl shadow-lg">
+                        <i class="fa-solid fa-play mr-2"></i> Procesar y Cargar
                     </button>
                 </div>
             `;
@@ -343,16 +316,9 @@
         function handleManualUpload() {
             const fRes = document.getElementById('fileResults').files[0];
             const fPred = document.getElementById('filePreds').files[0];
-
-            if (!fRes || !fPred) {
-                alert("Por favor selecciona ambos archivos CSV.");
-                return;
-            }
-
+            if (!fRes || !fPred) { alert("Selecciona ambos archivos CSV."); return; }
             Promise.all([fRes.text(), fPred.text()]).then(([resText, predsText]) => {
                 processData(resText, predsText);
-            }).catch(err => {
-                alert("Error al leer los archivos: " + err);
             });
         }
 
@@ -371,18 +337,16 @@
         }
 
         function processResults(rows) {
-            let validRows = rows.filter(r => {
-                let sysKey = Object.keys(r).find(k => k.trim().toLowerCase() === 'system');
-                if (!sysKey || !r[sysKey]) return false;
-                let val = r[sysKey].trim();
-                let canonical = getCanonicalName(val);
-                return canonical !== null;
-            });
-            
             let getVal = (r, colName) => {
                 let key = Object.keys(r).find(k => k.trim().toLowerCase() === colName.toLowerCase());
                 return key ? parseFloat(r[key]) || 0 : 0;
             };
+
+            // PROCESAR TODOS LOS MODELOS SIN DESCARTAR NINGUNO POR NOMBRE
+            let validRows = rows.filter(r => {
+                let sysKey = Object.keys(r).find(k => k.trim().toLowerCase() === 'system');
+                return sysKey && r[sysKey] && String(r[sysKey]).trim().length > 0;
+            });
 
             let atsArr = validRows.map(r => getVal(r, 'ATS'));
             let errArr = validRows.map(r => getVal(r, 'Absolute Error'));
@@ -395,10 +359,14 @@
             let min_ms = Math.min(...msArr), max_ms = Math.max(...msArr);
 
             validRows.forEach(row => {
-                let actualSysKey = Object.keys(row).find(k => k.trim().toLowerCase() === 'system');
-                let rawSys = row[actualSysKey].trim();
-                let canonicalSys = getCanonicalName(rawSys);
-                if (!canonicalSys) return;
+                let sysKey = Object.keys(row).find(k => k.trim().toLowerCase() === 'system');
+                let rawSys = String(row[sysKey]).trim();
+                
+                // Normalizar agatha/aghata si aplica
+                let modelName = rawSys;
+                if (rawSys.toLowerCase().includes("agath") || rawSys.toLowerCase().includes("aghata")) {
+                    modelName = "agatha.gg";
+                }
 
                 let ats = getVal(row, 'ATS');
                 let err = getVal(row, 'Absolute Error') || max_err;
@@ -413,10 +381,10 @@
 
                 let score = (term_ats + term_err + term_bias + term_ms) * 100;
 
-                // ACTIVACIÓN AUTOMÁTICA SI ATS > 0.50 (50%)
-                let activeByDefault = ats > 0.50;
+                // REGLA: Activos automáticamente si ATS >= 50%
+                let activeByDefault = ats >= 0.50;
 
-                modelStats[canonicalSys] = {
+                modelStats[modelName] = {
                     ats: ats,
                     abs_err: err,
                     bias: bias_val,
@@ -430,19 +398,10 @@
         function processPreds(rows) {
             rows.forEach((row, idx) => {
                 let keys = Object.keys(row);
-                let roadKey = keys.find(k => {
-                    let lk = k.trim().toLowerCase();
-                    return lk === 'road' || lk === 'visitor' || lk === 'visita';
-                });
-                let homeKey = keys.find(k => {
-                    let lk = k.trim().toLowerCase();
-                    return lk === 'home' || lk === 'local';
-                });
+                let roadKey = keys.find(k => ['road', 'visitor', 'visita'].includes(k.trim().toLowerCase()));
+                let homeKey = keys.find(k => ['home', 'local'].includes(k.trim().toLowerCase()));
                 let lineOpenKey = keys.find(k => k.trim().toLowerCase().includes('open'));
-                let lineKey = keys.find(k => {
-                    let lk = k.trim().toLowerCase();
-                    return lk === 'line' || lk === 'spread';
-                });
+                let lineKey = keys.find(k => ['line', 'spread'].includes(k.trim().toLowerCase()));
 
                 if (!roadKey || !homeKey || !row[roadKey] || !row[homeKey]) return;
 
@@ -453,11 +412,20 @@
                 
                 keys.forEach(k => {
                     let cleanK = k.trim().toLowerCase();
-                    let isExcluded = excludedHeaders.includes(cleanK);
-                    if (!isExcluded) {
-                        let canonical = getCanonicalNameFromPredHeader(k);
-                        if (canonical && row[k] !== undefined && row[k] !== '' && !isNaN(row[k])) {
-                            preds_dict[canonical] = parseFloat(row[k]);
+                    if (!excludedHeaders.includes(cleanK)) {
+                        let normalizedKey = cleanK;
+                        if (cleanK.includes('agath') || cleanK.includes('aghata')) {
+                            normalizedKey = 'agatha.gg';
+                        }
+                        
+                        // Buscar el nombre del modelo que coincide en modelStats
+                        let matchedModelName = Object.keys(modelStats).find(m => {
+                            let mLower = m.toLowerCase();
+                            return mLower === normalizedKey || cleanK.includes(mLower.replace('line', '').replace('.gg', '').replace('.com', '').trim());
+                        }) || normalizedKey;
+
+                        if (row[k] !== undefined && row[k] !== '' && !isNaN(row[k])) {
+                            preds_dict[matchedModelName] = parseFloat(row[k]);
                         }
                     }
                 });
