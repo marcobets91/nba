@@ -1,801 +1,278 @@
 <!DOCTYPE html>
-<html lang="es" class="light">
+<html lang="es" class="dark">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NBA Betting</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
-    <script>
-        tailwind.config = { darkMode: 'class' }
-    </script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <style>
-        body, .card-bg, .filter-bg, input, select { transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>NBA Edge</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+<script>tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{disp:['"Barlow Condensed"','sans-serif'],mono:['"IBM Plex Mono"','monospace']}}}}</script>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=IBM+Plex+Mono:wght@400;600&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f4f1ea;--card:#fffdf8;--ink:#17140f;--mut:#7a7366;--line:#e2dccd;--acc:#c2570c;--ok:#0f7a4d;--bad:#c0283d}
+.dark{--bg:#0b0d10;--card:#12161b;--ink:#eef0f2;--mut:#7d8793;--line:#222a33;--acc:#ffb020;--ok:#3ddc97;--bad:#ff5c72}
+body{background:var(--bg);color:var(--ink);font-family:Inter,sans-serif;padding-bottom:5rem}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;background:radial-gradient(900px 400px at 85% -10%,color-mix(in srgb,var(--acc) 14%,transparent),transparent)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px}
+.disp{font-family:'Barlow Condensed',sans-serif;letter-spacing:.02em}
+.mono{font-family:'IBM Plex Mono',monospace}
+.mut{color:var(--mut)}.acc{color:var(--acc)}.ok{color:var(--ok)}.bad{color:var(--bad)}
+.lbl{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--mut)}
+.inp{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:.45rem .7rem;font-size:14px;width:100%;color:var(--ink)}
+.chip{font-size:11px;font-weight:700;padding:2px 8px;border-radius:999px;border:1px solid var(--line);white-space:nowrap}
+.bar{height:6px;border-radius:9px;background:var(--line);overflow:hidden}.bar>i{display:block;height:100%;border-radius:9px}
+.tab{padding:.5rem 1rem;border-radius:10px;font-weight:700;font-size:13px;color:var(--mut)}
+.tab.on{background:var(--acc);color:#111}
+.nav{position:fixed;bottom:0;left:0;right:0;z-index:30;padding-bottom:env(safe-area-inset-bottom)}
+@media(min-width:768px){.nav{position:static;padding:0;background:none!important;border:0!important}body{padding-bottom:2rem}}
+details>summary{cursor:pointer;list-style:none}details>summary::-webkit-details-marker{display:none}
+.btn{background:var(--acc);color:#111;font-weight:800;font-size:12px;padding:.4rem .8rem;border-radius:9px}
+.btn2{border:1px solid var(--line);font-weight:700;font-size:12px;padding:.4rem .8rem;border-radius:9px}
+</style>
 </head>
-<body class="bg-slate-100 dark:bg-slate-950 text-slate-800 dark:text-slate-100 p-4 md:p-8 max-w-7xl mx-auto">
+<body class="max-w-7xl mx-auto px-4 md:px-8 pt-4 relative">
 
-    <header class="mb-6 flex flex-col md:flex-row justify-between items-center gap-4 border-b border-slate-300 dark:border-slate-800 pb-6">
-        <div>
-            <h1 class="text-3xl font-black tracking-tight flex items-center gap-3">
-                <i class="fa-solid fa-basketball text-amber-500"></i> NBA Betting
-            </h1>
-        </div>
-        
-        <div class="flex items-center gap-3">
-            <button onclick="toggleTheme()" class="bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 px-4 py-2 rounded-xl font-bold text-sm flex items-center gap-2 border border-slate-300 dark:border-slate-700 shadow-sm">
-                <i id="themeIcon" class="fa-solid fa-moon text-amber-500"></i> <span id="themeText">Modo Oscuro</span>
-            </button>
+<header class="flex flex-wrap items-center justify-between gap-3 pb-4">
+  <div class="flex items-center gap-3">
+    <div class="w-10 h-10 rounded-full flex items-center justify-center text-xl" style="background:var(--acc)">🏀</div>
+    <div><h1 class="disp text-3xl font-extrabold leading-none">NBA EDGE</h1><div id="stamp" class="lbl mt-1">Consenso de modelos · splits</div></div>
+  </div>
+  <div class="flex items-center gap-2">
+    <nav class="nav card md:!border-0 flex md:flex-row justify-around md:justify-start gap-1 p-1.5 md:bg-transparent" style="border-radius:14px">
+      <button class="tab on" id="t-dash" onclick="tab('dash')">Picks</button>
+      <button class="tab" id="t-splits" onclick="tab('splits')">Splits</button>
+      <button class="tab" id="t-lines" onclick="tab('lines')">Líneas</button>
+      <button class="tab" id="t-models" onclick="tab('models')">Modelos</button>
+    </nav>
+    <button class="btn2" onclick="theme()" id="themeBtn">☀️</button>
+  </div>
+</header>
 
-            <div class="flex bg-white dark:bg-slate-900 p-1.5 rounded-xl border border-slate-300 dark:border-slate-800 shadow-sm">
-                <button onclick="switchTab('dashboard')" id="tab-dashboard" class="px-4 py-2 rounded-lg text-sm font-bold transition bg-amber-600 text-white shadow">
-                    <i class="fa-solid fa-chart-line mr-2"></i> Predicciones
-                </button>
-                <button onclick="switchTab('lines')" id="tab-lines" class="px-4 py-2 rounded-lg text-sm font-bold transition text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white">
-                    <i class="fa-solid fa-pen-to-square mr-2"></i> Líneas
-                </button>
-                <button onclick="switchTab('models')" id="tab-models" class="px-4 py-2 rounded-lg text-sm font-bold transition text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white">
-                    <i class="fa-solid fa-sliders mr-2"></i> Modelos
-                </button>
-            </div>
-        </div>
-    </header>
+<div id="loading" class="text-center py-24 mut font-bold">Cargando CSV…<div id="loadMsg" class="mono text-xs mt-2"></div></div>
 
-    <div id="loading" class="text-center py-20">
-        <i class="fa-solid fa-spinner fa-spin text-4xl text-amber-500 mb-3"></i>
-        <p class="text-slate-500 font-bold">Cargando y procesando archivos CSV...</p>
-        <p id="loadingDetails" class="text-xs text-slate-400 mt-2 font-mono"></p>
+<!-- PICKS -->
+<section id="v-dash" class="hidden space-y-4">
+  <div id="kpis" class="grid grid-cols-2 md:grid-cols-4 gap-3"></div>
+  <div class="card p-4 grid grid-cols-2 md:grid-cols-6 gap-3 items-end">
+    <div class="col-span-2 md:col-span-1"><div class="lbl mb-1">Equipo</div><input id="fSearch" class="inp" placeholder="Boston, LAL…" oninput="render()"></div>
+    <div class="col-span-2"><div class="lbl mb-1 flex justify-between">Edge mínimo <b id="eLbl" class="acc">0.0</b></div><input id="fEdge" type="range" min="0" max="10" step="0.5" value="0" class="w-full" style="accent-color:var(--acc)" oninput="render()"></div>
+    <div><div class="lbl mb-1">Lado</div><select id="fSide" class="inp" onchange="render()"><option value="all">Ambos</option><option value="home">Local</option><option value="road">Visitante</option></select></div>
+    <div><div class="lbl mb-1">Línea</div><select id="fMove" class="inp" onchange="render()"><option value="all">Cualquiera</option><option value="toward">Hacia el pick</option><option value="away">Contra el pick</option></select></div>
+    <div><div class="lbl mb-1">Splits</div><select id="fSplit" class="inp" onchange="render()"><option value="all">Todos</option><option value="with">Dinero a favor</option><option value="against">Dinero en contra</option></select></div>
+    <div class="col-span-2 md:col-span-1"><div class="lbl mb-1">Ordenar</div><select id="fSort" class="inp" onchange="render()"><option value="edge">Mayor edge</option><option value="sharp">Más dinero (Circa)</option><option value="line">Línea</option></select></div>
+    <button class="btn2 md:col-span-1" onclick="clearF()">Limpiar</button>
+  </div>
+  <div id="grid" class="grid grid-cols-1 lg:grid-cols-2 gap-4"></div>
+</section>
+
+<!-- SPLITS -->
+<section id="v-splits" class="hidden space-y-4">
+  <div class="card p-4 text-sm mut">Handle % = dinero · Bets % = tickets. Si el handle supera a los tickets en un lado, hay dinero grande ahí (<b class="ok">sharp</b>). Circa es el libro más "afilado".</div>
+  <div id="splitsGrid" class="grid grid-cols-1 lg:grid-cols-2 gap-4"></div>
+</section>
+
+<!-- LINEAS -->
+<section id="v-lines" class="hidden">
+  <div class="card p-5">
+    <div class="flex flex-wrap justify-between gap-3 mb-3">
+      <div><h2 class="disp text-2xl font-bold">Líneas</h2><p class="text-sm mut">El edge se calcula contra la línea actual. Edítala o aplica la de un libro.</p></div>
+      <div class="flex gap-2 items-start"><button class="btn" onclick="applyBook('DK')">Usar DraftKings</button><button class="btn" onclick="applyBook('Circa')">Usar Circa</button><button class="btn2" onclick="resetLines()">Restaurar CSV</button></div>
     </div>
+    <div class="overflow-x-auto"><table class="w-full text-sm"><thead><tr class="lbl text-left"><th class="p-2">Partido</th><th class="p-2 text-center">CSV</th><th class="p-2 text-center">DK</th><th class="p-2 text-center">Circa</th><th class="p-2 text-center">Actual</th></tr></thead><tbody id="linesBody"></tbody></table></div>
+  </div>
+</section>
 
-    <!-- VISTA 1: DASHBOARD DE PREDICCIONES -->
-    <div id="view-dashboard" class="hidden space-y-6">
-        <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-300 dark:border-slate-800 shadow-sm grid grid-cols-1 md:grid-cols-4 lg:grid-cols-6 gap-4 items-end">
-            <div>
-                <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">Buscar equipo</label>
-                <input type="text" id="filterSearch" oninput="applyFilters()" placeholder="Ej. Boston, Lakers..." class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-amber-500">
-            </div>
-
-            <div class="md:col-span-2">
-                <div class="flex justify-between items-center mb-1">
-                    <label class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">Edge mínimo</label>
-                    <span id="edgeMinValueLabel" class="text-xs font-black text-amber-600 dark:text-amber-400">0.00 pts</span>
-                </div>
-                <input type="range" id="filterMinEdge" min="0" max="10" step="0.5" value="0" oninput="updateEdgeLabel(); applyFilters()" class="w-full accent-amber-500 cursor-pointer">
-            </div>
-
-            <div>
-                <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">Lado del pick</label>
-                <select id="filterSide" onchange="applyFilters()" class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-amber-500">
-                    <option value="all">Local y visitante</option>
-                    <option value="home">Solo Local</option>
-                    <option value="road">Solo Visitante</option>
-                </select>
-            </div>
-
-            <div>
-                <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">Mov. de la línea</label>
-                <select id="filterLineMove" onchange="applyFilters()" class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-amber-500">
-                    <option value="all">Cualquiera</option>
-                    <option value="toward">Hacia el pick</option>
-                    <option value="away">Contra el pick</option>
-                </select>
-            </div>
-
-            <div>
-                <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">Ordenar por</label>
-                <select id="filterSort" onchange="applyFilters()" class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-amber-500">
-                    <option value="edge_desc">Mayor edge</option>
-                    <option value="edge_asc">Menor edge</option>
-                    <option value="line_desc">Línea (Mayor)</option>
-                    <option value="line_asc">Línea (Menor)</option>
-                </select>
-            </div>
-        </div>
-
-        <div class="flex justify-between items-center bg-white dark:bg-slate-900 px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-800 shadow-sm text-sm">
-            <div class="text-slate-600 dark:text-slate-400">
-                Mostrando <span id="visibleMatchesCount" class="font-bold text-amber-600 dark:text-amber-400">0</span> de <span id="totalMatchesCount" class="font-bold text-slate-800 dark:text-slate-200">0</span> partidos | Modelos activos: <span id="activeModelsCount" class="font-bold text-amber-600 dark:text-amber-400">0</span>
-            </div>
-            <button onclick="clearFilters()" class="text-xs font-bold text-red-500 hover:text-red-600 dark:hover:text-red-400 transition flex items-center gap-1">
-                <i class="fa-solid fa-rotate-left"></i> Limpiar filtros
-            </button>
-        </div>
-
-        <div id="matchesContainer" class="grid grid-cols-1 lg:grid-cols-2 gap-6"></div>
+<!-- MODELOS -->
+<section id="v-models" class="hidden">
+  <div class="card p-5">
+    <div class="flex flex-wrap justify-between gap-3 mb-3">
+      <div><h2 class="disp text-2xl font-bold">Modelos</h2><p class="text-sm mut">Score = 60% ATS + 15% error + 5% bias + 20% mean square. Los modelos "sin historial" no están en nbaresults.csv.</p></div>
+      <div class="flex gap-2 items-start"><button class="btn" onclick="setAll(true)">Todos</button><button class="btn2" onclick="setAll(false)">Ninguno</button></div>
     </div>
+    <div class="overflow-x-auto"><table class="w-full text-sm"><thead><tr class="lbl text-left">
+      <th class="p-2">On</th><th class="p-2 cursor-pointer" onclick="sortM('name')">Modelo</th><th class="p-2 text-center cursor-pointer" onclick="sortM('score')">Score</th><th class="p-2 text-center cursor-pointer" onclick="sortM('ats')">ATS</th><th class="p-2 text-center cursor-pointer" onclick="sortM('abs_err')">Abs Err</th><th class="p-2 text-center cursor-pointer" onclick="sortM('bias')">Bias</th><th class="p-2 text-center cursor-pointer" onclick="sortM('ms')">MSE</th></tr></thead><tbody id="modelsBody"></tbody></table></div>
+  </div>
+</section>
 
-    <!-- VISTA 2: GESTIÓN DE LÍNEAS -->
-    <div id="view-lines" class="hidden space-y-6">
-        <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-300 dark:border-slate-800 shadow-xl">
-            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-4">
-                <div>
-                    <h2 class="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                        <i class="fa-solid fa-pen-to-square text-amber-500"></i> Gestión Rápida de Líneas
-                    </h2>
-                    <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Modifica las líneas de los partidos mediante texto de forma cómoda. Los cambios se aplicarán al volver al Dashboard.</p>
-                </div>
-                <button onclick="resetAllLines()" class="bg-slate-600 hover:bg-slate-700 text-white px-3 py-1.5 rounded-lg text-xs font-bold transition shadow">
-                    <i class="fa-solid fa-rotate-left mr-1"></i> Restaurar Originales
-                </button>
-            </div>
-            
-            <div class="overflow-x-auto mt-4">
-                <table class="w-full text-left border-collapse">
-                    <thead>
-                        <tr class="border-b border-slate-200 dark:border-slate-800 text-xs text-slate-500 uppercase tracking-wider bg-slate-50 dark:bg-slate-950">
-                            <th class="p-3">Partido (Visitante vs Local)</th>
-                            <th class="p-3 text-center">Línea Original (CSV)</th>
-                            <th class="p-3 text-center">Línea Actual (Editable)</th>
-                        </tr>
-                    </thead>
-                    <tbody id="linesTableBody" class="divide-y divide-slate-200 dark:divide-slate-800 text-sm"></tbody>
-                </table>
-            </div>
-        </div>
+<script>
+/* ============ CONFIG ============ */
+// columna de nbapreds.csv -> nombre EXACTO en la columna "System" de nbaresults.csv
+const MODEL_MAP={linesam:'Sam',linesag:'Sagarin Rating',linesage:'Sagarin Recent',linesagp:'Sagarin Predictor',linesaggm:'Sagarin Golden Mean',linedoi:'DirectorOfInformation.com',linemoore:'Sonny Moore',linedunkel:'Dunkel Index',linedok:'Dokter Entropy',linetalis:'Talisman Red',linemassey:'Massey Ratings',lineespn:'ESPN BPI',lineagatha:'agatha.gg',lineca:'Computer Adjusted',
+  linepugh:'Versus Sports Simulator',linedonc:'D Ratings.com',
+  /* aún no vienen en nbapreds.csv; si agregas estas columnas, se reconocen solas: */
+  linegtd:'Game Time Decision',linemes:'Model Edge Sports'};
+const ABS_MODELS=['Talisman Red']; // entregan margen en valor absoluto -> se les asigna el signo del consenso
+const NOT_MODEL=['lineopen','line','road','home','visitor','local','lineavg','std','line_avgdiff'];
+const SHORT={'agatha.gg':'AGATHA','Sagarin Rating':'SAG','Sagarin Recent':'SAG REC','Sagarin Predictor':'SAG P','Sagarin Golden Mean':'SAG GM','DirectorOfInformation.com':'DOI','Sonny Moore':'MOORE','Logical Approach':'LOGIC','Dunkel Index':'DUNKEL','Dokter Entropy':'DOKTER','Talisman Red':'TALIS','Massey Ratings':'MASSEY','ESPN BPI':'ESPN','Computer Adjusted':'CADJ','Sam':'SAM'};
+const T={Atlanta:['Atlanta Hawks','ATL',1610612737],Boston:['Boston Celtics','BOS',1610612738],Brooklyn:['Brooklyn Nets','BKN',1610612751],Charlotte:['Charlotte Hornets','CHA',1610612766],Chicago:['Chicago Bulls','CHI',1610612741],Cleveland:['Cleveland Cavaliers','CLE',1610612739],Dallas:['Dallas Mavericks','DAL',1610612742],Denver:['Denver Nuggets','DEN',1610612743],Detroit:['Detroit Pistons','DET',1610612765],'Golden State':['Golden State Warriors','GSW',1610612744],Houston:['Houston Rockets','HOU',1610612745],Indiana:['Indiana Pacers','IND',1610612754],'LA Clippers':['LA Clippers','LAC',1610612746],'LA Lakers':['Los Angeles Lakers','LAL',1610612747],Memphis:['Memphis Grizzlies','MEM',1610612763],Miami:['Miami Heat','MIA',1610612748],Milwaukee:['Milwaukee Bucks','MIL',1610612749],Minnesota:['Minnesota Timberwolves','MIN',1610612750],'New Orleans':['New Orleans Pelicans','NOP',1610612740],'New York':['New York Knicks','NYK',1610612752],'Oklahoma City':['Oklahoma City Thunder','OKC',1610612760],Orlando:['Orlando Magic','ORL',1610612753],Philadelphia:['Philadelphia 76ers','PHI',1610612755],Phoenix:['Phoenix Suns','PHX',1610612756],Portland:['Portland Trail Blazers','POR',1610612757],Sacramento:['Sacramento Kings','SAC',1610612758],'San Antonio':['San Antonio Spurs','SAS',1610612759],Toronto:['Toronto Raptors','TOR',1610612761],Utah:['Utah Jazz','UTA',1610612762],Washington:['Washington Wizards','WAS',1610612764]};
+const BOOKS=['DK','Circa'], BOOKNAME={DK:'DraftKings',Circa:'Circa'};
+
+/* ============ ESTADO ============ */
+const $=id=>document.getElementById(id);
+let stats={}, games=[], splits={}, splitDate='', sortCol='score', sortAsc=false;
+const num=v=>{const n=parseFloat(v);return isFinite(n)?n:NaN};
+const sgn=n=>(n>0?'+':'')+(Math.round(n*100)/100);
+const f2=n=>(n>0?'+':'')+n.toFixed(2);
+function canon(n){n=String(n||'').trim().toLowerCase();if(n.includes('laker'))return'LA Lakers';if(n.includes('clipper'))return'LA Clippers';
+  if(n.includes('knick'))return'New York';let best='';for(const k in T){const kl=k.toLowerCase();if(n.startsWith(kl)&&kl.length>best.length)best=k}return best||String(n).trim()}
+function team(k){const t=T[k];return t?{k,name:t[0],abbr:t[1],logo:`https://cdn.nba.com/logos/nba/${t[2]}/global/L/logo.svg`}:{k,name:k,abbr:k.slice(0,3).toUpperCase(),logo:''}}
+const logo=(t,c='w-10 h-10')=>t.logo?`<img src="${t.logo}" class="${c} object-contain" alt="">`:'';
+const col=(r,name)=>{const k=Object.keys(r).find(k=>k.trim().toLowerCase()===name);return k?r[k]:undefined};
+
+/* ============ CARGA ============ */
+async function getCSV(f,opt){try{const r=await fetch(f+'?t='+Date.now());if(r.ok)return await r.text()}catch(e){}if(opt)return null;throw new Error(f)}
+async function load(){
+  try{const [a,b,c]=await Promise.all([getCSV('nbaresults.csv'),getCSV('nbapreds.csv'),getCSV('splits.csv',true)]);init(a,b,c)}
+  catch(e){$('loading').innerHTML=`<div class="card p-6 max-w-md mx-auto text-left"><b>No se pudieron leer los CSV (${e.message}).</b><p class="text-sm mut my-3">Selecciona nbaresults.csv, nbapreds.csv y (opcional) splits.csv:</p><input type="file" id="files" multiple accept=".csv" class="text-sm"><button class="btn mt-4" onclick="manual()">Cargar</button></div>`}}
+async function manual(){const fs=[...$('files').files];const rd=async k=>{const f=fs.find(f=>f.name.toLowerCase().includes(k));return f?await f.text():null};
+  const a=await rd('result'),b=await rd('pred');if(!a||!b)return alert('Faltan nbaresults.csv y/o nbapreds.csv');init(a,b,await rd('split'))}
+function init(res,preds,spl){
+  stats={};games=[];splits={};
+  parseResults(Papa.parse(res,{header:true,skipEmptyLines:true}).data);
+  parsePreds(Papa.parse(preds,{header:true,skipEmptyLines:true}).data);
+  if(spl)parseSplits(Papa.parse(spl,{header:true,skipEmptyLines:true}).data);
+  attachSplits();loadPrefs();
+  $('loading').classList.add('hidden');$('v-dash').classList.remove('hidden');
+  $('stamp').textContent='Splits: '+(splitDate||'sin datos')+' · '+games.length+' partidos';
+  render();
+}
+
+/* ============ RESULTADOS -> score de modelos ============ */
+function parseResults(rows){
+  const ok=rows.filter(r=>{const s=String(col(r,'system')||'').trim().toLowerCase();return s&&!['line','opening line','system average'].includes(s)});
+  const get=(r,c)=>num(col(r,c));
+  const arr=(c,fn=x=>x)=>ok.map(r=>fn(get(r,c))).filter(isFinite);
+  const A=arr('ats'),E=arr('absolute error'),B=arr('bias',Math.abs),M=arr('mean square');
+  const mx=a=>Math.max(...a),mn=a=>Math.min(...a),norm=(v,a,inv)=>isFinite(v)?(inv?(mx(a)-v):(v-mn(a)))/(mx(a)-mn(a)+1e-9):0;
+  ok.forEach(r=>{let n=String(col(r,'system')).trim();if(/agath/i.test(n))n='agatha.gg';
+    const ats=get(r,'ats'),err=get(r,'absolute error'),bias=get(r,'bias'),ms=get(r,'mean square');
+    const score=100*(.6*(isFinite(ats)?ats/mx(A):0)+.15*norm(err,E,1)+.05*norm(Math.abs(bias),B,1)+.2*norm(ms,M,1));
+    stats[n]={ats,abs_err:err,bias,ms,score:Math.round(score*100)/100,active:isFinite(ats)&&ats>=.5,hist:true}});
+}
+
+/* ============ PREDICCIONES ============ */
+function parsePreds(rows){
+  const cols=Object.keys(rows[0]||{}).map(k=>k.trim());
+  const modelCols=cols.filter(c=>!NOT_MODEL.includes(c.toLowerCase())&&rows.some(r=>isFinite(num(r[c]))));
+  const colName=c=>{const l=c.toLowerCase();if(MODEL_MAP[l])return MODEL_MAP[l];return c.replace(/^line/i,'').replace(/^./,x=>x.toUpperCase())};
+  const scores=Object.values(stats).map(s=>s.score).sort((a,b)=>a-b),med=scores[Math.floor(scores.length/2)]||50;
+  modelCols.forEach(c=>{const n=colName(c);if(!stats[n])stats[n]={ats:NaN,abs_err:NaN,bias:NaN,ms:NaN,score:med,active:false,hist:false}});
+  rows.forEach((r,i)=>{
+    const road=col(r,'road')||col(r,'visitor'),home=col(r,'home')||col(r,'local');if(!road||!home)return;
+    const line=num(col(r,'line')),open=num(col(r,'lineopen')),p={};
+    modelCols.forEach(c=>{const k=Object.keys(r).find(k=>k.trim()===c),v=num(r[k]);if(isFinite(v))p[colName(c)]=v});
+    ABS_MODELS.forEach(m=>{if(p[m]===undefined)return;const o=Object.entries(p).filter(([n])=>!ABS_MODELS.includes(n)).map(e=>e[1]);
+      const mean=o.reduce((a,b)=>a+b,0)/(o.length||1),s=mean!==0?Math.sign(mean):Math.sign(line||1);p[m]=s*Math.abs(p[m])});
+    games.push({id:i,road:team(canon(road)),home:team(canon(home)),line:line||0,open:isFinite(open)?open:(line||0),cur:line||0,p,sp:{}});
+  });
+}
+
+/* ============ SPLITS ============ */
+// splits.csv: book,date,road,home,road_spread,road_handle,road_bets  (home = 100 - road)
+function parseSplits(rows){rows.forEach(r=>{const b=/circa/i.test(r.book)?'Circa':'DK',rk=canon(r.road),hk=canon(r.home);
+  const rs=num(r.road_spread),rh=num(r.road_handle),rb=num(r.road_bets);if(!isFinite(rh))return;
+  (splits[rk+'|'+hk]=splits[rk+'|'+hk]||{})[b]={line:rs,rh,rb,hh:100-rh,hb:100-rb};if(r.date)splitDate=r.date})}
+function attachSplits(){games.forEach(g=>g.sp=splits[g.road.k+'|'+g.home.k]||{})}
+const sideOf=(s,side)=>side==='home'?{h:s.hh,b:s.hb}:{h:s.rh,b:s.rb};
+function splitSig(g,side){const v=BOOKS.filter(b=>g.sp[b]).map(b=>sideOf(g.sp[b],side).h);if(!v.length)return'none';
+  const a=v.reduce((x,y)=>x+y,0)/v.length;return a>=55?'with':a<=45?'against':'mixed'}
+
+/* ============ CALCULO ============ */
+function compute(){
+  const act=Object.keys(stats).filter(m=>stats[m].active),W={};let tot=0;act.forEach(m=>{W[m]=Math.max(1,stats[m].score);tot+=W[m]});
+  $('eLbl').textContent=(+$('fEdge').value).toFixed(1);
+  return games.map(g=>{
+    let sum=0,wt=0,pts=[];
+    for(const m in g.p){if(!stats[m].active)continue;const w=W[m]/tot;sum+=g.p[m]*w;wt+=w;pts.push({m,v:g.p[m]})}
+    const avg=wt?sum/wt:g.cur,edge=avg-g.cur,side=edge>0?'home':'road';
+    const agree=pts.filter(x=>(x.v-g.cur>0?'home':'road')===side).length;
+    const d=g.cur-g.open,move=((edge>0&&d>0)||(edge<0&&d<0))?'toward':d!==0?'away':'any';
+    const sharp=g.sp.Circa?sideOf(g.sp.Circa,side).h:50;
+    return{g,avg,edge,abs:Math.abs(edge),side,agree,n:pts.length,pts,move,sig:splitSig(g,side),sharp};
+  });
+}
+function pickText(x){const g=x.g;return x.side==='home'?`${g.home.abbr} ${sgn(-g.cur)}`:`${g.road.abbr} ${sgn(g.cur)}`}
+
+/* ============ RENDER PICKS ============ */
+function splitPanel(x){
+  const bs=BOOKS.filter(b=>x.g.sp[b]);if(!bs.length)return`<div class="lbl py-2">Sin splits para este partido</div>`;
+  const rows=bs.map(b=>{const s=x.g.sp[b],o=sideOf(s,x.side),d=o.h-o.b,bookLine=x.side==='home'?-s.line:s.line;
+    return`<div class="grid grid-cols-[70px_1fr_1fr_auto] gap-2 items-center text-xs">
+      <div><b>${BOOKNAME[b]}</b><div class="mono mut">${sgn(bookLine)}</div></div>
+      <div><div class="flex justify-between"><span class="lbl">$</span><b class="mono">${o.h}%</b></div><div class="bar"><i style="width:${o.h}%;background:${o.h>=50?'var(--ok)':'var(--bad)'}"></i></div></div>
+      <div><div class="flex justify-between"><span class="lbl">#</span><b class="mono">${o.b}%</b></div><div class="bar"><i style="width:${o.b}%;background:var(--mut)"></i></div></div>
+      <span class="chip ${d>=10?'ok':d<=-10?'bad':'mut'}">${d>0?'+':''}${d}${d>=10?' 💰':''}</span></div>`}).join('');
+  const tag={with:['ok','✔ Dinero a favor'],against:['bad','✖ Dinero en contra'],mixed:['mut','≈ Mixto']}[x.sig];
+  let best='';if(bs.length===2){const a=x.g.sp.DK.line,c=x.g.sp.Circa.line;if(a!==c){const better=(x.side==='home')===(c<a)?'Circa':'DK';best=`<span class="chip acc">Mejor número: ${better}</span>`}}
+  return`<div class="flex justify-between items-center mb-2"><span class="lbl">Splits en el pick</span><span class="flex gap-1">${best}<span class="chip ${tag[0]}">${tag[1]}</span></span></div><div class="space-y-2">${rows}</div>`}
+
+function render(){
+  const q=$('fSearch').value.toLowerCase(),me=+$('fEdge').value,sd=$('fSide').value,mv=$('fMove').value,sp=$('fSplit').value,so=$('fSort').value;
+  const all=compute();
+  let L=all.filter(x=>(x.g.road.name+x.g.home.name+x.g.road.abbr+x.g.home.abbr).toLowerCase().includes(q)&&x.abs>=me&&(sd==='all'||x.side===sd)&&(mv==='all'||x.move===mv)&&(sp==='all'||x.sig===sp));
+  L.sort((a,b)=>so==='edge'?b.abs-a.abs:so==='sharp'?b.sharp-a.sharp:a.g.cur-b.g.cur);
+  const strong=all.filter(x=>x.abs>=2).length,aligned=all.filter(x=>x.abs>=2&&x.sig==='with').length;
+  $('kpis').innerHTML=[['Partidos',all.length],['Edge ≥ 2 pts',strong],['Con dinero a favor',aligned],['Modelos activos',Object.keys(stats).filter(n=>stats[n].active&&games.some(g=>n in g.p)).length]].map(k=>`<div class="card p-4"><div class="lbl">${k[0]}</div><div class="disp text-4xl font-extrabold acc">${k[1]}</div></div>`).join('');
+  $('grid').innerHTML=L.length?L.map(card).join(''):`<div class="col-span-2 text-center mut py-12 font-bold">Sin partidos con estos filtros.</div>`;
+}
+function card(x){
+  const g=x.g,mx=Math.max(6,...x.pts.map(p=>Math.abs(p.v-g.cur))),pos=v=>Math.max(4,Math.min(96,50+(v-g.cur)/mx*46));
+  const dots=x.pts.map(p=>`<i title="${p.m}: ${f2(p.v)}" style="position:absolute;left:${pos(p.v)}%;top:50%;width:11px;height:11px;margin:-5px 0 0 -5px;border-radius:50%;background:var(--acc);border:2px solid var(--card)"></i>`).join('');
+  const chips=Object.keys(g.p).sort((a,b)=>stats[b].score-stats[a].score).map(m=>{const on=stats[m].active;
+    return`<div class="rounded-lg p-1.5 text-center border ${on?'':'opacity-30'}" style="border-color:${on?'var(--acc)':'var(--line)'}"><div class="lbl truncate" title="${m}">${SHORT[m]||m.slice(0,6).toUpperCase()}</div><div class="mono text-xs font-semibold">${f2(g.p[m])}</div></div>`}).join('');
+  const hot=x.abs>=2;
+  return`<article class="card overflow-hidden">
+  <div class="flex items-center justify-between p-4" style="border-bottom:1px solid var(--line)">
+    <div class="flex items-center gap-3">${logo(g.road)}<div><div class="disp text-2xl font-bold leading-none">${g.road.abbr}</div><div class="lbl">Visita</div></div></div>
+    <div class="text-center"><div class="lbl">Línea (local)</div><div class="mono font-semibold acc">${sgn(g.cur)}</div><div class="lbl">open ${sgn(g.open)}</div></div>
+    <div class="flex items-center gap-3 text-right"><div><div class="disp text-2xl font-bold leading-none">${g.home.abbr}</div><div class="lbl">Local</div></div>${logo(g.home)}</div>
+  </div>
+  <div class="p-4 space-y-4">
+    <div class="flex items-center justify-between gap-3 rounded-xl p-3" style="background:color-mix(in srgb,${hot?'var(--ok)':'var(--acc)'} 12%,transparent)">
+      <div><div class="lbl">Pick</div><div class="disp text-3xl font-extrabold leading-none">${pickText(x)}</div></div>
+      <div class="text-right"><div class="disp text-4xl font-extrabold leading-none ${hot?'ok':'acc'}">${x.abs.toFixed(2)}</div><div class="lbl">edge · ${x.agree}/${x.n} modelos</div></div>
     </div>
-
-    <!-- VISTA 3: GESTIÓN DE MODELOS -->
-    <div id="view-models" class="hidden space-y-6">
-        <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-300 dark:border-slate-800 shadow-xl">
-            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-4">
-                <div>
-                    <h2 class="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                        <i class="fa-solid fa-ranking-star text-amber-500"></i> Calificación de Modelos (Fórmula ATS 60%)
-                    </h2>
-                    <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Haz clic en los encabezados para ordenar por variable. Activa o desactiva modelos para recalcular los consensos.</p>
-                </div>
-                <div class="flex items-center gap-2">
-                    <button onclick="setAllModels(true)" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1.5 rounded-lg text-xs font-bold transition shadow">
-                        <i class="fa-solid fa-check-double mr-1"></i> Activar Todos
-                    </button>
-                    <button onclick="setAllModels(false)" class="bg-slate-600 hover:bg-slate-700 text-white px-3 py-1.5 rounded-lg text-xs font-bold transition shadow">
-                        <i class="fa-solid fa-xmark mr-1"></i> Desactivar Todos
-                    </button>
-                </div>
-            </div>
-            
-            <div class="overflow-x-auto mt-4">
-                <table class="w-full text-left border-collapse">
-                    <thead>
-                        <tr class="border-b border-slate-200 dark:border-slate-800 text-xs text-slate-500 uppercase tracking-wider bg-slate-50 dark:bg-slate-950">
-                            <th class="p-3">Activo</th>
-                            <th class="p-3 cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-800" onclick="sortTable('name')">Modelo / Sistema <i class="fa-solid fa-sort ml-1"></i></th>
-                            <th class="p-3 text-center cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-800" onclick="sortTable('score')">Score <i class="fa-solid fa-sort ml-1"></i></th>
-                            <th class="p-3 text-center cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-800" onclick="sortTable('ats')">ATS % <i class="fa-solid fa-sort ml-1"></i></th>
-                            <th class="p-3 text-center cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-800" onclick="sortTable('abs_err')">Abs Error <i class="fa-solid fa-sort ml-1"></i></th>
-                            <th class="p-3 text-center cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-800" onclick="sortTable('bias')">Bias <i class="fa-solid fa-sort ml-1"></i></th>
-                            <th class="p-3 text-center cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-800" onclick="sortTable('mean_square')">Mean Square <i class="fa-solid fa-sort ml-1"></i></th>
-                        </tr>
-                    </thead>
-                    <tbody id="modelsTableBody" class="divide-y divide-slate-200 dark:divide-slate-800 text-sm"></tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        let modelStats = {};
-        let matchesData = [];
-
-        const nbaTeamsMeta = {
-            "Atlanta": {name: "Atlanta Hawks", abbr: "ATL", id: 1610612737},
-            "Boston": {name: "Boston Celtics", abbr: "BOS", id: 1610612738},
-            "Brooklyn": {name: "Brooklyn Nets", abbr: "BKN", id: 1610612751},
-            "Charlotte": {name: "Charlotte Hornets", abbr: "CHA", id: 1610612766},
-            "Chicago": {name: "Chicago Bulls", abbr: "CHI", id: 1610612741},
-            "Cleveland": {name: "Cleveland Cavaliers", abbr: "CLE", id: 1610612739},
-            "Dallas": {name: "Dallas Mavericks", abbr: "DAL", id: 1610612742},
-            "Denver": {name: "Denver Nuggets", abbr: "DEN", id: 1610612743},
-            "Detroit": {name: "Detroit Pistons", abbr: "DET", id: 1610612765},
-            "Golden State": {name: "Golden State Warriors", abbr: "GSW", id: 1610612744},
-            "Houston": {name: "Houston Rockets", abbr: "HOU", id: 1610612745},
-            "Indiana": {name: "Indiana Pacers", abbr: "IND", id: 1610612754},
-            "LA Clippers": {name: "LA Clippers", abbr: "LAC", id: 1610612746},
-            "Clippers": {name: "LA Clippers", abbr: "LAC", id: 1610612746},
-            "LA Lakers": {name: "Los Angeles Lakers", abbr: "LAL", id: 1610612747},
-            "Lakers": {name: "Los Angeles Lakers", abbr: "LAL", id: 1610612747},
-            "Memphis": {name: "Memphis Grizzlies", abbr: "MEM", id: 1610612763},
-            "Miami": {name: "Miami Heat", abbr: "MIA", id: 1610612748},
-            "Milwaukee": {name: "Milwaukee Bucks", abbr: "MIL", id: 1610612749},
-            "Minnesota": {name: "Minnesota Timberwolves", abbr: "MIN", id: 1610612750},
-            "New Orleans": {name: "New Orleans Pelicans", abbr: "NOP", id: 1610612740},
-            "New York": {name: "New York Knicks", abbr: "NYK", id: 1610612752},
-            "Knicks": {name: "New York Knicks", abbr: "NYK", id: 1610612752},
-            "Oklahoma City": {name: "Oklahoma City Thunder", abbr: "OKC", id: 1610612760},
-            "Orlando": {name: "Orlando Magic", abbr: "ORL", id: 1610612753},
-            "Philadelphia": {name: "Philadelphia 76ers", abbr: "PHI", id: 1610612755},
-            "Phoenix": {name: "Phoenix Suns", abbr: "PHX", id: 1610612756},
-            "Portland": {name: "Portland Trail Blazers", abbr: "POR", id: 1610612757},
-            "Sacramento": {name: "Sacramento Kings", abbr: "SAC", id: 1610612758},
-            "San Antonio": {name: "San Antonio Spurs", abbr: "SAS", id: 1610612759},
-            "Toronto": {name: "Toronto Raptors", abbr: "TOR", id: 1610612761},
-            "Utah": {name: "Utah Jazz", abbr: "UTA", id: 1610612762},
-            "Washington": {name: "Washington Wizards", abbr: "WAS", id: 1610612764}
-        };
-
-        function getTeamInfo(teamName) {
-            let cleaned = String(teamName).trim();
-            if (nbaTeamsMeta[cleaned]) {
-                let t = nbaTeamsMeta[cleaned];
-                return { name: t.name, abbr: t.abbr, logo: `https://cdn.nba.com/logos/nba/${t.id}/global/L/logo.svg` };
-            }
-            return { name: cleaned, abbr: cleaned.substring(0,3).toUpperCase(), logo: "https://cdn.nba.com/logos/nba/1610612738/global/L/logo.svg" };
-        }
-
-        // ABREVIATURAS LIMPIAS PARA CADA MODELO
-        const knownShorts = {
-            "agatha.gg": "AGHATA",
-            "aghata.gg": "AGHATA",
-            "Sagarin Rating": "SAG",
-            "Sagarin Recent": "SAG REC",
-            "Sagarin Predictor": "SAG P",
-            "Sagarin Golden Mean": "SAG GM",
-            "DirectorOfInformation.com": "DOI",
-            "Sonny Moore": "MOORE",
-            "Logical Approach": "LOGIC",
-            "Dunkel Index": "DUNKEL",
-            "Dokter Entropy": "DOKTER",
-            "Versus Sports Simulator": "VSS",
-            "Consensus": "CONS",
-            "Talisman Red": "TALIS",
-            "Massey Ratings": "MASSEY",
-            "ESPN BPI": "ESPN",
-            "Computer Adjusted": "CADJ",
-            "Sam": "SAM"
-        };
-
-        function getShortName(rawName) {
-            if (!rawName) return "MOD";
-            let clean = String(rawName).trim();
-            if (knownShorts[clean]) return knownShorts[clean];
-            let lower = clean.toLowerCase();
-            if (lower.includes("agath") || lower.includes("aghata")) return "AGHATA";
-            return clean.substring(0, 6).toUpperCase();
-        }
-
-        // LISTA ESTRICTA DE COLUMNAS QUE NUNCA DEBEN SER TRATADAS COMO MODELOS
-        const excludedHeaders = [
-            'line', 'lineopen', 'opening line', 'linepower', 'lineavg', 'std', 
-            'line_avgdiff', 'opening', 'system average', 'average', 'avg', 
-            'date', 'road', 'home', 'visitor', 'visita', 'local', 'spread', 'system'
-        ];
-
-        function isValidModelName(name) {
-            if (!name) return false;
-            let clean = String(name).trim().toLowerCase();
-            if (excludedHeaders.includes(clean)) return false;
-            if (clean.includes('line') && clean.length < 8) return false;
-            return true;
-        }
-
-        async function fetchCSV(filename) {
-            try {
-                let res = await fetch(filename);
-                if (res.ok) return await res.text();
-            } catch (e) {}
-
-            try {
-                let baseUrl = window.location.href.substring(0, window.location.href.lastIndexOf('/') + 1);
-                let res = await fetch(baseUrl + filename);
-                if (res.ok) return await res.text();
-            } catch (e) {}
-
-            throw new Error(`No se pudo descargar '${filename}' automáticamente.`);
-        }
-
-        async function loadCSVData() {
-            try {
-                document.getElementById('loadingDetails').innerText = "Cargando nbaresults.csv y nbapreds.csv...";
-                const [resText, predsText] = await Promise.all([
-                    fetchCSV('nbaresults.csv'),
-                    fetchCSV('nbapreds.csv')
-                ]);
-                processData(resText, predsText);
-            } catch (err) {
-                console.error("Error al cargar mediante fetch:", err);
-                showManualUploadFallback();
-            }
-        }
-
-        function showManualUploadFallback() {
-            document.getElementById('loading').innerHTML = `
-                <div class="p-8 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-800 rounded-3xl max-w-xl mx-auto shadow-xl text-center">
-                    <i class="fa-solid fa-cloud-arrow-up text-4xl text-amber-500 mb-4"></i>
-                    <h3 class="font-bold text-xl text-slate-900 dark:text-white mb-2">Carga Manual de Respaldos</h3>
-                    <p class="text-sm text-slate-500 dark:text-slate-400 mb-6">Selecciona tus archivos CSV locales para iniciar al instante:</p>
-                    <div class="space-y-4 text-left">
-                        <div>
-                            <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">Archivo nbaresults.csv</label>
-                            <input type="file" id="fileResults" accept=".csv" class="w-full text-sm border border-slate-300 dark:border-slate-800 rounded-xl p-2 bg-slate-50 dark:bg-slate-950">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">Archivo nbapreds.csv</label>
-                            <input type="file" id="filePreds" accept=".csv" class="w-full text-sm border border-slate-300 dark:border-slate-800 rounded-xl p-2 bg-slate-50 dark:bg-slate-950">
-                        </div>
-                    </div>
-                    <button onclick="handleManualUpload()" class="mt-6 w-full bg-amber-600 hover:bg-amber-700 text-white font-bold py-3 rounded-xl shadow-lg">
-                        <i class="fa-solid fa-play mr-2"></i> Procesar y Cargar
-                    </button>
-                </div>
-            `;
-        }
-
-        function handleManualUpload() {
-            const fRes = document.getElementById('fileResults').files[0];
-            const fPred = document.getElementById('filePreds').files[0];
-            if (!fRes || !fPred) { alert("Selecciona ambos archivos CSV."); return; }
-            Promise.all([fRes.text(), fPred.text()]).then(([resText, predsText]) => {
-                processData(resText, predsText);
-            });
-        }
-
-        function processData(resText, predsText) {
-            let resData = Papa.parse(resText, { header: true, skipEmptyLines: true }).data;
-            let predsData = Papa.parse(predsText, { header: true, skipEmptyLines: true }).data;
-
-            processResults(resData);
-            processPreds(predsData);
-
-            loadSavedModelPreferences();
-            document.getElementById('loading').classList.add('hidden');
-            document.getElementById('view-dashboard').classList.remove('hidden');
-            updateEdgeLabel();
-            applyFilters();
-        }
-
-        function processResults(rows) {
-            let getVal = (r, colName) => {
-                let key = Object.keys(r).find(k => k.trim().toLowerCase() === colName.toLowerCase());
-                return key ? parseFloat(r[key]) || 0 : 0;
-            };
-
-            let validRows = rows.filter(r => {
-                let sysKey = Object.keys(r).find(k => k.trim().toLowerCase() === 'system');
-                if (!sysKey || !r[sysKey]) return false;
-                let val = String(r[sysKey]).trim();
-                return isValidModelName(val);
-            });
-
-            let atsArr = validRows.map(r => getVal(r, 'ATS'));
-            let errArr = validRows.map(r => getVal(r, 'Absolute Error'));
-            let biasArr = validRows.map(r => Math.abs(getVal(r, 'Bias')));
-            let msArr = validRows.map(r => getVal(r, 'Mean Square'));
-
-            let max_ats = Math.max(...atsArr);
-            let min_err = Math.min(...errArr), max_err = Math.max(...errArr);
-            let min_bias = Math.min(...biasArr), max_bias = Math.max(...biasArr);
-            let min_ms = Math.min(...msArr), max_ms = Math.max(...msArr);
-
-            validRows.forEach(row => {
-                let sysKey = Object.keys(row).find(k => k.trim().toLowerCase() === 'system');
-                let rawSys = String(row[sysKey]).trim();
-                
-                let modelName = rawSys;
-                let lower = rawSys.toLowerCase();
-                if (lower.includes("agath") || lower.includes("aghata")) {
-                    modelName = "agatha.gg";
-                }
-
-                let ats = getVal(row, 'ATS');
-                let err = getVal(row, 'Absolute Error') || max_err;
-                let bias_val = getVal(row, 'Bias');
-                let abs_b = Math.abs(bias_val);
-                let ms = getVal(row, 'Mean Square') || max_ms;
-
-                let term_ats = 0.6 * (max_ats > 0 ? (ats / max_ats) : 0);
-                let term_err = 0.15 * ((max_err - err) / (max_err - min_err + 1e-9));
-                let term_bias = 0.05 * ((max_bias - abs_b) / (max_bias - min_bias + 1e-9));
-                let term_ms = 0.20 * ((max_ms - ms) / (max_ms - min_ms + 1e-9));
-
-                let score = (term_ats + term_err + term_bias + term_ms) * 100;
-
-                // ACTIVACIÓN AUTOMÁTICA SI ATS >= 50%
-                let activeByDefault = ats >= 0.50;
-
-                modelStats[modelName] = {
-                    ats: ats,
-                    abs_err: err,
-                    bias: bias_val,
-                    mean_square: ms,
-                    score: Math.round(score * 100) / 100,
-                    active: activeByDefault
-                };
-            });
-        }
-
-        function processPreds(rows) {
-            rows.forEach((row, idx) => {
-                let keys = Object.keys(row);
-                let roadKey = keys.find(k => ['road', 'visitor', 'visita'].includes(k.trim().toLowerCase()));
-                let homeKey = keys.find(k => ['home', 'local'].includes(k.trim().toLowerCase()));
-                let lineOpenKey = keys.find(k => k.trim().toLowerCase().includes('open'));
-                let lineKey = keys.find(k => ['line', 'spread'].includes(k.trim().toLowerCase()));
-
-                if (!roadKey || !homeKey || !row[roadKey] || !row[homeKey]) return;
-
-                let road_info = getTeamInfo(row[roadKey]);
-                let home_info = getTeamInfo(row[homeKey]);
-
-                let preds_dict = {};
-                
-                keys.forEach(k => {
-                    let cleanK = k.trim().toLowerCase();
-                    if (!excludedHeaders.includes(cleanK) && isValidModelName(k)) {
-                        let normalizedKey = cleanK;
-                        if (cleanK.includes('agath') || cleanK.includes('aghata')) {
-                            normalizedKey = 'agatha.gg';
-                        }
-                        
-                        let matchedModelName = Object.keys(modelStats).find(m => {
-                            let mLower = m.toLowerCase();
-                            return mLower === normalizedKey || cleanK.includes(mLower.replace('line', '').replace('.gg', '').replace('.com', '').trim());
-                        }) || normalizedKey;
-
-                        if (modelStats[matchedModelName] && row[k] !== undefined && row[k] !== '' && !isNaN(row[k])) {
-                            preds_dict[matchedModelName] = parseFloat(row[k]);
-                        }
-                    }
-                });
-
-                let baseLine = lineKey ? (parseFloat(row[lineKey]) || 0) : 0;
-
-                matchesData.push({
-                    id: idx + 1,
-                    road: road_info,
-                    home: home_info,
-                    lineopen: lineOpenKey ? (parseFloat(row[lineOpenKey]) || 0) : baseLine,
-                    line: baseLine,
-                    customLine: baseLine,
-                    predictions: preds_dict
-                });
-            });
-        }
-
-        let currentSortColumn = 'score';
-        let currentSortAsc = false;
-
-        function loadSavedModelPreferences() {
-            try {
-                const saved = localStorage.getItem('nba_model_preferences');
-                if (saved) {
-                    const parsed = JSON.parse(saved);
-                    for (let sys in parsed) {
-                        if (modelStats[sys]) modelStats[sys].active = parsed[sys];
-                    }
-                }
-            } catch (e) {}
-        }
-
-        function saveModelPreferences() {
-            try {
-                let prefs = {};
-                for (let sys in modelStats) prefs[sys] = modelStats[sys].active;
-                localStorage.setItem('nba_model_preferences', JSON.stringify(prefs));
-            } catch (e) {}
-        }
-
-        function toggleTheme() {
-            const html = document.documentElement;
-            const themeIcon = document.getElementById('themeIcon');
-            const themeText = document.getElementById('themeText');
-            if (html.classList.contains('dark')) {
-                html.classList.remove('dark'); html.classList.add('light');
-                themeIcon.className = "fa-solid fa-moon text-amber-500";
-                themeText.innerText = "Modo Oscuro";
-            } else {
-                html.classList.remove('light'); html.classList.add('dark');
-                themeIcon.className = "fa-solid fa-sun text-amber-400";
-                themeText.innerText = "Modo Claro";
-            }
-        }
-
-        function switchTab(tab) {
-            document.getElementById('view-dashboard').classList.add('hidden');
-            document.getElementById('view-lines').classList.add('hidden');
-            document.getElementById('view-models').classList.add('hidden');
-            document.getElementById('tab-dashboard').className = "px-4 py-2 rounded-lg text-sm font-bold transition text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white";
-            document.getElementById('tab-lines').className = "px-4 py-2 rounded-lg text-sm font-bold transition text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white";
-            document.getElementById('tab-models').className = "px-4 py-2 rounded-lg text-sm font-bold transition text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white";
-
-            if(tab === 'dashboard') {
-                document.getElementById('view-dashboard').classList.remove('hidden');
-                document.getElementById('tab-dashboard').className = "px-4 py-2 rounded-lg text-sm font-bold transition bg-amber-600 text-white shadow";
-                applyFilters();
-            } else if(tab === 'lines') {
-                document.getElementById('view-lines').classList.remove('hidden');
-                document.getElementById('tab-lines').className = "px-4 py-2 rounded-lg text-sm font-bold transition bg-amber-600 text-white shadow";
-                renderLinesTable();
-            } else {
-                document.getElementById('view-models').classList.remove('hidden');
-                document.getElementById('tab-models').className = "px-4 py-2 rounded-lg text-sm font-bold transition bg-amber-600 text-white shadow";
-                renderModelsTable();
-            }
-        }
-
-        function updateEdgeLabel() {
-            const val = document.getElementById('filterMinEdge').value;
-            document.getElementById('edgeMinValueLabel').innerText = parseFloat(val).toFixed(2) + " pts";
-        }
-
-        function clearFilters() {
-            document.getElementById('filterSearch').value = '';
-            document.getElementById('filterMinEdge').value = 0;
-            document.getElementById('filterSide').value = 'all';
-            document.getElementById('filterSort').value = 'edge_desc';
-            updateEdgeLabel();
-            applyFilters();
-        }
-
-        function renderLinesTable() {
-            const tbody = document.getElementById('linesTableBody');
-            tbody.innerHTML = '';
-            matchesData.forEach(m => {
-                const tr = document.createElement('tr');
-                tr.className = "hover:bg-slate-50 dark:hover:bg-slate-800/50 transition";
-                tr.innerHTML = `
-                    <td class="p-3 font-semibold text-slate-900 dark:text-white flex items-center gap-3">
-                        <img src="${m.road.logo}" class="w-7 h-7 object-contain"> <span>${m.road.name}</span> 
-                        <span class="text-xs text-slate-400 font-normal">vs</span> 
-                        <img src="${m.home.logo}" class="w-7 h-7 object-contain"> <span>${m.home.name}</span>
-                    </td>
-                    <td class="p-3 text-center text-slate-600 dark:text-slate-400 font-bold">${m.line}</td>
-                    <td class="p-3 text-center">
-                        <input type="number" step="0.5" value="${m.customLine}" onchange="setCustomLine(${m.id}, this.value)" class="w-28 bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-lg px-3 py-1.5 text-center font-bold text-amber-600 dark:text-amber-400 focus:outline-none focus:border-amber-500">
-                    </td>
-                `;
-                tbody.appendChild(tr);
-            });
-        }
-
-        function setCustomLine(matchId, val) {
-            let m = matchesData.find(item => item.id === matchId);
-            if(m && !isNaN(val)) {
-                m.customLine = parseFloat(val);
-            }
-        }
-
-        function resetAllLines() {
-            matchesData.forEach(m => m.customLine = m.line);
-            renderLinesTable();
-        }
-
-        function sortTable(column) {
-            if (currentSortColumn === column) {
-                currentSortAsc = !currentSortAsc;
-            } else {
-                currentSortColumn = column;
-                currentSortAsc = (column === 'name' || column === 'abs_err' || column === 'bias' || column === 'mean_square');
-            }
-            renderModelsTable();
-        }
-
-        function renderModelsTable() {
-            const tbody = document.getElementById('modelsTableBody');
-            tbody.innerHTML = '';
-            
-            let modelsArray = Object.keys(modelStats).map(sys => ({ name: sys, ...modelStats[sys] }));
-            modelsArray.sort((a, b) => {
-                let valA = a[currentSortColumn], valB = b[currentSortColumn];
-                if (typeof valA === 'string') return currentSortAsc ? valA.localeCompare(valB) : valB.localeCompare(valA);
-                return currentSortAsc ? valA - valB : valB - valA;
-            });
-
-            modelsArray.forEach(m => {
-                const tr = document.createElement('tr');
-                tr.className = "hover:bg-slate-50 dark:hover:bg-slate-800/50 transition";
-                tr.innerHTML = `
-                    <td class="p-3"><input type="checkbox" ${m.active ? 'checked' : ''} onchange="toggleModel('${m.name.replace(/'/g, "\\'")}', this.checked)" class="w-4 h-4 rounded text-amber-600 focus:ring-amber-500 bg-white dark:bg-slate-900 border-slate-300 dark:border-slate-700 cursor-pointer"></td>
-                    <td class="p-3 font-semibold text-slate-900 dark:text-white">${m.name}</td>
-                    <td class="p-3 text-center"><span class="px-2.5 py-1 rounded-full text-xs font-black bg-amber-100 dark:bg-amber-500/20 text-amber-700 dark:text-amber-400 border border-amber-300 dark:border-amber-500/30">${m.score} pts</span></td>
-                    <td class="p-3 text-center text-slate-700 dark:text-slate-300">${(m.ats * 100).toFixed(1)}%</td>
-                    <td class="p-3 text-center text-slate-700 dark:text-slate-300">${m.abs_err.toFixed(2)}</td>
-                    <td class="p-3 text-center text-slate-700 dark:text-slate-300">${m.bias.toFixed(2)}</td>
-                    <td class="p-3 text-center text-slate-700 dark:text-slate-300">${m.mean_square.toFixed(2)}</td>
-                `;
-                tbody.appendChild(tr);
-            });
-        }
-
-        function toggleModel(sys, status) {
-            if (modelStats[sys]) {
-                modelStats[sys].active = status;
-            }
-            saveModelPreferences();
-            applyFilters();
-        }
-
-        function setAllModels(status) {
-            for (let sys in modelStats) modelStats[sys].active = status;
-            saveModelPreferences();
-            renderModelsTable();
-            applyFilters();
-        }
-
-        function applyFilters() {
-            const searchQuery = document.getElementById('filterSearch').value.toLowerCase();
-            const minEdge = parseFloat(document.getElementById('filterMinEdge').value);
-            const sideFilter = document.getElementById('filterSide').value;
-            const lineMoveFilter = document.getElementById('filterLineMove').value;
-            const sortOption = document.getElementById('filterSort').value;
-
-            let activeCount = 0, totalCount = 0, weightSumTotal = 0;
-            let activeWeights = {};
-
-            for (let sys in modelStats) {
-                totalCount++;
-                if (modelStats[sys].active) {
-                    activeCount++;
-                    let w = Math.max(1, modelStats[sys].score);
-                    activeWeights[sys] = w;
-                    weightSumTotal += w;
-                }
-            }
-
-            document.getElementById('activeModelsCount').innerText = activeCount;
-            for (let sys in activeWeights) activeWeights[sys] = activeWeights[sys] / weightSumTotal;
-
-            let processedMatches = [];
-            matchesData.forEach((match) => {
-                let weightedSum = 0, wTotal = 0, modelPredictionsHTML = '';
-                let agreeingModelsCount = 0;
-                let totalActiveModelsEvaluating = 0;
-
-                let activePredictions = [];
-                for (let modelName in match.predictions) {
-                    let val = match.predictions[modelName];
-                    let isModelActive = modelStats[modelName] ? modelStats[modelName].active : false;
-
-                    if (isModelActive) {
-                        let w = activeWeights[modelName] || (1 / (activeCount || 1));
-                        weightedSum += val * w;
-                        wTotal += w;
-                        totalActiveModelsEvaluating++;
-                        activePredictions.push({ model: modelName, val });
-                    }
-
-                    let formattedVal = val > 0 ? '+' + val.toFixed(2) : val.toFixed(2);
-                    let shortName = getShortName(modelName);
-                    
-                    modelPredictionsHTML += `
-                        <div class="bg-slate-100 dark:bg-slate-950 border ${isModelActive ? 'border-amber-400 dark:border-amber-500/60 text-amber-900 dark:text-amber-300 font-bold' : 'border-slate-200 dark:border-slate-800/80 text-slate-400 opacity-30'} p-1.5 rounded-lg text-center transition">
-                            <div class="text-[10px] uppercase font-black truncate leading-tight tracking-wider" title="${modelName}">${shortName}</div>
-                            <div class="text-xs font-black mt-0.5">${formattedVal}</div>
-                        </div>
-                    `;
-                }
-
-                let weightedAvg = wTotal > 0 ? (weightedSum / wTotal) : match.customLine;
-                let edge = weightedAvg - match.customLine;
-                let absEdge = Math.abs(edge);
-                let edgeSide = edge > 0 ? 'home' : 'road';
-
-                activePredictions.forEach(item => {
-                    let modelEdge = item.val - match.customLine;
-                    let modelSide = modelEdge > 0 ? 'home' : 'road';
-                    if (modelSide === edgeSide) {
-                        agreeingModelsCount++;
-                    }
-                });
-
-                // PELOTITAS DE BÁSQUETBOL EN EL ESPECTRO
-                let spectrumDotsHTML = '';
-                if (activePredictions.length > 0) {
-                    let diffs = activePredictions.map(p => p.val - match.customLine);
-                    let maxDiff = Math.max(6, Math.max(...diffs.map(d => Math.abs(d))));
-                    
-                    activePredictions.forEach(p => {
-                        let diff = p.val - match.customLine;
-                        let percent = 50 + (diff / maxDiff) * 45;
-                        percent = Math.max(5, Math.min(95, percent));
-                        spectrumDotsHTML += `
-                            <div class="absolute transform -translate-x-1/2 -translate-y-1/2 transition-all duration-300 hover:scale-125 z-10" style="left: ${percent}%; top: 50%;" title="${p.model}: ${p.val > 0 ? '+' + p.val : p.val}">
-                                <i class="fa-solid fa-basketball text-amber-500 dark:text-amber-400 text-sm drop-shadow-md"></i>
-                            </div>
-                        `;
-                    });
-                }
-
-                let edgePick = edge > 0 ? `Cover ${match.home.abbr} (${match.customLine > 0 ? '-' + match.customLine : '+' + Math.abs(match.customLine)})` : `Cover ${match.road.abbr} (${match.customLine > 0 ? '+' + match.customLine : '-' + Math.abs(match.customLine)})`;
-
-                let lineDiff = match.customLine - match.lineopen;
-                let lineMoveType = 'any';
-                if ((edge > 0 && lineDiff > 0) || (edge < 0 && lineDiff < 0)) lineMoveType = 'toward';
-                else if (lineDiff !== 0) lineMoveType = 'away';
-
-                processedMatches.push({ match, weightedAvg, edge, absEdge, edgeSide, edgePick, modelPredictionsHTML, lineMoveType, agreeingModelsCount, totalActiveModelsEvaluating, spectrumDotsHTML });
-            });
-
-            let filtered = processedMatches.filter(item => {
-                let matchesSearch = item.match.road.name.toLowerCase().includes(searchQuery) || 
-                                    item.match.home.name.toLowerCase().includes(searchQuery) ||
-                                    item.match.road.abbr.toLowerCase().includes(searchQuery) ||
-                                    item.match.home.abbr.toLowerCase().includes(searchQuery);
-                if (!matchesSearch) return false;
-                if (item.absEdge < minEdge) return false;
-                if (sideFilter !== 'all' && item.edgeSide !== sideFilter) return false;
-                if (lineMoveFilter !== 'all' && item.lineMoveType !== lineMoveFilter) return false;
-                return true;
-            });
-
-            filtered.sort((a, b) => {
-                if (sortOption === 'edge_desc') return b.absEdge - a.absEdge;
-                if (sortOption === 'edge_asc') return a.absEdge - b.absEdge;
-                if (sortOption === 'line_desc') return b.match.customLine - a.match.customLine;
-                if (sortOption === 'line_asc') return a.match.customLine - b.match.customLine;
-                return 0;
-            });
-
-            document.getElementById('visibleMatchesCount').innerText = filtered.length;
-            document.getElementById('totalMatchesCount').innerText = matchesData.length;
-
-            const container = document.getElementById('matchesContainer');
-            container.innerHTML = '';
-
-            if (filtered.length === 0) {
-                container.innerHTML = `<div class="col-span-2 text-center py-12 text-slate-400 font-semibold">No se encontraron partidos con los filtros seleccionados.</div>`;
-                return;
-            }
-
-            filtered.forEach(item => {
-                let m = item.match;
-                const card = document.createElement('div');
-                card.className = "bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-800 rounded-2xl p-6 shadow-sm flex flex-col justify-between";
-                card.innerHTML = `
-                    <div>
-                        <div class="flex justify-between items-center mb-5 border-b border-slate-200 dark:border-slate-800 pb-4">
-                            <div class="flex items-center gap-3">
-                                <img src="${m.road.logo}" class="w-12 h-12 object-contain" alt="${m.road.name}">
-                                <div><h3 class="font-bold text-base text-slate-900 dark:text-white">${m.road.name}</h3><span class="text-xs text-slate-500">Visitante</span></div>
-                            </div>
-                            <div class="text-center px-2">
-                                <span class="text-[10px] font-black tracking-widest text-slate-500 bg-slate-100 dark:bg-slate-950 px-2 py-1 rounded border border-slate-200 dark:border-slate-800">VS</span>
-                                <div class="text-xs font-semibold text-amber-600 dark:text-amber-400 mt-1">Línea: ${m.customLine > 0 ? '+' + m.customLine : m.customLine}</div>
-                            </div>
-                            <div class="flex items-center gap-3 text-right">
-                                <div><h3 class="font-bold text-base text-slate-900 dark:text-white">${m.home.name}</h3><span class="text-xs text-slate-500">Local</span></div>
-                                <img src="${m.home.logo}" class="w-12 h-12 object-contain" alt="${m.home.name}">
-                            </div>
-                        </div>
-
-                        <div class="grid grid-cols-3 gap-3 mb-5 bg-slate-50 dark:bg-slate-950 p-4 rounded-xl border border-slate-200 dark:border-slate-800 text-center">
-                            <div><span class="text-[10px] text-slate-500 uppercase font-bold">Línea Open</span><div class="text-base font-bold text-slate-700 dark:text-slate-300 mt-0.5">${m.lineopen}</div></div>
-                            <div><span class="text-[10px] text-slate-500 uppercase font-bold">Consenso Ponderado</span><div class="text-base font-bold text-amber-600 dark:text-amber-400 mt-0.5">${item.weightedAvg.toFixed(2)}</div></div>
-                            <div><span class="text-[10px] text-slate-500 uppercase font-bold">Edge Valor</span><div class="text-base font-bold ${item.absEdge >= 2 ? 'text-emerald-600 dark:text-emerald-400 font-extrabold' : 'text-slate-700 dark:text-slate-300'} mt-0.5">+${item.absEdge.toFixed(2)}</div></div>
-                        </div>
-
-                        <div class="bg-gradient-to-r from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-4 mb-5 relative">
-                            <div class="flex justify-between text-[11px] text-slate-500 dark:text-slate-400 mb-2 font-semibold uppercase">
-                                <span><i class="fa-solid fa-caret-left mr-1"></i> ${m.road.abbr}</span>
-                                <span class="text-amber-600 dark:text-amber-400 font-bold">Línea: ${m.customLine}</span>
-                                <span>${m.home.abbr} <i class="fa-solid fa-caret-right ml-1"></i></span>
-                            </div>
-                            <div class="h-6 w-full bg-slate-200 dark:bg-slate-800 rounded-lg relative overflow-hidden flex items-center shadow-inner">
-                                <div class="absolute bg-slate-400 dark:bg-slate-600 h-full w-0.5" style="left: 50%;"></div>
-                                ${item.spectrumDotsHTML}
-                            </div>
-                            <div class="mt-3 flex items-center justify-between text-xs text-slate-700 dark:text-slate-300">
-                                <span class="font-bold text-amber-600 dark:text-amber-400">Pick Recomendado:</span>
-                                <div class="flex items-center gap-2">
-                                    <span class="bg-emerald-100 dark:bg-emerald-500/20 border border-emerald-300 dark:border-emerald-500/40 text-emerald-800 dark:text-emerald-300 px-2 py-0.5 rounded text-[11px] font-bold" title="Modelos apoyando este lado">
-                                        <i class="fa-solid fa-users mr-1"></i> ${item.agreeingModelsCount}/${item.totalActiveModelsEvaluating}
-                                    </span>
-                                    <span class="bg-amber-100 dark:bg-amber-500/20 border border-amber-300 dark:border-amber-500/40 text-amber-800 dark:text-amber-300 px-3 py-1 rounded-lg font-black">${item.edgePick}</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="mb-2"><span class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Modelos Incluidos:</span></div>
-                        <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-1.5 max-h-48 overflow-y-auto pr-1">
-                            ${item.modelPredictionsHTML}
-                        </div>
-                    </div>
-                `;
-                container.appendChild(card);
-            });
-        }
-
-        document.addEventListener('DOMContentLoaded', loadCSVData);
-    </script>
+    <div><div class="flex justify-between lbl mb-1"><span>◂ ${g.road.abbr}</span><span>consenso ${f2(x.avg)}</span><span>${g.home.abbr} ▸</span></div>
+      <div class="relative h-6 rounded-lg" style="background:var(--line)"><i style="position:absolute;left:50%;top:0;bottom:0;width:2px;background:var(--mut)"></i>${dots}</div></div>
+    <div class="rounded-xl p-3" style="border:1px solid var(--line)">${splitPanel(x)}</div>
+    <details open><summary class="lbl mb-2">Modelos (${x.n} activos) ▾</summary><div class="grid grid-cols-4 sm:grid-cols-6 gap-1.5 max-h-44 overflow-y-auto">${chips}</div></details>
+  </div></article>`}
+
+/* ============ RENDER SPLITS ============ */
+function renderSplits(){
+  const L=games.filter(g=>Object.keys(g.sp).length).map(g=>({g,div:Math.max(...BOOKS.filter(b=>g.sp[b]).flatMap(b=>[Math.abs(g.sp[b].rh-g.sp[b].rb)]))})).sort((a,b)=>b.div-a.div);
+  if(!L.length){$('splitsGrid').innerHTML='<div class="card p-6 mut">No hay splits.csv todavía. Súbelo a tu repo con el formato indicado.</div>';return}
+  $('splitsGrid').innerHTML=L.map(({g})=>`<article class="card p-4"><div class="flex items-center gap-2 mb-3 disp text-2xl font-bold">${logo(g.road,'w-7 h-7')}${g.road.abbr}<span class="mut text-base">@</span>${logo(g.home,'w-7 h-7')}${g.home.abbr}</div>
+  ${BOOKS.filter(b=>g.sp[b]).map(b=>{const s=g.sp[b];return`<div class="mb-3"><div class="lbl mb-1">${BOOKNAME[b]}</div>${[['road',g.road],['home',g.home]].map(([sd,t])=>{const o=sideOf(s,sd),d=o.h-o.b,ln=sd==='home'?-s.line:s.line;
+    return`<div class="grid grid-cols-[48px_46px_1fr_1fr_44px] gap-2 items-center text-xs py-1"><b>${t.abbr}</b><span class="mono mut">${sgn(ln)}</span>
+    <div><div class="bar"><i style="width:${o.h}%;background:var(--ok)"></i></div><span class="mono">$ ${o.h}%</span></div><div><div class="bar"><i style="width:${o.b}%;background:var(--mut)"></i></div><span class="mono">## ${o.b}%</span></div><span class="chip ${d>=10?'ok':d<=-10?'bad':'mut'}">${d>0?'+':''}${d}</span></div>`}).join('')}</div>`}).join('')}</article>`).join('')}
+
+/* ============ LINEAS / MODELOS ============ */
+function renderLines(){$('linesBody').innerHTML=games.map(g=>`<tr style="border-top:1px solid var(--line)"><td class="p-2 font-semibold">${g.road.abbr} @ ${g.home.abbr}</td><td class="p-2 text-center mono mut">${sgn(g.line)}</td>
+  <td class="p-2 text-center mono">${g.sp.DK?sgn(g.sp.DK.line):'–'}</td><td class="p-2 text-center mono">${g.sp.Circa?sgn(g.sp.Circa.line):'–'}</td>
+  <td class="p-2 text-center"><input type="number" step="0.5" value="${g.cur}" onchange="g_(${g.id}).cur=parseFloat(this.value)||0" class="inp mono text-center acc font-bold" style="width:90px"></td></tr>`).join('')}
+const g_=id=>games.find(g=>g.id===id);
+function applyBook(b){games.forEach(g=>{if(g.sp[b]&&isFinite(g.sp[b].line))g.cur=g.sp[b].line});renderLines()}
+function resetLines(){games.forEach(g=>g.cur=g.line);renderLines()}
+function sortM(c){if(sortCol===c)sortAsc=!sortAsc;else{sortCol=c;sortAsc=['name','abs_err','bias','ms'].includes(c)}renderModels()}
+function renderModels(){const a=Object.keys(stats).map(n=>({name:n,...stats[n]}));
+  a.sort((x,y)=>{let u=x[sortCol],v=y[sortCol];if(sortCol==='bias'){u=Math.abs(u);v=Math.abs(v)}if(typeof u==='string')return sortAsc?u.localeCompare(v):v.localeCompare(u);u=isFinite(u)?u:-1e9;v=isFinite(v)?v:-1e9;return sortAsc?u-v:v-u});
+  const t=(v,d=2)=>isFinite(v)?v.toFixed(d):'–';
+  $('modelsBody').innerHTML=a.map(m=>`<tr style="border-top:1px solid var(--line)"><td class="p-2"><input type="checkbox" ${m.active?'checked':''} onchange="toggle(this.dataset.n,this.checked)" data-n="${m.name.replace(/"/g,'&quot;')}" style="accent-color:var(--acc);width:16px;height:16px"></td>
+  <td class="p-2 font-semibold">${m.name}${m.hist?'':' <span class="chip mut">sin historial</span>'}${games.some(g=>m.name in g.p)?'':' <span class="chip mut">sin columna en preds</span>'}</td><td class="p-2 text-center"><span class="chip acc">${m.score}</span></td>
+  <td class="p-2 text-center mono">${isFinite(m.ats)?(m.ats*100).toFixed(1)+'%':'–'}</td><td class="p-2 text-center mono">${t(m.abs_err)}</td><td class="p-2 text-center mono">${t(m.bias)}</td><td class="p-2 text-center mono">${t(m.ms,1)}</td></tr>`).join('')}
+function toggle(n,v){stats[n].active=v;savePrefs();render()}
+function setAll(v){for(const n in stats)stats[n].active=v;savePrefs();renderModels();render()}
+function savePrefs(){try{const o={};for(const n in stats)o[n]=stats[n].active;localStorage.setItem('nba_prefs_v2',JSON.stringify(o))}catch(e){}}
+function loadPrefs(){try{const o=JSON.parse(localStorage.getItem('nba_prefs_v2')||'{}');for(const n in o)if(stats[n])stats[n].active=o[n]}catch(e){}}
+
+/* ============ UI ============ */
+function clearF(){$('fSearch').value='';$('fEdge').value=0;['fSide','fMove','fSplit'].forEach(i=>$(i).value='all');$('fSort').value='edge';render()}
+function tab(t){['dash','splits','lines','models'].forEach(k=>{$('v-'+k).classList.toggle('hidden',k!==t);$('t-'+k).classList.toggle('on',k===t)});
+  if(t==='dash')render();if(t==='splits')renderSplits();if(t==='lines')renderLines();if(t==='models')renderModels()}
+function theme(){const d=document.documentElement.classList.toggle('dark');$('themeBtn').textContent=d?'☀️':'🌙';try{localStorage.setItem('nba_theme',d?'dark':'light')}catch(e){}}
+try{if(localStorage.getItem('nba_theme')==='light'){document.documentElement.classList.remove('dark');setTimeout(()=>$('themeBtn').textContent='🌙')}}catch(e){}
+document.addEventListener('DOMContentLoaded',load);
+</script>
 </body>
 </html>
