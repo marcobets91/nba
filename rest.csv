@@ -1,8 +1,4 @@
 date,road,home,road_rest,road_b2b,road_3in4,home_rest,home_b2b,home_3in4
-2026-11-12,CHA,PHX,2,0,0,1,0,1
-2026-11-12,DAL,MIN,2,0,0,3,0,0
-2026-11-12,DET,WAS,2,0,0,0,1,1
-2026-11-12,TOR,PHI,0,1,1,1,0,0
 2026-11-13,ATL,CHI,3,0,0,1,0,0
 2026-11-13,CLE,MIA,1,0,0,2,0,0
 2026-11-13,GSW,SAS,1,0,0,1,0,0
@@ -12,3 +8,8 @@ date,road,home,road_rest,road_b2b,road_3in4,home_rest,home_b2b,home_3in4
 2026-11-13,OKC,LAC,1,0,1,2,0,0
 2026-11-13,POR,SAC,1,0,1,2,0,0
 2026-11-13,UTA,HOU,1,0,1,1,0,0
+2026-11-14,BKN,MEM,2,0,0,0,1,1
+2026-11-14,CHI,MIN,0,1,1,1,0,0
+2026-11-14,DAL,CLE,1,0,0,0,1,1
+2026-11-14,DEN,NOP,2,0,0,0,1,1
+2026-11-14,DET,MIA,1,0,0,0,1,0
