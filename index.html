@@ -34,7 +34,7 @@ details>summary{cursor:pointer;list-style:none}details>summary::-webkit-details-
 
 <header class="flex flex-wrap items-center justify-between gap-3 pb-4">
   <div class="flex items-center gap-3">
-    <div class="w-10 h-10 rounded-full flex items-center justify-center text-xl" style="background:var(--acc)">🏀</div>
+    <img id="nbaLogo" src="logo.png" alt="NBA" class="h-11 w-auto rounded" onerror="logoFallback(this)">
     <div><h1 class="disp text-3xl font-extrabold leading-none">NBA EDGE</h1><div id="stamp" class="lbl mt-1">Consenso de modelos · splits</div></div>
   </div>
   <div class="flex items-center gap-2">
@@ -56,6 +56,7 @@ details>summary{cursor:pointer;list-style:none}details>summary::-webkit-details-
   <div class="card p-4 grid grid-cols-2 md:grid-cols-6 gap-3 items-end">
     <div class="col-span-2 md:col-span-1"><div class="lbl mb-1">Equipo</div><input id="fSearch" class="inp" placeholder="Boston, LAL…" oninput="render()"></div>
     <div class="col-span-2"><div class="lbl mb-1 flex justify-between">Edge mínimo <b id="eLbl" class="acc">0.0</b></div><input id="fEdge" type="range" min="0" max="10" step="0.5" value="0" class="w-full" style="accent-color:var(--acc)" oninput="render()"></div>
+    <div class="col-span-2"><div class="lbl mb-1 flex justify-between">Modelos con el pick (mín.) <b id="mLbl" class="acc">0</b></div><input id="fMin" type="range" min="0" max="0" step="1" value="0" class="w-full" style="accent-color:var(--acc)" oninput="render()"></div>
     <div><div class="lbl mb-1">Lado</div><select id="fSide" class="inp" onchange="render()"><option value="all">Ambos</option><option value="home">Local</option><option value="road">Visitante</option></select></div>
     <div><div class="lbl mb-1">Línea</div><select id="fMove" class="inp" onchange="render()"><option value="all">Cualquiera</option><option value="toward">Hacia el pick</option><option value="away">Contra el pick</option></select></div>
     <div><div class="lbl mb-1">Splits</div><select id="fSplit" class="inp" onchange="render()"><option value="all">Todos</option><option value="with">Dinero a favor</option><option value="against">Dinero en contra</option></select></div>
@@ -186,7 +187,7 @@ function injSide(g,side){const L=injBy[g[side].k]||[],list=L.filter(i=>W_ST[i.s]
 function ctxPanel(x){const g=x.g,pk=x.side,op=pk==='home'?'road':'home',R=restBy[g.road.abbr+'|'+g.home.abbr],has=Object.keys(injBy).length;if(!has&&!R)return'';
   const I={road:injSide(g,'road'),home:injSide(g,'home')},tags=[],diff=I[op].lost-I[pk].lost;
   if(I[pk].key.length)tags.push(['bad','⚠ Baja clave en tu pick']);if(I[op].key.length)tags.push(['ok','Baja clave en el rival']);
-  if(Math.abs(diff)>=15)tags.push([diff>0?'ok':'bad',(diff>0?'Rival':'Pick')+' pierde '+Math.abs(diff).toFixed(0)+' PER más']);
+  
   if(R){['road','home'].forEach(s=>{if(R[s+'_b2b']==='1')tags.push([s===pk?'bad':'ok',g[s].abbr+' B2B']);if(R[s+'_3in4']==='1')tags.push([s===pk?'bad':'ok',g[s].abbr+' 3 en 4'])});
     const rr=num(R.road_rest),hr=num(R.home_rest);if(isFinite(rr)&&isFinite(hr)){const d=pk==='home'?hr-rr:rr-hr;if(d)tags.push([d>0?'ok':'bad','Descanso '+(d>0?'+':'')+d+'d '+(d>0?'a favor':'en contra')])}}
   const line=s=>{const i=I[s],it=i.list.slice(0,6).map(p=>`<span class="chip ${p.s==='questionable'?'acc':'bad'}" style="${p.key?'border-color:var(--bad);border-width:2px':''}" title="${p.why}">${ICON[p.s]} ${p.p.split(', ').reverse().join(' ')}${isFinite(p.per)?' · PER '+p.per.toFixed(0):''}</span>`).join(' ');
@@ -228,7 +229,8 @@ function splitPanel(x){
 function render(){
   const q=$('fSearch').value.toLowerCase(),me=+$('fEdge').value,sd=$('fSide').value,mv=$('fMove').value,sp=$('fSplit').value,so=$('fSort').value;
   const all=compute();
-  let L=all.filter(x=>(x.g.road.name+x.g.home.name+x.g.road.abbr+x.g.home.abbr).toLowerCase().includes(q)&&x.abs>=me&&(sd==='all'||x.side===sd)&&(mv==='all'||x.move===mv)&&(sp==='all'||x.sig===sp));
+  const fm=$('fMin'),nMax=Math.max(0,...all.map(x=>x.n));fm.max=nMax;if(+fm.value>nMax)fm.value=nMax;const mm=+fm.value;$('mLbl').textContent=mm+' de '+nMax;
+  let L=all.filter(x=>x.agree>=mm&&(x.g.road.name+x.g.home.name+x.g.road.abbr+x.g.home.abbr).toLowerCase().includes(q)&&x.abs>=me&&(sd==='all'||x.side===sd)&&(mv==='all'||x.move===mv)&&(sp==='all'||x.sig===sp));
   L.sort((a,b)=>so==='edge'?b.abs-a.abs:so==='sharp'?b.sharp-a.sharp:a.g.cur-b.g.cur);
   const strong=all.filter(x=>x.abs>=2).length,aligned=all.filter(x=>x.abs>=2&&x.sig==='with').length;
   $('kpis').innerHTML=[['Partidos',all.length],['Edge ≥ 2 pts',strong],['Con dinero a favor',aligned],['Modelos activos',Object.keys(stats).filter(n=>stats[n].active&&games.some(g=>n in g.p)).length]].map(k=>`<div class="card p-4"><div class="lbl">${k[0]}</div><div class="disp text-4xl font-extrabold acc">${k[1]}</div></div>`).join('');
@@ -287,7 +289,9 @@ function savePrefs(){try{const o={};for(const n in stats)o[n]=stats[n].active;lo
 function loadPrefs(){try{const o=JSON.parse(localStorage.getItem('nba_prefs_v2')||'{}');for(const n in o)if(stats[n])stats[n].active=o[n]}catch(e){}}
 
 /* ============ UI ============ */
-function clearF(){$('fSearch').value='';$('fEdge').value=0;['fSide','fMove','fSplit'].forEach(i=>$(i).value='all');$('fSort').value='edge';render()}
+// Logo: 1) logo.png en tu repo  2) logo oficial NBA (CDN)  3) emoji
+function logoFallback(i){if(!i.dataset.t){i.dataset.t=1;i.src='https://cdn.nba.com/logos/leagues/logo-nba.svg'}else{const s=document.createElement('div');s.className='w-10 h-10 rounded-full flex items-center justify-center text-xl';s.style.background='var(--acc)';s.textContent='🏀';i.replaceWith(s)}}
+function clearF(){$('fSearch').value='';$('fEdge').value=0;$('fMin').value=0;['fSide','fMove','fSplit'].forEach(i=>$(i).value='all');$('fSort').value='edge';render()}
 function tab(t){['dash','splits','lines','models'].forEach(k=>{$('v-'+k).classList.toggle('hidden',k!==t);$('t-'+k).classList.toggle('on',k===t)});
   if(t==='dash')render();if(t==='splits')renderSplits();if(t==='lines')renderLines();if(t==='models')renderModels()}
 function theme(){const d=document.documentElement.classList.toggle('dark');$('themeBtn').textContent=d?'☀️':'🌙';try{localStorage.setItem('nba_theme',d?'dark':'light')}catch(e){}}
