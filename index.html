@@ -121,18 +121,18 @@ const col=(r,name)=>{const k=Object.keys(r).find(k=>k.trim().toLowerCase()===nam
 /* ============ CARGA ============ */
 async function getCSV(f,opt){try{const r=await fetch(f+'?t='+Date.now());if(r.ok)return await r.text()}catch(e){}if(opt)return null;throw new Error(f)}
 async function load(){
-  try{const [a,b,c]=await Promise.all([getCSV('nbaresults.csv'),getCSV('nbapreds.csv'),getCSV('splits.csv',true)]);init(a,b,c)}
+  try{const [a,b,...c]=await Promise.all([getCSV('nbaresults.csv'),getCSV('nbapreds.csv'),getCSV('splits.csv',true),getCSV('injuries.csv',true),getCSV('rest.csv',true)]);init(a,b,c[0],c[1],c[2])}
   catch(e){$('loading').innerHTML=`<div class="card p-6 max-w-md mx-auto text-left"><b>No se pudieron leer los CSV (${e.message}).</b><p class="text-sm mut my-3">Selecciona nbaresults.csv, nbapreds.csv y (opcional) splits.csv:</p><input type="file" id="files" multiple accept=".csv" class="text-sm"><button class="btn mt-4" onclick="manual()">Cargar</button></div>`}}
 async function manual(){const fs=[...$('files').files];const rd=async k=>{const f=fs.find(f=>f.name.toLowerCase().includes(k));return f?await f.text():null};
-  const a=await rd('result'),b=await rd('pred');if(!a||!b)return alert('Faltan nbaresults.csv y/o nbapreds.csv');init(a,b,await rd('split'))}
-function init(res,preds,spl){
+  const a=await rd('result'),b=await rd('pred');if(!a||!b)return alert('Faltan nbaresults.csv y/o nbapreds.csv');init(a,b,await rd('split'),await rd('injur'),await rd('rest'))}
+function init(res,preds,spl,inj,rst){
   stats={};games=[];splits={};
   parseResults(Papa.parse(res,{header:true,skipEmptyLines:true}).data);
   parsePreds(Papa.parse(preds,{header:true,skipEmptyLines:true}).data);
   if(spl)parseSplits(Papa.parse(spl,{header:true,skipEmptyLines:true}).data);
-  attachSplits();loadPrefs();
+  attachSplits();injBy={};restBy={};if(inj)parseInj(Papa.parse(inj,{header:true,skipEmptyLines:true}).data);if(rst)parseRest(Papa.parse(rst,{header:true,skipEmptyLines:true}).data);loadPrefs();
   $('loading').classList.add('hidden');$('v-dash').classList.remove('hidden');
-  $('stamp').textContent='Splits: '+(splitDate||'sin datos')+' · '+games.length+' partidos';
+  $('stamp').textContent='Splits: '+(splitDate||'sin datos')+' · Lesiones: '+(injTime||'sin datos')+' · '+games.length+' partidos';
   render();
 }
 
@@ -172,6 +172,26 @@ function parseSplits(rows){rows.forEach(r=>{const b=/circa/i.test(r.book)?'Circa
   const rs=num(r.road_spread),rh=num(r.road_handle),rb=num(r.road_bets);if(!isFinite(rh))return;
   (splits[rk+'|'+hk]=splits[rk+'|'+hk]||{})[b]={line:rs,rh,rb,hh:100-rh,hb:100-rb};if(r.date)splitDate=r.date})}
 function attachSplits(){games.forEach(g=>g.sp=splits[g.road.k+'|'+g.home.k]||{})}
+/* ============ LESIONES + DESCANSO ============ */
+// injuries.csv y rest.csv los genera scripts/update_data.py (GitHub Action). players.csv (player,mpg) define "clave".
+const W_ST={out:1,doubtful:.9,questionable:.5},ICON={out:'⛔',doubtful:'🔴',questionable:'🟡'};
+let injBy={},restBy={},injTime='';
+function parseInj(rows){const first={};rows=rows.filter(r=>r.team);
+  rows.forEach(r=>{const k=canon(r.team),d=r.game_date||'9';injTime=r.report_et||injTime;if(!(k in first)||d<first[k])first[k]=d});
+  rows.forEach(r=>{const k=canon(r.team);if((r.game_date||'9')!==first[k])return;
+    (injBy[k]=injBy[k]||[]).push({p:r.player||'',s:String(r.status||'').toLowerCase(),why:r.reason||'',mpg:num(r.mpg),per:num(r.per),key:r.key==='1'})})}
+function parseRest(rows){rows.sort((a,b)=>a.date<b.date?-1:1).forEach(r=>{const k=r.road+'|'+r.home;if(!restBy[k])restBy[k]=r})}
+function injSide(g,side){const L=injBy[g[side].k]||[],list=L.filter(i=>W_ST[i.s]&&!/g league/i.test(i.why)).sort((a,b)=>(b.mpg||0)-(a.mpg||0));
+  return{list,lost:list.reduce((a,i)=>a+(isFinite(i.per)&&i.mpg>=12?i.per*W_ST[i.s]:0),0),key:list.filter(i=>i.key),pend:L.some(i=>i.s==='not yet submitted')}}
+function ctxPanel(x){const g=x.g,pk=x.side,op=pk==='home'?'road':'home',R=restBy[g.road.abbr+'|'+g.home.abbr],has=Object.keys(injBy).length;if(!has&&!R)return'';
+  const I={road:injSide(g,'road'),home:injSide(g,'home')},tags=[],diff=I[op].lost-I[pk].lost;
+  if(I[pk].key.length)tags.push(['bad','⚠ Baja clave en tu pick']);if(I[op].key.length)tags.push(['ok','Baja clave en el rival']);
+  if(Math.abs(diff)>=15)tags.push([diff>0?'ok':'bad',(diff>0?'Rival':'Pick')+' pierde '+Math.abs(diff).toFixed(0)+' PER más']);
+  if(R){['road','home'].forEach(s=>{if(R[s+'_b2b']==='1')tags.push([s===pk?'bad':'ok',g[s].abbr+' B2B']);if(R[s+'_3in4']==='1')tags.push([s===pk?'bad':'ok',g[s].abbr+' 3 en 4'])});
+    const rr=num(R.road_rest),hr=num(R.home_rest);if(isFinite(rr)&&isFinite(hr)){const d=pk==='home'?hr-rr:rr-hr;if(d)tags.push([d>0?'ok':'bad','Descanso '+(d>0?'+':'')+d+'d '+(d>0?'a favor':'en contra')])}}
+  const line=s=>{const i=I[s],it=i.list.slice(0,6).map(p=>`<span class="chip ${p.s==='questionable'?'acc':'bad'}" style="${p.key?'border-color:var(--bad);border-width:2px':''}" title="${p.why}">${ICON[p.s]} ${p.p.split(', ').reverse().join(' ')}${isFinite(p.per)?' · PER '+p.per.toFixed(0):''}</span>`).join(' ');
+    return`<div class="flex gap-2 items-start text-xs"><b class="w-9 shrink-0">${g[s].abbr}</b><div class="flex flex-wrap gap-1">${it||`<span class="mut">${i.pend?'reporte pendiente':'sin bajas reportadas'}</span>`}</div></div>`};
+  return`<div class="rounded-xl p-3 space-y-2" style="border:1px solid var(--line)"><div class="flex justify-between items-start gap-2"><span class="lbl">Lesiones y descanso</span><span class="flex flex-wrap gap-1 justify-end">${tags.map(t=>`<span class="chip ${t[0]}">${t[1]}</span>`).join('')}</span></div>${has?line('road')+line('home'):''}</div>`}
 const sideOf=(s,side)=>side==='home'?{h:s.hh,b:s.hb}:{h:s.rh,b:s.rb};
 function splitSig(g,side){const v=BOOKS.filter(b=>g.sp[b]).map(b=>sideOf(g.sp[b],side).h);if(!v.length)return'none';
   const a=v.reduce((x,y)=>x+y,0)/v.length;return a>=55?'with':a<=45?'against':'mixed'}
@@ -234,6 +254,7 @@ function card(x){
     <div><div class="flex justify-between lbl mb-1"><span>◂ ${g.road.abbr}</span><span>consenso ${f2(x.avg)}</span><span>${g.home.abbr} ▸</span></div>
       <div class="relative h-6 rounded-lg" style="background:var(--line)"><i style="position:absolute;left:50%;top:0;bottom:0;width:2px;background:var(--mut)"></i>${dots}</div></div>
     <div class="rounded-xl p-3" style="border:1px solid var(--line)">${splitPanel(x)}</div>
+    ${ctxPanel(x)}
     <details open><summary class="lbl mb-2">Modelos (${x.n} activos) ▾</summary><div class="grid grid-cols-4 sm:grid-cols-6 gap-1.5 max-h-44 overflow-y-auto">${chips}</div></details>
   </div></article>`}
 
