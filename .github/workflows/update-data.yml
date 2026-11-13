@@ -1,0 +1,22 @@
+name: Actualizar lesiones y descanso
+on:
+  schedule:
+    - cron: "*/30 * * * *"      # cada 30 min (UTC; GitHub puede retrasarlo unos minutos)
+  workflow_dispatch:             # botón manual en la pestaña Actions
+permissions:
+  contents: write
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - run: pip install pdfplumber
+      - run: python scripts/update_data.py
+      - name: Commit si hay cambios
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add injuries.csv rest.csv
+          git diff --staged --quiet || (git commit -m "Auto: lesiones y descanso" && git push)
