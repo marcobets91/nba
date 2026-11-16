@@ -122,16 +122,16 @@ const col=(r,name)=>{const k=Object.keys(r).find(k=>k.trim().toLowerCase()===nam
 /* ============ CARGA ============ */
 async function getCSV(f,opt){try{const r=await fetch(f+'?t='+Date.now());if(r.ok)return await r.text()}catch(e){}if(opt)return null;throw new Error(f)}
 async function load(){
-  try{const [a,b,...c]=await Promise.all([getCSV('nbaresults.csv'),getCSV('nbapreds.csv'),getCSV('splits.csv',true),getCSV('injuries.csv',true),getCSV('rest.csv',true)]);init(a,b,c[0],c[1],c[2])}
+  try{const [a,b,...c]=await Promise.all([getCSV('nbaresults.csv'),getCSV('nbapreds.csv'),getCSV('splits.csv',true),getCSV('injuries.csv',true),getCSV('rest.csv',true),getCSV('ratings.csv',true)]);init(a,b,c[0],c[1],c[2],c[3])}
   catch(e){$('loading').innerHTML=`<div class="card p-6 max-w-md mx-auto text-left"><b>No se pudieron leer los CSV (${e.message}).</b><p class="text-sm mut my-3">Selecciona nbaresults.csv, nbapreds.csv y (opcional) splits.csv:</p><input type="file" id="files" multiple accept=".csv" class="text-sm"><button class="btn mt-4" onclick="manual()">Cargar</button></div>`}}
 async function manual(){const fs=[...$('files').files];const rd=async k=>{const f=fs.find(f=>f.name.toLowerCase().includes(k));return f?await f.text():null};
-  const a=await rd('result'),b=await rd('pred');if(!a||!b)return alert('Faltan nbaresults.csv y/o nbapreds.csv');init(a,b,await rd('split'),await rd('injur'),await rd('rest'))}
-function init(res,preds,spl,inj,rst){
+  const a=await rd('result'),b=await rd('pred');if(!a||!b)return alert('Faltan nbaresults.csv y/o nbapreds.csv');init(a,b,await rd('split'),await rd('injur'),await rd('rest'),await rd('rating'))}
+function init(res,preds,spl,inj,rst,rat){
   stats={};games=[];splits={};
   parseResults(Papa.parse(res,{header:true,skipEmptyLines:true}).data);
   parsePreds(Papa.parse(preds,{header:true,skipEmptyLines:true}).data);
   if(spl)parseSplits(Papa.parse(spl,{header:true,skipEmptyLines:true}).data);
-  attachSplits();injBy={};restBy={};if(inj)parseInj(Papa.parse(inj,{header:true,skipEmptyLines:true}).data);if(rst)parseRest(Papa.parse(rst,{header:true,skipEmptyLines:true}).data);loadPrefs();
+  attachSplits();injBy={};restBy={};ratBy={};if(rat)parseRatings(Papa.parse(rat,{header:true,skipEmptyLines:true}).data);if(inj)parseInj(Papa.parse(inj,{header:true,skipEmptyLines:true}).data);if(rst)parseRest(Papa.parse(rst,{header:true,skipEmptyLines:true}).data);loadPrefs();
   $('loading').classList.add('hidden');$('v-dash').classList.remove('hidden');
   $('stamp').textContent='Splits: '+(splitDate||'sin datos')+' · Lesiones: '+(injTime||'sin datos')+' · '+games.length+' partidos';
   render();
@@ -176,7 +176,12 @@ function attachSplits(){games.forEach(g=>g.sp=splits[g.road.k+'|'+g.home.k]||{})
 /* ============ LESIONES + DESCANSO ============ */
 // injuries.csv y rest.csv los genera scripts/update_data.py (GitHub Action). players.csv (player,mpg) define "clave".
 const W_ST={out:1,doubtful:.9,questionable:.5},ICON={out:'⛔',doubtful:'🔴',questionable:'🟡'};
-let injBy={},restBy={},injTime='';
+let injBy={},restBy={},injTime='',ratBy={};
+// ratings.csv: team(abreviatura),ortg,drtg,net,ortg_rk,drtg_rk,net_rk
+function parseRatings(rows){rows.forEach(r=>{const k=(r.team||'').trim().toUpperCase(),n=num(r.net);if(k&&isFinite(n))ratBy[k]={ortg:num(r.ortg),drtg:num(r.drtg),net:n,ortg_rk:r.ortg_rk,drtg_rk:r.drtg_rk,net_rk:r.net_rk}})}
+function ratBlock(t,right){const r=ratBy[t.abbr];if(!r)return'';const f=v=>isFinite(v)?v.toFixed(1):'–';
+  const c=(l,v,rk,cls='')=>`<div><div class="lbl">${l}</div><div class="mono text-[11px] font-semibold ${cls}">${v}<span class="mut font-normal hidden sm:inline"> #${rk||''}</span></div></div>`;
+  return`<div class="flex gap-2.5 mt-2 ${right?'justify-end':''}">${c('Net',(r.net>0?'+':'')+f(r.net),r.net_rk,r.net>0?'ok':'bad')}${c('Off',f(r.ortg),r.ortg_rk)}${c('Def',f(r.drtg),r.drtg_rk)}</div>`}
 function parseInj(rows){const first={};rows=rows.filter(r=>r.team);
   rows.forEach(r=>{const k=canon(r.team),d=r.game_date||'9';injTime=r.report_et||injTime;if(!(k in first)||d<first[k])first[k]=d});
   rows.forEach(r=>{const k=canon(r.team);if((r.game_date||'9')!==first[k])return;
@@ -244,9 +249,9 @@ function card(x){
   const hot=x.abs>=2;
   return`<article class="card overflow-hidden">
   <div class="flex items-center justify-between p-4" style="border-bottom:1px solid var(--line)">
-    <div class="flex items-center gap-3">${logo(g.road)}<div><div class="disp text-2xl font-bold leading-none">${g.road.abbr}</div><div class="lbl">Visita</div></div></div>
+    <div><div class="flex items-center gap-3">${logo(g.road)}<div><div class="disp text-2xl font-bold leading-none">${g.road.abbr}</div><div class="lbl">Visita</div></div></div>${ratBlock(g.road,false)}</div>
     <div class="text-center"><div class="lbl">Línea (local)</div><div class="mono font-semibold acc">${sgn(g.cur)}</div><div class="lbl">open ${sgn(g.open)}</div></div>
-    <div class="flex items-center gap-3 text-right"><div><div class="disp text-2xl font-bold leading-none">${g.home.abbr}</div><div class="lbl">Local</div></div>${logo(g.home)}</div>
+    <div><div class="flex items-center gap-3 justify-end text-right"><div><div class="disp text-2xl font-bold leading-none">${g.home.abbr}</div><div class="lbl">Local</div></div>${logo(g.home)}</div>${ratBlock(g.home,true)}</div>
   </div>
   <div class="p-4 space-y-4">
     <div class="flex items-center justify-between gap-3 rounded-xl p-3" style="background:color-mix(in srgb,${hot?'var(--ok)':'var(--acc)'} 12%,transparent)">
