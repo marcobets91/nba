@@ -1,19 +1,17 @@
 book,date,road,home,road_spread,road_handle,road_bets
-DraftKings,Nov 13,New York,Indiana,-8.5,67,66
-DraftKings,Nov 13,Milwaukee,Orlando,9.5,50,45
-DraftKings,Nov 13,Memphis,New Orleans,-3.5,47,61
-DraftKings,Nov 13,Atlanta,Chicago,-7.5,73,65
-DraftKings,Nov 13,Cleveland,Miami,2.5,48,59
-DraftKings,Nov 13,Utah,Houston,15.5,64,40
-DraftKings,Nov 13,Golden State,San Antonio,12.5,46,38
-DraftKings,Nov 13,Portland,Sacramento,-10.5,83,64
-DraftKings,Nov 13,Oklahoma City,LA Clippers,-7.5,80,75
-Circa,Nov 13,New York,Indiana,-8.5,17,44
-Circa,Nov 13,Milwaukee,Orlando,9.5,68,73
-Circa,Nov 13,Memphis,New Orleans,-3,9,25
-Circa,Nov 13,Atlanta,Chicago,-7,99,83
-Circa,Nov 13,Cleveland,Miami,2,4,40
-Circa,Nov 13,Utah,Houston,15,99,50
-Circa,Nov 13,Golden State,San Antonio,12,94,27
-Circa,Nov 13,Portland,Sacramento,-10,6,45
-Circa,Nov 13,Oklahoma City,LA Clippers,-7,51,63
+DraftKings,Nov 16,Orlando,Boston,8.5,38,27
+DraftKings,Nov 16,Chicago,Cleveland,8.5,71,43
+DraftKings,Nov 16,Memphis,Washington,-3.5,49,54
+DraftKings,Nov 16,Houston,Miami,-2.5,77,56
+DraftKings,Nov 16,Philadelphia,Brooklyn,-5.5,97,92
+DraftKings,Nov 16,Golden State,New Orleans,-3.5,58,68
+DraftKings,Nov 16,Portland,Minnesota,2.5,35,54
+DraftKings,Nov 16,Phoenix,Denver,9.5,65,42
+Circa,Nov 16,Orlando,Boston,8.5,72,50
+Circa,Nov 16,Chicago,Cleveland,9,50,50
+Circa,Nov 16,Memphis,Washington,-3.5,99,67
+Circa,Nov 16,Houston,Miami,-2.5,100,100
+Circa,Nov 16,Philadelphia,Brooklyn,-5.5,100,100
+Circa,Nov 16,Golden State,New Orleans,-3,100,100
+Circa,Nov 16,Portland,Minnesota,2,0,0
+Circa,Nov 16,Phoenix,Denver,9.5,100,100
