@@ -25,7 +25,7 @@ body:before{content:"";position:fixed;inset:0;pointer-events:none;background:rad
 .tab.on{background:var(--acc);color:#111}
 .nav{position:fixed;bottom:0;left:0;right:0;z-index:30;padding-bottom:env(safe-area-inset-bottom)}
 @media(min-width:768px){.nav{position:static;padding:0;background:none!important;border:0!important}body{padding-bottom:2rem}}
-details>summary{cursor:pointer;list-style:none}details>summary::-webkit-details-marker{display:none}
+details>summary{cursor:pointer;list-style:none}.arr{font-size:14px;transition:transform .2s}details[open] .arr{transform:rotate(180deg)}details>summary::-webkit-details-marker{display:none}
 .btn{background:var(--acc);color:#111;font-weight:800;font-size:12px;padding:.4rem .8rem;border-radius:9px}
 .btn2{border:1px solid var(--line);font-weight:700;font-size:12px;padding:.4rem .8rem;border-radius:9px}
 </style>
@@ -262,7 +262,7 @@ function card(x){
       <div class="relative h-6 rounded-lg" style="background:var(--line)"><i style="position:absolute;left:50%;top:0;bottom:0;width:2px;background:var(--mut)"></i>${dots}</div></div>
     <div class="rounded-xl p-3" style="border:1px solid var(--line)">${splitPanel(x)}</div>
     ${ctxPanel(x)}
-    <details open><summary class="lbl mb-2">Modelos (${x.n} activos) ▾</summary><div class="grid grid-cols-4 sm:grid-cols-6 gap-1.5 max-h-44 overflow-y-auto">${chips}</div></details>
+    <details><summary class="lbl flex items-center justify-between">Modelos (${x.n} activos)<span class="arr">▾</span></summary><div class="grid grid-cols-4 sm:grid-cols-6 gap-1.5 max-h-44 overflow-y-auto mt-2">${chips}</div></details>
   </div></article>`}
 
 /* ============ RENDER SPLITS ============ */
