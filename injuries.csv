@@ -1,45 +1,45 @@
 report_et,game_date,game_time,matchup,team,player,status,reason,mpg,per,key
-2026-11-19 09:15,2026-11-19,08:00 (ET),GSW@MEM,Golden State Warriors,,NOT YET SUBMITTED,,,,0
-2026-11-19 09:15,2026-11-19,08:00 (ET),GSW@MEM,Memphis Grizzlies,,NOT YET SUBMITTED,,,,0
-2026-11-19 09:15,2026-11-19,08:00 (ET),LAC@SAS,LA Clippers,"Beal, Bradley",Out,Management,,,0
-2026-11-19 09:15,2026-11-19,08:00 (ET),LAC@SAS,LA Clippers,"Ingram, Brandon",Out,Injury/Illness - Right Heel Surgery,,,0
-2026-11-19 09:15,2026-11-19,08:00 (ET),LAC@SAS,LA Clippers,"Martinelli, Nick",Out,G League - Two-Way Injury/Illness - Left Rotator Cuff,4.4,25.3,0
-2026-11-19 09:15,2026-11-19,08:00 (ET),LAC@SAS,LA Clippers,"Miller, Jordan",Out,Surgery,,,0
-2026-11-19 09:15,2026-11-19,08:00 (ET),LAC@SAS,San Antonio Spurs,"Brown, Maliq",Out,G League - Two-Way,1.0,29.8,0
-2026-11-19 09:15,2026-11-19,08:00 (ET),LAC@SAS,San Antonio Spurs,"Gillespie, Ja'Kobi",Out,G League - Two-Way,2.0,29.4,0
-2026-11-19 09:15,2026-11-19,08:00 (ET),LAC@SAS,San Antonio Spurs,"Harper, Dylan",Out,Injury/Illness - Left Hip Soreness,31.8,18.9,1
-2026-11-19 09:15,2026-11-19,08:00 (ET),LAC@SAS,San Antonio Spurs,"Harris, Tobias",Out,Injury/Illness - Left Calf Strain,,,0
-2026-11-19 09:15,2026-11-19,08:00 (ET),LAC@SAS,San Antonio Spurs,"Quaintance, Jayden",Out,Injury/Illness - Right Knee Surgery,,,0
-2026-11-19 09:15,2026-11-19,08:00 (ET),NYK@MIN,Minnesota Timberwolves,"Beringer, Joan",Available,Injury/Illness - Face Mask,16.4,18.3,0
-2026-11-19 09:15,2026-11-19,08:00 (ET),NYK@MIN,Minnesota Timberwolves,"Clark, Jaylen",Out,Injury/Illness - Right Hamstring Strain Injury/Illness - Right Achilles Tendon,14.1,11.3,0
-2026-11-19 09:15,2026-11-19,08:00 (ET),NYK@MIN,Minnesota Timberwolves,"DiVincenzo, Donte",Out,Repair / Surgery Injury/Illness - Right Knee,,,0
-2026-11-19 09:15,2026-11-19,08:00 (ET),NYK@MIN,Minnesota Timberwolves,"Edwards, Anthony",Out,Arthroscopy Injury/Illness - Right Shoulder,33.8,25.4,1
-2026-11-19 09:15,2026-11-19,08:00 (ET),NYK@MIN,Minnesota Timberwolves,"Kuminga, Jonathan",Questionable,Contusion Injury/Illness - Right Quadriceps,30.7,13.4,0
-2026-11-19 09:15,2026-11-19,08:00 (ET),NYK@MIN,Minnesota Timberwolves,"Pullin, Zyon",Questionable,Contusion Injury/Illness - Left Foot,3.0,27.7,0
-2026-11-19 09:15,2026-11-19,08:00 (ET),POR@MIL,Portland Trail Blazers,"Avdija, Deni",Questionable,Inflammation / Soreness,32.5,21.1,0
-2026-11-19 09:15,2026-11-19,08:00 (ET),POR@MIL,Portland Trail Blazers,"Camara, Toumani",Questionable,Injury/Illness - Abdominal Soreness,28.5,13.6,0
-2026-11-19 09:15,2026-11-19,08:00 (ET),POR@MIL,Portland Trail Blazers,"Carlson, Branden",Available,Injury/Illness - Face Mask,8.2,7.1,0
-2026-11-19 09:15,2026-11-19,08:00 (ET),POR@MIL,Portland Trail Blazers,"Krejci, Vit",Out,Injury/Illness - Left Ankle Fracture,10.3,7.1,0
-2026-11-19 09:15,2026-11-19,08:00 (ET),POR@MIL,Portland Trail Blazers,"Morant, Ja",Out,Injury/Illness - Left Hamstring Strain Injury/Illness - Right Meniscus,25.8,21.4,1
-2026-11-19 09:15,2026-11-19,08:00 (ET),POR@MIL,Portland Trail Blazers,"Sharpe, Shaedon",Out,Surgery,,,0
-2026-11-19 09:15,2026-11-19,08:00 (ET),POR@MIL,Portland Trail Blazers,"Williams III, Robert",Out,Rest Injury/Illness - Right Heel Contusion /,16.4,24.4,1
-2026-11-19 09:15,2026-11-19,08:00 (ET),POR@MIL,Portland Trail Blazers,"Youngblood, Chris",Out,Bone Bruise,13.3,10.2,0
-2026-11-19 09:15,2026-11-19,08:00 (ET),POR@MIL,Milwaukee Bucks,,NOT YET SUBMITTED,,,,0
-2026-11-19 09:15,2026-11-20,07:00 (ET),CHA@ATL,Charlotte Hornets,,NOT YET SUBMITTED,,,,0
-2026-11-19 09:15,2026-11-20,07:00 (ET),CHA@ATL,Atlanta Hawks,,NOT YET SUBMITTED,,,,0
-2026-11-19 09:15,2026-11-20,07:30 (ET),IND@CLE,Indiana Pacers,,NOT YET SUBMITTED,,,,0
-2026-11-19 09:15,2026-11-20,07:30 (ET),IND@CLE,Cleveland Cavaliers,,NOT YET SUBMITTED,,,,0
-2026-11-19 09:15,2026-11-20,07:30 (ET),ORL@BKN,Orlando Magic,,NOT YET SUBMITTED,,,,0
-2026-11-19 09:15,2026-11-20,07:30 (ET),ORL@BKN,Brooklyn Nets,,NOT YET SUBMITTED,,,,0
-2026-11-19 09:15,2026-11-20,07:30 (ET),TOR@DET,Toronto Raptors,,NOT YET SUBMITTED,,,,0
-2026-11-19 09:15,2026-11-20,07:30 (ET),TOR@DET,Detroit Pistons,,NOT YET SUBMITTED,,,,0
-2026-11-19 09:15,2026-11-20,08:00 (ET),NOP@OKC,New Orleans Pelicans,,NOT YET SUBMITTED,,,,0
-2026-11-19 09:15,2026-11-20,08:00 (ET),NOP@OKC,Oklahoma City Thunder,,NOT YET SUBMITTED,,,,0
-2026-11-19 09:15,2026-11-20,08:00 (ET),WAS@CHI,Washington Wizards,,NOT YET SUBMITTED,,,,0
-2026-11-19 09:15,2026-11-20,08:00 (ET),WAS@CHI,Chicago Bulls,,NOT YET SUBMITTED,,,,0
-2026-11-19 09:15,2026-11-20,09:30 (ET),PHX@UTA,Phoenix Suns,,NOT YET SUBMITTED,,,,0
-2026-11-19 09:15,2026-11-20,09:30 (ET),PHX@UTA,Utah Jazz,,NOT YET SUBMITTED,,,,0
-2026-11-19 09:15,2026-11-20,10:00 (ET),HOU@DEN,Houston Rockets,,NOT YET SUBMITTED,,,,0
-2026-11-19 09:15,2026-11-20,10:00 (ET),HOU@DEN,Denver Nuggets,,NOT YET SUBMITTED,,,,0
-2026-11-19 09:15,2026-11-20,10:00 (ET),SAC@LAL,Sacramento Kings,,NOT YET SUBMITTED,,,,0
-2026-11-19 09:15,2026-11-20,10:00 (ET),SAC@LAL,Los Angeles Lakers,,NOT YET SUBMITTED,,,,0
+2026-11-19 10:15,2026-11-19,08:00 (ET),GSW@MEM,Golden State Warriors,,NOT YET SUBMITTED,,,,0
+2026-11-19 10:15,2026-11-19,08:00 (ET),GSW@MEM,Memphis Grizzlies,,NOT YET SUBMITTED,,,,0
+2026-11-19 10:15,2026-11-19,08:00 (ET),LAC@SAS,LA Clippers,"Beal, Bradley",Out,Management,,,0
+2026-11-19 10:15,2026-11-19,08:00 (ET),LAC@SAS,LA Clippers,"Ingram, Brandon",Out,Injury/Illness - Right Heel Surgery,,,0
+2026-11-19 10:15,2026-11-19,08:00 (ET),LAC@SAS,LA Clippers,"Martinelli, Nick",Out,G League - Two-Way Injury/Illness - Left Rotator Cuff,4.4,25.3,0
+2026-11-19 10:15,2026-11-19,08:00 (ET),LAC@SAS,LA Clippers,"Miller, Jordan",Out,Surgery,,,0
+2026-11-19 10:15,2026-11-19,08:00 (ET),LAC@SAS,San Antonio Spurs,"Brown, Maliq",Out,G League - Two-Way,1.0,29.8,0
+2026-11-19 10:15,2026-11-19,08:00 (ET),LAC@SAS,San Antonio Spurs,"Gillespie, Ja'Kobi",Out,G League - Two-Way,2.0,29.4,0
+2026-11-19 10:15,2026-11-19,08:00 (ET),LAC@SAS,San Antonio Spurs,"Harper, Dylan",Out,Injury/Illness - Left Hip Soreness,31.8,18.9,1
+2026-11-19 10:15,2026-11-19,08:00 (ET),LAC@SAS,San Antonio Spurs,"Harris, Tobias",Out,Injury/Illness - Left Calf Strain,,,0
+2026-11-19 10:15,2026-11-19,08:00 (ET),LAC@SAS,San Antonio Spurs,"Quaintance, Jayden",Out,Injury/Illness - Right Knee Surgery,,,0
+2026-11-19 10:15,2026-11-19,08:00 (ET),NYK@MIN,Minnesota Timberwolves,"Beringer, Joan",Available,Injury/Illness - Face Mask,16.4,18.3,0
+2026-11-19 10:15,2026-11-19,08:00 (ET),NYK@MIN,Minnesota Timberwolves,"Clark, Jaylen",Out,Injury/Illness - Right Hamstring Strain Injury/Illness - Right Achilles Tendon,14.1,11.3,0
+2026-11-19 10:15,2026-11-19,08:00 (ET),NYK@MIN,Minnesota Timberwolves,"DiVincenzo, Donte",Out,Repair / Surgery Injury/Illness - Right Knee,,,0
+2026-11-19 10:15,2026-11-19,08:00 (ET),NYK@MIN,Minnesota Timberwolves,"Edwards, Anthony",Out,Arthroscopy Injury/Illness - Right Shoulder,33.8,25.4,1
+2026-11-19 10:15,2026-11-19,08:00 (ET),NYK@MIN,Minnesota Timberwolves,"Kuminga, Jonathan",Questionable,Contusion Injury/Illness - Right Quadriceps,30.7,13.4,0
+2026-11-19 10:15,2026-11-19,08:00 (ET),NYK@MIN,Minnesota Timberwolves,"Pullin, Zyon",Questionable,Contusion Injury/Illness - Left Foot,3.0,27.7,0
+2026-11-19 10:15,2026-11-19,08:00 (ET),POR@MIL,Portland Trail Blazers,"Avdija, Deni",Questionable,Inflammation / Soreness,32.5,21.1,0
+2026-11-19 10:15,2026-11-19,08:00 (ET),POR@MIL,Portland Trail Blazers,"Camara, Toumani",Questionable,Injury/Illness - Abdominal Soreness,28.5,13.6,0
+2026-11-19 10:15,2026-11-19,08:00 (ET),POR@MIL,Portland Trail Blazers,"Carlson, Branden",Available,Injury/Illness - Face Mask,8.2,7.1,0
+2026-11-19 10:15,2026-11-19,08:00 (ET),POR@MIL,Portland Trail Blazers,"Krejci, Vit",Out,Injury/Illness - Left Ankle Fracture,10.3,7.1,0
+2026-11-19 10:15,2026-11-19,08:00 (ET),POR@MIL,Portland Trail Blazers,"Morant, Ja",Out,Injury/Illness - Left Hamstring Strain Injury/Illness - Right Meniscus,25.8,21.4,1
+2026-11-19 10:15,2026-11-19,08:00 (ET),POR@MIL,Portland Trail Blazers,"Sharpe, Shaedon",Out,Surgery,,,0
+2026-11-19 10:15,2026-11-19,08:00 (ET),POR@MIL,Portland Trail Blazers,"Williams III, Robert",Out,Rest Injury/Illness - Right Heel Contusion /,16.4,24.4,1
+2026-11-19 10:15,2026-11-19,08:00 (ET),POR@MIL,Portland Trail Blazers,"Youngblood, Chris",Out,Bone Bruise,13.3,10.2,0
+2026-11-19 10:15,2026-11-19,08:00 (ET),POR@MIL,Milwaukee Bucks,,NOT YET SUBMITTED,,,,0
+2026-11-19 10:15,2026-11-20,07:00 (ET),CHA@ATL,Charlotte Hornets,,NOT YET SUBMITTED,,,,0
+2026-11-19 10:15,2026-11-20,07:00 (ET),CHA@ATL,Atlanta Hawks,,NOT YET SUBMITTED,,,,0
+2026-11-19 10:15,2026-11-20,07:30 (ET),IND@CLE,Indiana Pacers,,NOT YET SUBMITTED,,,,0
+2026-11-19 10:15,2026-11-20,07:30 (ET),IND@CLE,Cleveland Cavaliers,,NOT YET SUBMITTED,,,,0
+2026-11-19 10:15,2026-11-20,07:30 (ET),ORL@BKN,Orlando Magic,,NOT YET SUBMITTED,,,,0
+2026-11-19 10:15,2026-11-20,07:30 (ET),ORL@BKN,Brooklyn Nets,,NOT YET SUBMITTED,,,,0
+2026-11-19 10:15,2026-11-20,07:30 (ET),TOR@DET,Toronto Raptors,,NOT YET SUBMITTED,,,,0
+2026-11-19 10:15,2026-11-20,07:30 (ET),TOR@DET,Detroit Pistons,,NOT YET SUBMITTED,,,,0
+2026-11-19 10:15,2026-11-20,08:00 (ET),NOP@OKC,New Orleans Pelicans,,NOT YET SUBMITTED,,,,0
+2026-11-19 10:15,2026-11-20,08:00 (ET),NOP@OKC,Oklahoma City Thunder,,NOT YET SUBMITTED,,,,0
+2026-11-19 10:15,2026-11-20,08:00 (ET),WAS@CHI,Washington Wizards,,NOT YET SUBMITTED,,,,0
+2026-11-19 10:15,2026-11-20,08:00 (ET),WAS@CHI,Chicago Bulls,,NOT YET SUBMITTED,,,,0
+2026-11-19 10:15,2026-11-20,09:30 (ET),PHX@UTA,Phoenix Suns,,NOT YET SUBMITTED,,,,0
+2026-11-19 10:15,2026-11-20,09:30 (ET),PHX@UTA,Utah Jazz,,NOT YET SUBMITTED,,,,0
+2026-11-19 10:15,2026-11-20,10:00 (ET),HOU@DEN,Houston Rockets,,NOT YET SUBMITTED,,,,0
+2026-11-19 10:15,2026-11-20,10:00 (ET),HOU@DEN,Denver Nuggets,,NOT YET SUBMITTED,,,,0
+2026-11-19 10:15,2026-11-20,10:00 (ET),SAC@LAL,Sacramento Kings,,NOT YET SUBMITTED,,,,0
+2026-11-19 10:15,2026-11-20,10:00 (ET),SAC@LAL,Los Angeles Lakers,,NOT YET SUBMITTED,,,,0
