@@ -1,26 +1,31 @@
 report_et,game_date,game_time,matchup,team,player,status,reason,mpg,per,key
-2026-11-26 14:30,2026-11-27,07:00 (ET),MIA@NYK,Miami Heat,,NOT YET SUBMITTED,,,,0
-2026-11-26 14:30,2026-11-27,07:00 (ET),MIA@NYK,New York Knicks,,NOT YET SUBMITTED,,,,0
-2026-11-26 14:30,2026-11-27,07:30 (ET),BKN@TOR,Brooklyn Nets,,NOT YET SUBMITTED,,,,0
-2026-11-26 14:30,2026-11-27,07:30 (ET),BKN@TOR,Toronto Raptors,,NOT YET SUBMITTED,,,,0
-2026-11-26 14:30,2026-11-27,07:30 (ET),MIL@DET,Milwaukee Bucks,,NOT YET SUBMITTED,,,,0
-2026-11-26 14:30,2026-11-27,07:30 (ET),MIL@DET,Detroit Pistons,,NOT YET SUBMITTED,,,,0
-2026-11-26 14:30,2026-11-27,07:30 (ET),PHI@IND,Philadelphia 76ers,,NOT YET SUBMITTED,,,,0
-2026-11-26 14:30,2026-11-27,07:30 (ET),PHI@IND,Indiana Pacers,,NOT YET SUBMITTED,,,,0
-2026-11-26 14:30,2026-11-27,08:00 (ET),ATL@BOS,Atlanta Hawks,,NOT YET SUBMITTED,,,,0
-2026-11-26 14:30,2026-11-27,08:00 (ET),ATL@BOS,Boston Celtics,"Carter, Devin",Out,G League - Two-Way,,,0
-2026-11-26 14:30,2026-11-27,08:00 (ET),ATL@BOS,Boston Celtics,"Mitchell, Dillon",Out,G League - Two-Way,2.0,0.0,0
-2026-11-26 14:30,2026-11-27,08:00 (ET),ATL@BOS,Boston Celtics,"Robinson, Mitchell",Questionable,Injury/Illness - Illness,17.9,16.1,0
-2026-11-26 14:30,2026-11-27,08:00 (ET),ATL@BOS,Boston Celtics,"Williams, Amari",Out,G League - Two-Way,,,0
-2026-11-26 14:30,2026-11-27,08:30 (ET),MEM@MIN,Memphis Grizzlies,,NOT YET SUBMITTED,,,,0
-2026-11-26 14:30,2026-11-27,08:30 (ET),MEM@MIN,Minnesota Timberwolves,,NOT YET SUBMITTED,,,,0
-2026-11-26 14:30,2026-11-27,09:00 (ET),DAL@PHX,Dallas Mavericks,,NOT YET SUBMITTED,,,,0
-2026-11-26 14:30,2026-11-27,09:00 (ET),DAL@PHX,Phoenix Suns,,NOT YET SUBMITTED,,,,0
-2026-11-26 14:30,2026-11-27,09:30 (ET),DEN@UTA,Denver Nuggets,,NOT YET SUBMITTED,,,,0
-2026-11-26 14:30,2026-11-27,09:30 (ET),DEN@UTA,Utah Jazz,,NOT YET SUBMITTED,,,,0
-2026-11-26 14:30,2026-11-27,09:30 (ET),GSW@POR,Golden State Warriors,,NOT YET SUBMITTED,,,,0
-2026-11-26 14:30,2026-11-27,09:30 (ET),GSW@POR,Portland Trail Blazers,,NOT YET SUBMITTED,,,,0
-2026-11-26 14:30,2026-11-27,09:30 (ET),LAL@SAS,Los Angeles Lakers,,NOT YET SUBMITTED,,,,0
-2026-11-26 14:30,2026-11-27,09:30 (ET),LAL@SAS,San Antonio Spurs,,NOT YET SUBMITTED,,,,0
-2026-11-26 14:30,2026-11-27,09:30 (ET),NOP@LAC,New Orleans Pelicans,,NOT YET SUBMITTED,,,,0
-2026-11-26 14:30,2026-11-27,09:30 (ET),NOP@LAC,LA Clippers,,NOT YET SUBMITTED,,,,0
+2026-11-26 15:45,2026-11-27,07:00 (ET),MIA@NYK,Miami Heat,,NOT YET SUBMITTED,,,,0
+2026-11-26 15:45,2026-11-27,07:00 (ET),MIA@NYK,New York Knicks,,NOT YET SUBMITTED,,,,0
+2026-11-26 15:45,2026-11-27,07:30 (ET),BKN@TOR,Brooklyn Nets,,NOT YET SUBMITTED,,,,0
+2026-11-26 15:45,2026-11-27,07:30 (ET),BKN@TOR,Toronto Raptors,,NOT YET SUBMITTED,,,,0
+2026-11-26 15:45,2026-11-27,07:30 (ET),MIL@DET,Milwaukee Bucks,,NOT YET SUBMITTED,,,,0
+2026-11-26 15:45,2026-11-27,07:30 (ET),MIL@DET,Detroit Pistons,,NOT YET SUBMITTED,,,,0
+2026-11-26 15:45,2026-11-27,07:30 (ET),PHI@IND,Philadelphia 76ers,,NOT YET SUBMITTED,,,,0
+2026-11-26 15:45,2026-11-27,07:30 (ET),PHI@IND,Indiana Pacers,,NOT YET SUBMITTED,,,,0
+2026-11-26 15:45,2026-11-27,08:00 (ET),ATL@BOS,Atlanta Hawks,,NOT YET SUBMITTED,,,,0
+2026-11-26 15:45,2026-11-27,08:00 (ET),ATL@BOS,Boston Celtics,"Carter, Devin",Out,G League - Two-Way,,,0
+2026-11-26 15:45,2026-11-27,08:00 (ET),ATL@BOS,Boston Celtics,"Mitchell, Dillon",Out,G League - Two-Way,2.0,0.0,0
+2026-11-26 15:45,2026-11-27,08:00 (ET),ATL@BOS,Boston Celtics,"Robinson, Mitchell",Questionable,Injury/Illness - Illness,17.9,16.1,0
+2026-11-26 15:45,2026-11-27,08:00 (ET),ATL@BOS,Boston Celtics,"Williams, Amari",Out,G League - Two-Way,,,0
+2026-11-26 15:45,2026-11-27,08:30 (ET),MEM@MIN,Memphis Grizzlies,,NOT YET SUBMITTED,,,,0
+2026-11-26 15:45,2026-11-27,08:30 (ET),MEM@MIN,Minnesota Timberwolves,,NOT YET SUBMITTED,,,,0
+2026-11-26 15:45,2026-11-27,09:00 (ET),DAL@PHX,Dallas Mavericks,,NOT YET SUBMITTED,,,,0
+2026-11-26 15:45,2026-11-27,09:00 (ET),DAL@PHX,Phoenix Suns,,NOT YET SUBMITTED,,,,0
+2026-11-26 15:45,2026-11-27,09:30 (ET),DEN@UTA,Denver Nuggets,,NOT YET SUBMITTED,,,,0
+2026-11-26 15:45,2026-11-27,09:30 (ET),DEN@UTA,Utah Jazz,,NOT YET SUBMITTED,,,,0
+2026-11-26 15:45,2026-11-27,09:30 (ET),GSW@POR,Golden State Warriors,,NOT YET SUBMITTED,,,,0
+2026-11-26 15:45,2026-11-27,09:30 (ET),GSW@POR,Portland Trail Blazers,,NOT YET SUBMITTED,,,,0
+2026-11-26 15:45,2026-11-27,09:30 (ET),LAL@SAS,Los Angeles Lakers,,NOT YET SUBMITTED,,,,0
+2026-11-26 15:45,2026-11-27,09:30 (ET),LAL@SAS,San Antonio Spurs,,NOT YET SUBMITTED,,,,0
+2026-11-26 15:45,2026-11-27,09:30 (ET),NOP@LAC,New Orleans Pelicans,"Dia, Malik",Out,G League - Two-Way,,,0
+2026-11-26 15:45,2026-11-27,09:30 (ET),NOP@LAC,New Orleans Pelicans,"Mathurin, Bennedict",Doubtful,Injury/Illness - Left Plantar Fasciitis,15.8,8.3,0
+2026-11-26 15:45,2026-11-27,09:30 (ET),NOP@LAC,New Orleans Pelicans,"Murray, Dejounte",Out,Injury/Illness - Left Ankle Sprain,31.3,13.6,0
+2026-11-26 15:45,2026-11-27,09:30 (ET),NOP@LAC,New Orleans Pelicans,"Pierre Jr., Jaron",Out,G League - Two-Way,7.0,12.5,0
+2026-11-26 15:45,2026-11-27,09:30 (ET),NOP@LAC,New Orleans Pelicans,"Reese, Julian",Out,G League - Two-Way,5.5,12.3,0
+2026-11-26 15:45,2026-11-27,09:30 (ET),NOP@LAC,New Orleans Pelicans,"Watford, Trendon",Probable,Injury/Illness - Right Ankle Sprain,17.7,15.0,0
+2026-11-26 15:45,2026-11-27,09:30 (ET),NOP@LAC,LA Clippers,,NOT YET SUBMITTED,,,,0
