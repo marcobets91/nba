@@ -1,31 +1,46 @@
 report_et,game_date,game_time,matchup,team,player,status,reason,mpg,per,key
-2026-11-26 15:45,2026-11-27,07:00 (ET),MIA@NYK,Miami Heat,,NOT YET SUBMITTED,,,,0
-2026-11-26 15:45,2026-11-27,07:00 (ET),MIA@NYK,New York Knicks,,NOT YET SUBMITTED,,,,0
-2026-11-26 15:45,2026-11-27,07:30 (ET),BKN@TOR,Brooklyn Nets,,NOT YET SUBMITTED,,,,0
-2026-11-26 15:45,2026-11-27,07:30 (ET),BKN@TOR,Toronto Raptors,,NOT YET SUBMITTED,,,,0
-2026-11-26 15:45,2026-11-27,07:30 (ET),MIL@DET,Milwaukee Bucks,,NOT YET SUBMITTED,,,,0
-2026-11-26 15:45,2026-11-27,07:30 (ET),MIL@DET,Detroit Pistons,,NOT YET SUBMITTED,,,,0
-2026-11-26 15:45,2026-11-27,07:30 (ET),PHI@IND,Philadelphia 76ers,,NOT YET SUBMITTED,,,,0
-2026-11-26 15:45,2026-11-27,07:30 (ET),PHI@IND,Indiana Pacers,,NOT YET SUBMITTED,,,,0
-2026-11-26 15:45,2026-11-27,08:00 (ET),ATL@BOS,Atlanta Hawks,,NOT YET SUBMITTED,,,,0
-2026-11-26 15:45,2026-11-27,08:00 (ET),ATL@BOS,Boston Celtics,"Carter, Devin",Out,G League - Two-Way,,,0
-2026-11-26 15:45,2026-11-27,08:00 (ET),ATL@BOS,Boston Celtics,"Mitchell, Dillon",Out,G League - Two-Way,2.0,0.0,0
-2026-11-26 15:45,2026-11-27,08:00 (ET),ATL@BOS,Boston Celtics,"Robinson, Mitchell",Questionable,Injury/Illness - Illness,17.9,16.1,0
-2026-11-26 15:45,2026-11-27,08:00 (ET),ATL@BOS,Boston Celtics,"Williams, Amari",Out,G League - Two-Way,,,0
-2026-11-26 15:45,2026-11-27,08:30 (ET),MEM@MIN,Memphis Grizzlies,,NOT YET SUBMITTED,,,,0
-2026-11-26 15:45,2026-11-27,08:30 (ET),MEM@MIN,Minnesota Timberwolves,,NOT YET SUBMITTED,,,,0
-2026-11-26 15:45,2026-11-27,09:00 (ET),DAL@PHX,Dallas Mavericks,,NOT YET SUBMITTED,,,,0
-2026-11-26 15:45,2026-11-27,09:00 (ET),DAL@PHX,Phoenix Suns,,NOT YET SUBMITTED,,,,0
-2026-11-26 15:45,2026-11-27,09:30 (ET),DEN@UTA,Denver Nuggets,,NOT YET SUBMITTED,,,,0
-2026-11-26 15:45,2026-11-27,09:30 (ET),DEN@UTA,Utah Jazz,,NOT YET SUBMITTED,,,,0
-2026-11-26 15:45,2026-11-27,09:30 (ET),GSW@POR,Golden State Warriors,,NOT YET SUBMITTED,,,,0
-2026-11-26 15:45,2026-11-27,09:30 (ET),GSW@POR,Portland Trail Blazers,,NOT YET SUBMITTED,,,,0
-2026-11-26 15:45,2026-11-27,09:30 (ET),LAL@SAS,Los Angeles Lakers,,NOT YET SUBMITTED,,,,0
-2026-11-26 15:45,2026-11-27,09:30 (ET),LAL@SAS,San Antonio Spurs,,NOT YET SUBMITTED,,,,0
-2026-11-26 15:45,2026-11-27,09:30 (ET),NOP@LAC,New Orleans Pelicans,"Dia, Malik",Out,G League - Two-Way,,,0
-2026-11-26 15:45,2026-11-27,09:30 (ET),NOP@LAC,New Orleans Pelicans,"Mathurin, Bennedict",Doubtful,Injury/Illness - Left Plantar Fasciitis,15.8,8.3,0
-2026-11-26 15:45,2026-11-27,09:30 (ET),NOP@LAC,New Orleans Pelicans,"Murray, Dejounte",Out,Injury/Illness - Left Ankle Sprain,31.3,13.6,0
-2026-11-26 15:45,2026-11-27,09:30 (ET),NOP@LAC,New Orleans Pelicans,"Pierre Jr., Jaron",Out,G League - Two-Way,7.0,12.5,0
-2026-11-26 15:45,2026-11-27,09:30 (ET),NOP@LAC,New Orleans Pelicans,"Reese, Julian",Out,G League - Two-Way,5.5,12.3,0
-2026-11-26 15:45,2026-11-27,09:30 (ET),NOP@LAC,New Orleans Pelicans,"Watford, Trendon",Probable,Injury/Illness - Right Ankle Sprain,17.7,15.0,0
-2026-11-26 15:45,2026-11-27,09:30 (ET),NOP@LAC,LA Clippers,,NOT YET SUBMITTED,,,,0
+2026-11-26 16:45,2026-11-27,07:00 (ET),MIA@NYK,Miami Heat,"Antetokounmpo, Giannis",Probable,Injury/Illness - Right Groin Tendinitis,32.6,27.4,0
+2026-11-26 16:45,2026-11-27,07:00 (ET),MIA@NYK,Miami Heat,"Donaldson, Tre",Out,G League - Two-Way,,,0
+2026-11-26 16:45,2026-11-27,07:00 (ET),MIA@NYK,Miami Heat,"Goldin, Vladislav",Out,G League - Two-Way,,,0
+2026-11-26 16:45,2026-11-27,07:00 (ET),MIA@NYK,Miami Heat,"Wiggins, Andrew",Probable,Injury/Illness - Right Ankle Sprain,25.7,8.2,0
+2026-11-26 16:45,2026-11-27,07:00 (ET),MIA@NYK,New York Knicks,"Anunoby, OG",Doubtful,Injury/Illness - Left Calf Strain,32.7,14.4,0
+2026-11-26 16:45,2026-11-27,07:00 (ET),MIA@NYK,New York Knicks,"Clarkson, Jordan",Questionable,Injury/Illness - Right Plantar Fasciitis,10.6,17.9,0
+2026-11-26 16:45,2026-11-27,07:00 (ET),MIA@NYK,New York Knicks,"Drummond, Andre",Questionable,Injury/Illness - Head Injury/Illness - Left Adductor,13.5,19.0,0
+2026-11-26 16:45,2026-11-27,07:00 (ET),MIA@NYK,New York Knicks,"McBride, Miles",Questionable,Tightness,18.9,13.9,0
+2026-11-26 16:45,2026-11-27,07:30 (ET),BKN@TOR,Brooklyn Nets,"Bilodeau, Tyler",Out,G League - Two-Way,,,0
+2026-11-26 16:45,2026-11-27,07:30 (ET),BKN@TOR,Brooklyn Nets,"Jefferson, Joshua",Out,G League - On Assignment,4.0,-35.6,0
+2026-11-26 16:45,2026-11-27,07:30 (ET),BKN@TOR,Brooklyn Nets,"Powell, Drake",Out,G League - On Assignment,8.5,7.9,0
+2026-11-26 16:45,2026-11-27,07:30 (ET),BKN@TOR,Brooklyn Nets,"Traore, Nolan",Out,Injury/Illness - Right Hamstring Strain Injury/Illness - Left Knee Injury,22.1,18.1,1
+2026-11-26 16:45,2026-11-27,07:30 (ET),BKN@TOR,Brooklyn Nets,"Wagner, Moritz",Out,Management,18.3,19.5,1
+2026-11-26 16:45,2026-11-27,07:30 (ET),BKN@TOR,Toronto Raptors,"Barrett, RJ",Out,Injury/Illness - Right Hamstring Strain,33.2,15.9,0
+2026-11-26 16:45,2026-11-27,07:30 (ET),BKN@TOR,Toronto Raptors,"Bittle, Nate",Out,G League - Two-Way Injury/Illness - Left Knee Injury,,,0
+2026-11-26 16:45,2026-11-27,07:30 (ET),BKN@TOR,Toronto Raptors,"Leonard, Kawhi",Out,Management,26.0,19.7,1
+2026-11-26 16:45,2026-11-27,07:30 (ET),BKN@TOR,Toronto Raptors,"Martin, Alijah",Questionable,Injury/Illness - Left Knee Soreness,11.6,18.6,0
+2026-11-26 16:45,2026-11-27,07:30 (ET),BKN@TOR,Toronto Raptors,"McCullar Jr., Kevin",Out,G League - Two-Way,,,0
+2026-11-26 16:45,2026-11-27,07:30 (ET),BKN@TOR,Toronto Raptors,"Smith, Malachi",Out,G League - Two-Way,1.0,0.0,0
+2026-11-26 16:45,2026-11-27,07:30 (ET),MIL@DET,Milwaukee Bucks,,NOT YET SUBMITTED,,,,0
+2026-11-26 16:45,2026-11-27,07:30 (ET),MIL@DET,Detroit Pistons,,NOT YET SUBMITTED,,,,0
+2026-11-26 16:45,2026-11-27,07:30 (ET),PHI@IND,Philadelphia 76ers,,NOT YET SUBMITTED,,,,0
+2026-11-26 16:45,2026-11-27,07:30 (ET),PHI@IND,Indiana Pacers,,NOT YET SUBMITTED,,,,0
+2026-11-26 16:45,2026-11-27,08:00 (ET),ATL@BOS,Atlanta Hawks,,NOT YET SUBMITTED,,,,0
+2026-11-26 16:45,2026-11-27,08:00 (ET),ATL@BOS,Boston Celtics,"Carter, Devin",Out,G League - Two-Way,,,0
+2026-11-26 16:45,2026-11-27,08:00 (ET),ATL@BOS,Boston Celtics,"Mitchell, Dillon",Out,G League - Two-Way,2.0,0.0,0
+2026-11-26 16:45,2026-11-27,08:00 (ET),ATL@BOS,Boston Celtics,"Robinson, Mitchell",Questionable,Injury/Illness - Illness,17.9,16.1,0
+2026-11-26 16:45,2026-11-27,08:00 (ET),ATL@BOS,Boston Celtics,"Williams, Amari",Out,G League - Two-Way,,,0
+2026-11-26 16:45,2026-11-27,08:30 (ET),MEM@MIN,Memphis Grizzlies,,NOT YET SUBMITTED,,,,0
+2026-11-26 16:45,2026-11-27,08:30 (ET),MEM@MIN,Minnesota Timberwolves,,NOT YET SUBMITTED,,,,0
+2026-11-26 16:45,2026-11-27,09:00 (ET),DAL@PHX,Dallas Mavericks,,NOT YET SUBMITTED,,,,0
+2026-11-26 16:45,2026-11-27,09:00 (ET),DAL@PHX,Phoenix Suns,,NOT YET SUBMITTED,,,,0
+2026-11-26 16:45,2026-11-27,09:30 (ET),DEN@UTA,Denver Nuggets,,NOT YET SUBMITTED,,,,0
+2026-11-26 16:45,2026-11-27,09:30 (ET),DEN@UTA,Utah Jazz,,NOT YET SUBMITTED,,,,0
+2026-11-26 16:45,2026-11-27,09:30 (ET),GSW@POR,Golden State Warriors,,NOT YET SUBMITTED,,,,0
+2026-11-26 16:45,2026-11-27,09:30 (ET),GSW@POR,Portland Trail Blazers,,NOT YET SUBMITTED,,,,0
+2026-11-26 16:45,2026-11-27,09:30 (ET),LAL@SAS,Los Angeles Lakers,,NOT YET SUBMITTED,,,,0
+2026-11-26 16:45,2026-11-27,09:30 (ET),LAL@SAS,San Antonio Spurs,,NOT YET SUBMITTED,,,,0
+2026-11-26 16:45,2026-11-27,09:30 (ET),NOP@LAC,New Orleans Pelicans,"Dia, Malik",Out,G League - Two-Way,,,0
+2026-11-26 16:45,2026-11-27,09:30 (ET),NOP@LAC,New Orleans Pelicans,"Mathurin, Bennedict",Doubtful,Injury/Illness - Left Plantar Fasciitis,15.8,8.3,0
+2026-11-26 16:45,2026-11-27,09:30 (ET),NOP@LAC,New Orleans Pelicans,"Murray, Dejounte",Out,Injury/Illness - Left Ankle Sprain,31.3,13.6,0
+2026-11-26 16:45,2026-11-27,09:30 (ET),NOP@LAC,New Orleans Pelicans,"Pierre Jr., Jaron",Out,G League - Two-Way,7.0,12.5,0
+2026-11-26 16:45,2026-11-27,09:30 (ET),NOP@LAC,New Orleans Pelicans,"Reese, Julian",Out,G League - Two-Way,5.5,12.3,0
+2026-11-26 16:45,2026-11-27,09:30 (ET),NOP@LAC,New Orleans Pelicans,"Watford, Trendon",Probable,Injury/Illness - Right Ankle Sprain,17.7,15.0,0
+2026-11-26 16:45,2026-11-27,09:30 (ET),NOP@LAC,LA Clippers,,NOT YET SUBMITTED,,,,0
