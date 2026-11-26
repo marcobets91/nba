@@ -1,68 +1,89 @@
 report_et,game_date,game_time,matchup,team,player,status,reason,mpg,per,key
-2026-11-26 17:45,2026-11-27,07:00 (ET),MIA@NYK,Miami Heat,"Antetokounmpo, Giannis",Probable,Injury/Illness - Right Groin Tendinitis,32.6,27.4,0
-2026-11-26 17:45,2026-11-27,07:00 (ET),MIA@NYK,Miami Heat,"Donaldson, Tre",Out,G League - Two-Way,,,0
-2026-11-26 17:45,2026-11-27,07:00 (ET),MIA@NYK,Miami Heat,"Goldin, Vladislav",Out,G League - Two-Way,,,0
-2026-11-26 17:45,2026-11-27,07:00 (ET),MIA@NYK,Miami Heat,"Wiggins, Andrew",Probable,Injury/Illness - Right Ankle Sprain,25.7,8.2,0
-2026-11-26 17:45,2026-11-27,07:00 (ET),MIA@NYK,New York Knicks,"Anunoby, OG",Doubtful,Injury/Illness - Left Calf Strain,32.7,14.4,0
-2026-11-26 17:45,2026-11-27,07:00 (ET),MIA@NYK,New York Knicks,"Clarkson, Jordan",Questionable,Injury/Illness - Right Plantar Fasciitis,10.6,17.9,0
-2026-11-26 17:45,2026-11-27,07:00 (ET),MIA@NYK,New York Knicks,"Drummond, Andre",Questionable,Injury/Illness - Head Injury/Illness - Left Adductor,13.5,19.0,0
-2026-11-26 17:45,2026-11-27,07:00 (ET),MIA@NYK,New York Knicks,"McBride, Miles",Questionable,Tightness,18.9,13.9,0
-2026-11-26 17:45,2026-11-27,07:30 (ET),BKN@TOR,Brooklyn Nets,"Bilodeau, Tyler",Out,G League - Two-Way,,,0
-2026-11-26 17:45,2026-11-27,07:30 (ET),BKN@TOR,Brooklyn Nets,"Jefferson, Joshua",Out,G League - On Assignment,4.0,-35.6,0
-2026-11-26 17:45,2026-11-27,07:30 (ET),BKN@TOR,Brooklyn Nets,"Powell, Drake",Out,G League - On Assignment,8.5,7.9,0
-2026-11-26 17:45,2026-11-27,07:30 (ET),BKN@TOR,Brooklyn Nets,"Traore, Nolan",Out,Injury/Illness - Right Hamstring Strain Injury/Illness - Left Knee Injury,22.1,18.1,1
-2026-11-26 17:45,2026-11-27,07:30 (ET),BKN@TOR,Brooklyn Nets,"Wagner, Moritz",Out,Management,18.3,19.5,1
-2026-11-26 17:45,2026-11-27,07:30 (ET),BKN@TOR,Toronto Raptors,"Barrett, RJ",Out,Injury/Illness - Right Hamstring Strain,33.2,15.9,0
-2026-11-26 17:45,2026-11-27,07:30 (ET),BKN@TOR,Toronto Raptors,"Bittle, Nate",Out,G League - Two-Way Injury/Illness - Left Knee Injury,,,0
-2026-11-26 17:45,2026-11-27,07:30 (ET),BKN@TOR,Toronto Raptors,"Leonard, Kawhi",Out,Management,26.0,19.7,1
-2026-11-26 17:45,2026-11-27,07:30 (ET),BKN@TOR,Toronto Raptors,"Martin, Alijah",Questionable,Injury/Illness - Left Knee Soreness,11.6,18.6,0
-2026-11-26 17:45,2026-11-27,07:30 (ET),BKN@TOR,Toronto Raptors,"McCullar Jr., Kevin",Out,G League - Two-Way,,,0
-2026-11-26 17:45,2026-11-27,07:30 (ET),BKN@TOR,Toronto Raptors,"Smith, Malachi",Out,G League - Two-Way,1.0,0.0,0
-2026-11-26 17:45,2026-11-27,07:30 (ET),MIL@DET,Milwaukee Bucks,"Jones, Kam",Out,G League - Two-Way,,,0
-2026-11-26 17:45,2026-11-27,07:30 (ET),MIL@DET,Milwaukee Bucks,"Markovic, Bogoljub",Out,G League - On Assignment,4.3,12.6,0
-2026-11-26 17:45,2026-11-27,07:30 (ET),MIL@DET,Milwaukee Bucks,"Ryan, Cormac",Out,G League - Two-Way Injury/Illness - Right Knee,,,0
-2026-11-26 17:45,2026-11-27,07:30 (ET),MIL@DET,Detroit Pistons,"Cunningham, Cade",Out,Tendinopathy,33.2,20.5,1
-2026-11-26 17:45,2026-11-27,07:30 (ET),MIL@DET,Detroit Pistons,"Duren, Jalen",Out,Injury/Illness - Right Hamstring Strain,19.0,29.9,1
-2026-11-26 17:45,2026-11-27,07:30 (ET),MIL@DET,Detroit Pistons,"Okorie, Ebuka",Out,Injury/Illness - Left Oblique Strain,4.0,9.2,0
-2026-11-26 17:45,2026-11-27,07:30 (ET),MIL@DET,Detroit Pistons,"Onyenso, Ugonna",Out,G League - Two-Way,,,0
-2026-11-26 17:45,2026-11-27,07:30 (ET),MIL@DET,Detroit Pistons,"Prince, Taurean",Out,Injury/Illness - Right Arthroscopy,7.0,12.6,0
-2026-11-26 17:45,2026-11-27,07:30 (ET),MIL@DET,Detroit Pistons,"Robinson, Duncan",Out,Injury/Illness - Left Quadriceps Strain Injury/Illness - Left Hamstring Injury,30.8,18.4,1
-2026-11-26 17:45,2026-11-27,07:30 (ET),PHI@IND,Philadelphia 76ers,"Brown, Jaylen",Out,Management,34.9,18.0,1
-2026-11-26 17:45,2026-11-27,07:30 (ET),PHI@IND,Philadelphia 76ers,"Embiid, Joel",Questionable,Injury/Illness - Illness Injury/Illness - Right Achilles Tendon,31.8,15.4,0
-2026-11-26 17:45,2026-11-27,07:30 (ET),PHI@IND,Philadelphia 76ers,"Hukporti, Ariel",Out,Rupture / Tear Injury/Illness - Right ACL Repair /,,,0
-2026-11-26 17:45,2026-11-27,07:30 (ET),PHI@IND,Indiana Pacers,"Furphy, Johnny",Out,Surgery,,,0
-2026-11-26 17:45,2026-11-27,07:30 (ET),PHI@IND,Indiana Pacers,"Haliburton, Tyrese",Out,Injury/Illness - Left Hamstring Strain Injury/Illness - Left Hamstring Injury,33.0,25.7,1
-2026-11-26 17:45,2026-11-27,07:30 (ET),PHI@IND,Indiana Pacers,"McConnell, T.J.",Questionable,Management,10.3,19.5,0
-2026-11-26 17:45,2026-11-27,07:30 (ET),PHI@IND,Indiana Pacers,"Nance Jr., Larry",Questionable,Injury/Illness - Right Ankle Bruise,14.6,11.7,0
-2026-11-26 17:45,2026-11-27,07:30 (ET),PHI@IND,Indiana Pacers,"Oubre Jr., Kelly",Questionable,Injury/Illness - Right Hand Laceration,23.4,11.2,0
-2026-11-26 17:45,2026-11-27,07:30 (ET),PHI@IND,Indiana Pacers,"Sheppard, Ben",Out,Injury/Illness - Left Meniscus Surgery,12.0,1.7,0
-2026-11-26 17:45,2026-11-27,08:00 (ET),ATL@BOS,Atlanta Hawks,"Castro, Rafael",Doubtful,G League - Two-Way,,,0
-2026-11-26 17:45,2026-11-27,08:00 (ET),ATL@BOS,Atlanta Hawks,"Gueye, Mouhamed",Out,Injury/Illness - Left Foot Fracture,,,0
-2026-11-26 17:45,2026-11-27,08:00 (ET),ATL@BOS,Atlanta Hawks,"Landale, Jock",Out,Injury/Illness - Right Great Toe Sprain,15.1,13.7,0
-2026-11-26 17:45,2026-11-27,08:00 (ET),ATL@BOS,Atlanta Hawks,"McCollum, CJ",Out,Injury/Illness - Left Calf Strain,25.6,12.8,0
-2026-11-26 17:45,2026-11-27,08:00 (ET),ATL@BOS,Atlanta Hawks,"Newell, Asa",Out,Injury/Illness - Left Great Toe Surgery Injury/Illness - Right ACL Repair /,11.0,9.8,0
-2026-11-26 17:45,2026-11-27,08:00 (ET),ATL@BOS,Atlanta Hawks,"Veesaar, Henri",Out,Surgery,,,0
-2026-11-26 17:45,2026-11-27,08:00 (ET),ATL@BOS,Atlanta Hawks,"Wilson, Jalen",Doubtful,G League - Two-Way,,,0
-2026-11-26 17:45,2026-11-27,08:00 (ET),ATL@BOS,Boston Celtics,"Carter, Devin",Out,G League - Two-Way,,,0
-2026-11-26 17:45,2026-11-27,08:00 (ET),ATL@BOS,Boston Celtics,"Mitchell, Dillon",Out,G League - Two-Way,2.0,0.0,0
-2026-11-26 17:45,2026-11-27,08:00 (ET),ATL@BOS,Boston Celtics,"Robinson, Mitchell",Questionable,Injury/Illness - Illness,17.9,16.1,0
-2026-11-26 17:45,2026-11-27,08:00 (ET),ATL@BOS,Boston Celtics,"Williams, Amari",Out,G League - Two-Way,,,0
-2026-11-26 17:45,2026-11-27,08:30 (ET),MEM@MIN,Memphis Grizzlies,,NOT YET SUBMITTED,,,,0
-2026-11-26 17:45,2026-11-27,08:30 (ET),MEM@MIN,Minnesota Timberwolves,,NOT YET SUBMITTED,,,,0
-2026-11-26 17:45,2026-11-27,09:00 (ET),DAL@PHX,Dallas Mavericks,,NOT YET SUBMITTED,,,,0
-2026-11-26 17:45,2026-11-27,09:00 (ET),DAL@PHX,Phoenix Suns,,NOT YET SUBMITTED,,,,0
-2026-11-26 17:45,2026-11-27,09:30 (ET),DEN@UTA,Denver Nuggets,"Holmes II, DaRon",Out,G League - On Assignment,2.5,10.5,0
-2026-11-26 17:45,2026-11-27,09:30 (ET),DEN@UTA,Denver Nuggets,"Hopkins, Bryce",Out,G League - Two-Way,14.3,11.7,0
-2026-11-26 17:45,2026-11-27,09:30 (ET),DEN@UTA,Denver Nuggets,"Whitmore, Cam",Out,G League - Two-Way,7.5,15.4,0
-2026-11-26 17:45,2026-11-27,09:30 (ET),DEN@UTA,Utah Jazz,,NOT YET SUBMITTED,,,,0
-2026-11-26 17:45,2026-11-27,09:30 (ET),GSW@POR,Golden State Warriors,,NOT YET SUBMITTED,,,,0
-2026-11-26 17:45,2026-11-27,09:30 (ET),GSW@POR,Portland Trail Blazers,,NOT YET SUBMITTED,,,,0
-2026-11-26 17:45,2026-11-27,09:30 (ET),LAL@SAS,Los Angeles Lakers,,NOT YET SUBMITTED,,,,0
-2026-11-26 17:45,2026-11-27,09:30 (ET),LAL@SAS,San Antonio Spurs,,NOT YET SUBMITTED,,,,0
-2026-11-26 17:45,2026-11-27,09:30 (ET),NOP@LAC,New Orleans Pelicans,"Dia, Malik",Out,G League - Two-Way,,,0
-2026-11-26 17:45,2026-11-27,09:30 (ET),NOP@LAC,New Orleans Pelicans,"Mathurin, Bennedict",Doubtful,Injury/Illness - Left Plantar Fasciitis,15.8,8.3,0
-2026-11-26 17:45,2026-11-27,09:30 (ET),NOP@LAC,New Orleans Pelicans,"Murray, Dejounte",Out,Injury/Illness - Left Ankle Sprain,31.3,13.6,0
-2026-11-26 17:45,2026-11-27,09:30 (ET),NOP@LAC,New Orleans Pelicans,"Pierre Jr., Jaron",Out,G League - Two-Way,7.0,12.5,0
-2026-11-26 17:45,2026-11-27,09:30 (ET),NOP@LAC,New Orleans Pelicans,"Reese, Julian",Out,G League - Two-Way,5.5,12.3,0
-2026-11-26 17:45,2026-11-27,09:30 (ET),NOP@LAC,New Orleans Pelicans,"Watford, Trendon",Probable,Injury/Illness - Right Ankle Sprain,17.7,15.0,0
-2026-11-26 17:45,2026-11-27,09:30 (ET),NOP@LAC,LA Clippers,,NOT YET SUBMITTED,,,,0
+2026-11-26 18:45,2026-11-27,07:00 (ET),MIA@NYK,Miami Heat,"Antetokounmpo, Giannis",Probable,Injury/Illness - Right Groin Tendinitis,32.6,27.4,0
+2026-11-26 18:45,2026-11-27,07:00 (ET),MIA@NYK,Miami Heat,"Donaldson, Tre",Out,G League - Two-Way,,,0
+2026-11-26 18:45,2026-11-27,07:00 (ET),MIA@NYK,Miami Heat,"Goldin, Vladislav",Out,G League - Two-Way,,,0
+2026-11-26 18:45,2026-11-27,07:00 (ET),MIA@NYK,Miami Heat,"Wiggins, Andrew",Probable,Injury/Illness - Right Ankle Sprain,25.7,8.2,0
+2026-11-26 18:45,2026-11-27,07:00 (ET),MIA@NYK,New York Knicks,"Anunoby, OG",Doubtful,Injury/Illness - Left Calf Strain,32.7,14.4,0
+2026-11-26 18:45,2026-11-27,07:00 (ET),MIA@NYK,New York Knicks,"Clarkson, Jordan",Questionable,Injury/Illness - Right Plantar Fasciitis,10.6,17.9,0
+2026-11-26 18:45,2026-11-27,07:00 (ET),MIA@NYK,New York Knicks,"Drummond, Andre",Questionable,Injury/Illness - Head Injury/Illness - Left Adductor,13.5,19.0,0
+2026-11-26 18:45,2026-11-27,07:00 (ET),MIA@NYK,New York Knicks,"McBride, Miles",Questionable,Tightness,18.9,13.9,0
+2026-11-26 18:45,2026-11-27,07:30 (ET),BKN@TOR,Brooklyn Nets,"Bilodeau, Tyler",Out,G League - Two-Way,,,0
+2026-11-26 18:45,2026-11-27,07:30 (ET),BKN@TOR,Brooklyn Nets,"Jefferson, Joshua",Out,G League - On Assignment,4.0,-35.6,0
+2026-11-26 18:45,2026-11-27,07:30 (ET),BKN@TOR,Brooklyn Nets,"Powell, Drake",Out,G League - On Assignment,8.5,7.9,0
+2026-11-26 18:45,2026-11-27,07:30 (ET),BKN@TOR,Brooklyn Nets,"Traore, Nolan",Out,Injury/Illness - Right Hamstring Strain Injury/Illness - Left Knee Injury,22.1,18.1,1
+2026-11-26 18:45,2026-11-27,07:30 (ET),BKN@TOR,Brooklyn Nets,"Wagner, Moritz",Out,Management,18.3,19.5,1
+2026-11-26 18:45,2026-11-27,07:30 (ET),BKN@TOR,Toronto Raptors,"Barrett, RJ",Out,Injury/Illness - Right Hamstring Strain,33.2,15.9,0
+2026-11-26 18:45,2026-11-27,07:30 (ET),BKN@TOR,Toronto Raptors,"Bittle, Nate",Out,G League - Two-Way Injury/Illness - Left Knee Injury,,,0
+2026-11-26 18:45,2026-11-27,07:30 (ET),BKN@TOR,Toronto Raptors,"Leonard, Kawhi",Out,Management,26.0,19.7,1
+2026-11-26 18:45,2026-11-27,07:30 (ET),BKN@TOR,Toronto Raptors,"Martin, Alijah",Questionable,Injury/Illness - Left Knee Soreness,11.6,18.6,0
+2026-11-26 18:45,2026-11-27,07:30 (ET),BKN@TOR,Toronto Raptors,"McCullar Jr., Kevin",Out,G League - Two-Way,,,0
+2026-11-26 18:45,2026-11-27,07:30 (ET),BKN@TOR,Toronto Raptors,"Smith, Malachi",Out,G League - Two-Way,1.0,0.0,0
+2026-11-26 18:45,2026-11-27,07:30 (ET),MIL@DET,Milwaukee Bucks,"Jones, Kam",Out,G League - Two-Way,,,0
+2026-11-26 18:45,2026-11-27,07:30 (ET),MIL@DET,Milwaukee Bucks,"Markovic, Bogoljub",Out,G League - On Assignment,4.3,12.6,0
+2026-11-26 18:45,2026-11-27,07:30 (ET),MIL@DET,Milwaukee Bucks,"Ryan, Cormac",Out,G League - Two-Way Injury/Illness - Right Knee,,,0
+2026-11-26 18:45,2026-11-27,07:30 (ET),MIL@DET,Detroit Pistons,"Cunningham, Cade",Out,Tendinopathy,33.2,20.5,1
+2026-11-26 18:45,2026-11-27,07:30 (ET),MIL@DET,Detroit Pistons,"Duren, Jalen",Out,Injury/Illness - Right Hamstring Strain,19.0,29.9,1
+2026-11-26 18:45,2026-11-27,07:30 (ET),MIL@DET,Detroit Pistons,"Okorie, Ebuka",Out,Injury/Illness - Left Oblique Strain,4.0,9.2,0
+2026-11-26 18:45,2026-11-27,07:30 (ET),MIL@DET,Detroit Pistons,"Onyenso, Ugonna",Out,G League - Two-Way,,,0
+2026-11-26 18:45,2026-11-27,07:30 (ET),MIL@DET,Detroit Pistons,"Prince, Taurean",Out,Injury/Illness - Right Arthroscopy,7.0,12.6,0
+2026-11-26 18:45,2026-11-27,07:30 (ET),MIL@DET,Detroit Pistons,"Robinson, Duncan",Out,Injury/Illness - Left Quadriceps Strain Injury/Illness - Left Hamstring Injury,30.8,18.4,1
+2026-11-26 18:45,2026-11-27,07:30 (ET),PHI@IND,Philadelphia 76ers,"Brown, Jaylen",Out,Management,34.9,18.0,1
+2026-11-26 18:45,2026-11-27,07:30 (ET),PHI@IND,Philadelphia 76ers,"Embiid, Joel",Questionable,Injury/Illness - Illness Injury/Illness - Right Achilles Tendon,31.8,15.4,0
+2026-11-26 18:45,2026-11-27,07:30 (ET),PHI@IND,Philadelphia 76ers,"Hukporti, Ariel",Out,Rupture / Tear Injury/Illness - Right ACL Repair /,,,0
+2026-11-26 18:45,2026-11-27,07:30 (ET),PHI@IND,Indiana Pacers,"Furphy, Johnny",Out,Surgery,,,0
+2026-11-26 18:45,2026-11-27,07:30 (ET),PHI@IND,Indiana Pacers,"Haliburton, Tyrese",Out,Injury/Illness - Left Hamstring Strain Injury/Illness - Left Hamstring Injury,33.0,25.7,1
+2026-11-26 18:45,2026-11-27,07:30 (ET),PHI@IND,Indiana Pacers,"McConnell, T.J.",Questionable,Management,10.3,19.5,0
+2026-11-26 18:45,2026-11-27,07:30 (ET),PHI@IND,Indiana Pacers,"Nance Jr., Larry",Questionable,Injury/Illness - Right Ankle Bruise,14.6,11.7,0
+2026-11-26 18:45,2026-11-27,07:30 (ET),PHI@IND,Indiana Pacers,"Oubre Jr., Kelly",Questionable,Injury/Illness - Right Hand Laceration,23.4,11.2,0
+2026-11-26 18:45,2026-11-27,07:30 (ET),PHI@IND,Indiana Pacers,"Sheppard, Ben",Out,Injury/Illness - Left Meniscus Surgery,12.0,1.7,0
+2026-11-26 18:45,2026-11-27,08:00 (ET),ATL@BOS,Atlanta Hawks,"Castro, Rafael",Doubtful,G League - Two-Way,,,0
+2026-11-26 18:45,2026-11-27,08:00 (ET),ATL@BOS,Atlanta Hawks,"Gueye, Mouhamed",Out,Injury/Illness - Left Foot Fracture,,,0
+2026-11-26 18:45,2026-11-27,08:00 (ET),ATL@BOS,Atlanta Hawks,"Landale, Jock",Out,Injury/Illness - Right Great Toe Sprain,15.1,13.7,0
+2026-11-26 18:45,2026-11-27,08:00 (ET),ATL@BOS,Atlanta Hawks,"McCollum, CJ",Out,Injury/Illness - Left Calf Strain,25.6,12.8,0
+2026-11-26 18:45,2026-11-27,08:00 (ET),ATL@BOS,Atlanta Hawks,"Newell, Asa",Out,Injury/Illness - Left Great Toe Surgery Injury/Illness - Right ACL Repair /,11.0,9.8,0
+2026-11-26 18:45,2026-11-27,08:00 (ET),ATL@BOS,Atlanta Hawks,"Veesaar, Henri",Out,Surgery,,,0
+2026-11-26 18:45,2026-11-27,08:00 (ET),ATL@BOS,Atlanta Hawks,"Wilson, Jalen",Doubtful,G League - Two-Way,,,0
+2026-11-26 18:45,2026-11-27,08:00 (ET),ATL@BOS,Boston Celtics,"Carter, Devin",Out,G League - Two-Way,,,0
+2026-11-26 18:45,2026-11-27,08:00 (ET),ATL@BOS,Boston Celtics,"Mitchell, Dillon",Out,G League - Two-Way,2.0,0.0,0
+2026-11-26 18:45,2026-11-27,08:00 (ET),ATL@BOS,Boston Celtics,"Robinson, Mitchell",Questionable,Injury/Illness - Illness,17.9,16.1,0
+2026-11-26 18:45,2026-11-27,08:00 (ET),ATL@BOS,Boston Celtics,"Williams, Amari",Out,G League - Two-Way Injury/Illness - Right Medial Ankle,,,0
+2026-11-26 18:45,2026-11-27,08:30 (ET),MEM@MIN,Memphis Grizzlies,"Boozer, Cameron",Out,Sprain,32.3,14.4,0
+2026-11-26 18:45,2026-11-27,08:30 (ET),MEM@MIN,Memphis Grizzlies,"Edey, Zach",Questionable,Injury/Illness - Left Ankle Soreness,20.7,15.0,0
+2026-11-26 18:45,2026-11-27,08:30 (ET),MEM@MIN,Memphis Grizzlies,"Grant, Jerami",Out,Injury/Illness - Left Calf Strain Injury/Illness - Left 5th Metatarsal,23.6,13.0,0
+2026-11-26 18:45,2026-11-27,08:30 (ET),MEM@MIN,Memphis Grizzlies,"Jackson, GG",Out,Fracture,15.5,7.6,0
+2026-11-26 18:45,2026-11-27,08:30 (ET),MEM@MIN,Memphis Grizzlies,"Lopez, Karim",Out,G League - On Assignment Injury/Illness - Lumbar Disc,3.7,18.2,0
+2026-11-26 18:45,2026-11-27,08:30 (ET),MEM@MIN,Memphis Grizzlies,"Pippen Jr., Scotty",Out,Herniation,16.0,11.5,0
+2026-11-26 18:45,2026-11-27,08:30 (ET),MEM@MIN,Memphis Grizzlies,"Saunders, Richie",Out,Injury/Illness - Right Knee Surgery,,,0
+2026-11-26 18:45,2026-11-27,08:30 (ET),MEM@MIN,Memphis Grizzlies,"Stewart, Isaiah",Questionable,Injury/Illness - Right Hip Soreness,18.2,19.0,0
+2026-11-26 18:45,2026-11-27,08:30 (ET),MEM@MIN,Minnesota Timberwolves,"Ball, LaMelo",Questionable,Injury/Illness - Left Ankle Sprain,27.7,17.4,0
+2026-11-26 18:45,2026-11-27,08:30 (ET),MEM@MIN,Minnesota Timberwolves,"Beringer, Joan",Available,Injury/Illness - Face Mask,16.4,18.3,0
+2026-11-26 18:45,2026-11-27,08:30 (ET),MEM@MIN,Minnesota Timberwolves,"Clark, Jaylen",Out,Injury/Illness - Right Hamstring Strain Injury/Illness - Right Achilles Tendon,14.1,11.3,0
+2026-11-26 18:45,2026-11-27,08:30 (ET),MEM@MIN,Minnesota Timberwolves,"DiVincenzo, Donte",Out,Repair / Surgery Injury/Illness - Right Knee,,,0
+2026-11-26 18:45,2026-11-27,08:30 (ET),MEM@MIN,Minnesota Timberwolves,"Edwards, Anthony",Out,Arthroscopy,33.8,25.4,1
+2026-11-26 18:45,2026-11-27,08:30 (ET),MEM@MIN,Minnesota Timberwolves,"Zikarsky, Rocco",Out,G League - Two-Way,2.0,-14.0,0
+2026-11-26 18:45,2026-11-27,09:00 (ET),DAL@PHX,Dallas Mavericks,"Biberovic, Tarik",Out,Injury/Illness - Right Heel Bursitis,,,0
+2026-11-26 18:45,2026-11-27,09:00 (ET),DAL@PHX,Dallas Mavericks,"de Larrea, Sergio",Out,Injury/Illness - Right Knee Sprain,11.5,11.3,0
+2026-11-26 18:45,2026-11-27,09:00 (ET),DAL@PHX,Dallas Mavericks,"Lawal, Tobi",Out,Injury/Illness - Right Groin Strain,2.5,23.7,0
+2026-11-26 18:45,2026-11-27,09:00 (ET),DAL@PHX,Dallas Mavericks,"Lively II, Dereck",Out,Injury/Illness - Right Foot Surgery,,,0
+2026-11-26 18:45,2026-11-27,09:00 (ET),DAL@PHX,Dallas Mavericks,"Martin, Caleb",Available,Injury/Illness - Right Thumb Splint,18.4,6.8,0
+2026-11-26 18:45,2026-11-27,09:00 (ET),DAL@PHX,Phoenix Suns,,NOT YET SUBMITTED,,,,0
+2026-11-26 18:45,2026-11-27,09:30 (ET),DEN@UTA,Denver Nuggets,"Holmes II, DaRon",Out,G League - On Assignment,2.5,10.5,0
+2026-11-26 18:45,2026-11-27,09:30 (ET),DEN@UTA,Denver Nuggets,"Hopkins, Bryce",Out,G League - Two-Way,14.3,11.7,0
+2026-11-26 18:45,2026-11-27,09:30 (ET),DEN@UTA,Denver Nuggets,"Whitmore, Cam",Out,G League - Two-Way,7.5,15.4,0
+2026-11-26 18:45,2026-11-27,09:30 (ET),DEN@UTA,Utah Jazz,,NOT YET SUBMITTED,,,,0
+2026-11-26 18:45,2026-11-27,09:30 (ET),GSW@POR,Golden State Warriors,,NOT YET SUBMITTED,,,,0
+2026-11-26 18:45,2026-11-27,09:30 (ET),GSW@POR,Portland Trail Blazers,,NOT YET SUBMITTED,,,,0
+2026-11-26 18:45,2026-11-27,09:30 (ET),LAL@SAS,Los Angeles Lakers,"Grimes, Quentin",Available,Injury/Illness - Right Finger Splint Injury/Illness - Left Heel Contusion /,26.1,9.4,0
+2026-11-26 18:45,2026-11-27,09:30 (ET),LAL@SAS,Los Angeles Lakers,"Reaves, Austin",Questionable,Bone Bruise,35.2,20.3,0
+2026-11-26 18:45,2026-11-27,09:30 (ET),LAL@SAS,San Antonio Spurs,"Brown, Maliq",Out,G League - Two-Way,1.0,29.8,0
+2026-11-26 18:45,2026-11-27,09:30 (ET),LAL@SAS,San Antonio Spurs,"Fox, De'Aaron",Questionable,Injury/Illness - Right Shin Contusion Injury/Illness - Left Hip External,29.5,18.6,0
+2026-11-26 18:45,2026-11-27,09:30 (ET),LAL@SAS,San Antonio Spurs,"Harper, Dylan",Questionable,Rotator Strain,31.8,18.9,0
+2026-11-26 18:45,2026-11-27,09:30 (ET),LAL@SAS,San Antonio Spurs,"Harris, Tobias",Out,Injury/Illness - Left Calf Strain,,,0
+2026-11-26 18:45,2026-11-27,09:30 (ET),LAL@SAS,San Antonio Spurs,"Quaintance, Jayden",Out,Injury/Illness - Right Knee Surgery,,,0
+2026-11-26 18:45,2026-11-27,09:30 (ET),NOP@LAC,New Orleans Pelicans,"Dia, Malik",Out,G League - Two-Way,,,0
+2026-11-26 18:45,2026-11-27,09:30 (ET),NOP@LAC,New Orleans Pelicans,"Mathurin, Bennedict",Doubtful,Injury/Illness - Left Plantar Fasciitis,15.8,8.3,0
+2026-11-26 18:45,2026-11-27,09:30 (ET),NOP@LAC,New Orleans Pelicans,"Murray, Dejounte",Out,Injury/Illness - Left Ankle Sprain,31.3,13.6,0
+2026-11-26 18:45,2026-11-27,09:30 (ET),NOP@LAC,New Orleans Pelicans,"Pierre Jr., Jaron",Out,G League - Two-Way,7.0,12.5,0
+2026-11-26 18:45,2026-11-27,09:30 (ET),NOP@LAC,New Orleans Pelicans,"Reese, Julian",Out,G League - Two-Way,5.5,12.3,0
+2026-11-26 18:45,2026-11-27,09:30 (ET),NOP@LAC,New Orleans Pelicans,"Watford, Trendon",Probable,Injury/Illness - Right Ankle Sprain,17.7,15.0,0
+2026-11-26 18:45,2026-11-27,09:30 (ET),NOP@LAC,LA Clippers,,NOT YET SUBMITTED,,,,0
