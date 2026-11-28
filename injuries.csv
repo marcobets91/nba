@@ -1,61 +1,61 @@
 report_et,game_date,game_time,matchup,team,player,status,reason,mpg,per,key
-2026-11-28 05:15,2026-11-28,05:00 (ET),ORL@WAS,Orlando Magic,"Banchero, Paolo",Out,Sprain,34.0,25.8,1
-2026-11-28 05:15,2026-11-28,05:00 (ET),ORL@WAS,Orlando Magic,"Black, Anthony",Questionable,Injury/Illness - Back soreness,31.5,19.9,0
-2026-11-28 05:15,2026-11-28,05:00 (ET),ORL@WAS,Orlando Magic,"Castleton, Colin",Out,G League - Two-Way Injury/Illness - Left Knee Injury,3.2,30.0,0
-2026-11-28 05:15,2026-11-28,05:00 (ET),ORL@WAS,Orlando Magic,"Isaac, Jonathan",Out,Management Injury/Illness - Left Ankle injury,,,0
-2026-11-28 05:15,2026-11-28,05:00 (ET),ORL@WAS,Orlando Magic,"Nelson, Izaiyah",Out,recovery Injury/Illness - Right Partially torn,,,0
-2026-11-28 05:15,2026-11-28,05:00 (ET),ORL@WAS,Orlando Magic,"Penda, Noah",Out,hamstring Return to Competition,,,0
-2026-11-28 05:15,2026-11-28,05:00 (ET),ORL@WAS,Orlando Magic,"Porter Jr., Kevin",Out,Reconditioning,,,0
-2026-11-28 05:15,2026-11-28,05:00 (ET),ORL@WAS,Washington Wizards,"Beekman, Reece",Out,G League - Two-Way,1.0,0.0,0
-2026-11-28 05:15,2026-11-28,05:00 (ET),ORL@WAS,Washington Wizards,"Champagnie, Justin",Out,Injury/Illness - Right Foot Surgery,18.2,21.5,1
-2026-11-28 05:15,2026-11-28,05:00 (ET),ORL@WAS,Washington Wizards,"Okpara, Felix",Out,G League - Two-Way,1.7,14.3,0
-2026-11-28 05:15,2026-11-28,05:00 (ET),ORL@WAS,Washington Wizards,"Vukcevic, Tristan",Out,Injury/Illness - Left Hip Impingement Injury/Illness - Left ACL Repair /,,,0
-2026-11-28 05:15,2026-11-28,05:00 (ET),ORL@WAS,Washington Wizards,"Watkins, Jamir",Out,Surgery,,,0
-2026-11-28 05:15,2026-11-28,06:00 (ET),BKN@CHA,Brooklyn Nets,,NOT YET SUBMITTED,,,,0
-2026-11-28 05:15,2026-11-28,06:00 (ET),BKN@CHA,Charlotte Hornets,"Ajayi, Michael",Out,G League - Two-Way,,,0
-2026-11-28 05:15,2026-11-28,06:00 (ET),BKN@CHA,Charlotte Hornets,"Allen, Grayson",Questionable,Concussion Protocol,26.6,17.5,0
-2026-11-28 05:15,2026-11-28,06:00 (ET),BKN@CHA,Charlotte Hornets,"Boswell, Kylan",Out,G League - Two-Way,,,0
-2026-11-28 05:15,2026-11-28,06:00 (ET),BKN@CHA,Charlotte Hornets,"Hall, PJ",Out,G League - Two-Way Injury/Illness - Left Hip Soreness /,5.5,1.4,0
-2026-11-28 05:15,2026-11-28,06:00 (ET),BKN@CHA,Charlotte Hornets,"Kalkbrenner, Ryan",Probable,Tightness,18.8,17.2,0
-2026-11-28 05:15,2026-11-28,06:00 (ET),BKN@CHA,Charlotte Hornets,"Knueppel, Kon",Out,Injury/Illness - Left Hamstring Strain,6.0,-2.5,0
-2026-11-28 05:15,2026-11-28,06:00 (ET),BKN@CHA,Charlotte Hornets,"Schroder, Dennis",Out,Injury/Illness - Left Hamstring Strain,29.9,7.1,0
-2026-11-28 05:15,2026-11-28,08:00 (ET),IND@CHI,Indiana Pacers,,NOT YET SUBMITTED,,,,0
-2026-11-28 05:15,2026-11-28,08:00 (ET),IND@CHI,Chicago Bulls,"Awaka, Tobe",Out,G League - Two-Way,10.2,18.5,0
-2026-11-28 05:15,2026-11-28,08:00 (ET),IND@CHI,Chicago Bulls,"Essengue, Noa",Probable,Injury/Illness - Right Thumb Sprain,13.8,9.1,0
-2026-11-28 05:15,2026-11-28,08:00 (ET),IND@CHI,Chicago Bulls,"Powell, Norman",Out,Injury/Illness - Right Hamstring Strain,28.8,15.8,0
-2026-11-28 05:15,2026-11-28,08:00 (ET),IND@CHI,Chicago Bulls,"Sellers, Jaylin",Out,G League - Two-Way,8.0,13.0,0
-2026-11-28 05:15,2026-11-28,08:00 (ET),IND@CHI,Chicago Bulls,"Smith, Jalen",Probable,Injury/Illness - Gastrointestinal Illness,24.0,20.0,0
-2026-11-28 05:15,2026-11-28,08:00 (ET),IND@CHI,Chicago Bulls,"Swain, Dailyn",Out,G League - On Assignment Injury/Illness - Right Metacarpal,9.5,5.7,0
-2026-11-28 05:15,2026-11-28,08:00 (ET),IND@CHI,Chicago Bulls,"Wilson, Caleb",Out,Fracture Injury/Illness - Right Knee/ Injury,30.8,14.9,0
-2026-11-28 05:15,2026-11-28,08:00 (ET),OKC@MIL,Oklahoma City Thunder,"Holmgren, Chet",Out,Recovery,30.0,19.2,1
-2026-11-28 05:15,2026-11-28,08:00 (ET),OKC@MIL,Oklahoma City Thunder,"Mara, Aday",Out,Injury/Illness - Right Shin Contusion,21.2,16.9,0
-2026-11-28 05:15,2026-11-28,08:00 (ET),OKC@MIL,Oklahoma City Thunder,"Sorber, Thomas",Out,Injury/Illness - Right Knee Surgery,,,0
-2026-11-28 05:15,2026-11-28,08:00 (ET),OKC@MIL,Oklahoma City Thunder,"Topic, Nikola",Out,Injury/Illness - Left Hip Strain,,,0
-2026-11-28 05:15,2026-11-28,08:00 (ET),OKC@MIL,Oklahoma City Thunder,"Wallace, Cason",Out,Injury/Illness - Left Shoulder Surgery,16.3,13.1,0
-2026-11-28 05:15,2026-11-28,08:00 (ET),OKC@MIL,Oklahoma City Thunder,"Williams, Jalen",Out,Injury/Illness - Left Ankle Surgery,31.7,11.4,0
-2026-11-28 05:15,2026-11-28,08:00 (ET),OKC@MIL,Oklahoma City Thunder,"Williams, Jaylin",Out,Injury/Illness - Low Back Spasms,18.4,4.3,0
-2026-11-28 05:15,2026-11-28,08:00 (ET),OKC@MIL,Milwaukee Bucks,,NOT YET SUBMITTED,,,,0
-2026-11-28 05:15,2026-11-28,08:30 (ET),PHI@HOU,Philadelphia 76ers,,NOT YET SUBMITTED,,,,0
-2026-11-28 05:15,2026-11-28,08:30 (ET),PHI@HOU,Houston Rockets,"Adams, Steven",Questionable,Pain,8.0,20.8,0
-2026-11-28 05:15,2026-11-28,08:30 (ET),PHI@HOU,Houston Rockets,"Copeland, Quadir",Out,G League - Two-Way,,,0
-2026-11-28 05:15,2026-11-28,08:30 (ET),PHI@HOU,Houston Rockets,"Phillips, Julian",Out,G League - Two-Way,,,0
-2026-11-28 05:15,2026-11-29,03:30 (ET),MIA@CLE,Miami Heat,,NOT YET SUBMITTED,,,,0
-2026-11-28 05:15,2026-11-29,03:30 (ET),MIA@CLE,Cleveland Cavaliers,,NOT YET SUBMITTED,,,,0
-2026-11-28 05:15,2026-11-29,04:00 (ET),BOS@SAS,Boston Celtics,,NOT YET SUBMITTED,,,,0
-2026-11-28 05:15,2026-11-29,04:00 (ET),BOS@SAS,San Antonio Spurs,,NOT YET SUBMITTED,,,,0
-2026-11-28 05:15,2026-11-29,04:00 (ET),LAL@MEM,Los Angeles Lakers,,NOT YET SUBMITTED,,,,0
-2026-11-28 05:15,2026-11-29,04:00 (ET),LAL@MEM,Memphis Grizzlies,,NOT YET SUBMITTED,,,,0
-2026-11-28 05:15,2026-11-29,05:00 (ET),PHX@UTA,Phoenix Suns,,NOT YET SUBMITTED,,,,0
-2026-11-28 05:15,2026-11-29,05:00 (ET),PHX@UTA,Utah Jazz,,NOT YET SUBMITTED,,,,0
-2026-11-28 05:15,2026-11-29,06:00 (ET),ATL@NYK,Atlanta Hawks,,NOT YET SUBMITTED,,,,0
-2026-11-28 05:15,2026-11-29,06:00 (ET),ATL@NYK,New York Knicks,,NOT YET SUBMITTED,,,,0
-2026-11-28 05:15,2026-11-29,06:00 (ET),DEN@TOR,Denver Nuggets,,NOT YET SUBMITTED,,,,0
-2026-11-28 05:15,2026-11-29,06:00 (ET),DEN@TOR,Toronto Raptors,,NOT YET SUBMITTED,,,,0
-2026-11-28 05:15,2026-11-29,06:00 (ET),NOP@POR,New Orleans Pelicans,,NOT YET SUBMITTED,,,,0
-2026-11-28 05:15,2026-11-29,06:00 (ET),NOP@POR,Portland Trail Blazers,,NOT YET SUBMITTED,,,,0
-2026-11-28 05:15,2026-11-29,06:00 (ET),ORL@DET,Orlando Magic,,NOT YET SUBMITTED,,,,0
-2026-11-28 05:15,2026-11-29,06:00 (ET),ORL@DET,Detroit Pistons,,NOT YET SUBMITTED,,,,0
-2026-11-28 05:15,2026-11-29,08:30 (ET),LAC@GSW,LA Clippers,,NOT YET SUBMITTED,,,,0
-2026-11-28 05:15,2026-11-29,08:30 (ET),LAC@GSW,Golden State Warriors,,NOT YET SUBMITTED,,,,0
-2026-11-28 05:15,2026-11-29,09:00 (ET),MIN@SAC,Minnesota Timberwolves,,NOT YET SUBMITTED,,,,0
-2026-11-28 05:15,2026-11-29,09:00 (ET),MIN@SAC,Sacramento Kings,,NOT YET SUBMITTED,,,,0
+2026-11-28 06:15,2026-11-28,05:00 (ET),ORL@WAS,Orlando Magic,"Banchero, Paolo",Out,Sprain,34.0,25.8,1
+2026-11-28 06:15,2026-11-28,05:00 (ET),ORL@WAS,Orlando Magic,"Black, Anthony",Questionable,Injury/Illness - Back soreness,31.5,19.9,0
+2026-11-28 06:15,2026-11-28,05:00 (ET),ORL@WAS,Orlando Magic,"Castleton, Colin",Out,G League - Two-Way Injury/Illness - Left Knee Injury,3.2,30.0,0
+2026-11-28 06:15,2026-11-28,05:00 (ET),ORL@WAS,Orlando Magic,"Isaac, Jonathan",Out,Management Injury/Illness - Left Ankle injury,,,0
+2026-11-28 06:15,2026-11-28,05:00 (ET),ORL@WAS,Orlando Magic,"Nelson, Izaiyah",Out,recovery Injury/Illness - Right Partially torn,,,0
+2026-11-28 06:15,2026-11-28,05:00 (ET),ORL@WAS,Orlando Magic,"Penda, Noah",Out,hamstring Return to Competition,,,0
+2026-11-28 06:15,2026-11-28,05:00 (ET),ORL@WAS,Orlando Magic,"Porter Jr., Kevin",Out,Reconditioning,,,0
+2026-11-28 06:15,2026-11-28,05:00 (ET),ORL@WAS,Washington Wizards,"Beekman, Reece",Out,G League - Two-Way,1.0,0.0,0
+2026-11-28 06:15,2026-11-28,05:00 (ET),ORL@WAS,Washington Wizards,"Champagnie, Justin",Out,Injury/Illness - Right Foot Surgery,18.2,21.5,1
+2026-11-28 06:15,2026-11-28,05:00 (ET),ORL@WAS,Washington Wizards,"Okpara, Felix",Out,G League - Two-Way,1.7,14.3,0
+2026-11-28 06:15,2026-11-28,05:00 (ET),ORL@WAS,Washington Wizards,"Vukcevic, Tristan",Out,Injury/Illness - Left Hip Impingement Injury/Illness - Left ACL Repair /,,,0
+2026-11-28 06:15,2026-11-28,05:00 (ET),ORL@WAS,Washington Wizards,"Watkins, Jamir",Out,Surgery,,,0
+2026-11-28 06:15,2026-11-28,06:00 (ET),BKN@CHA,Brooklyn Nets,,NOT YET SUBMITTED,,,,0
+2026-11-28 06:15,2026-11-28,06:00 (ET),BKN@CHA,Charlotte Hornets,"Ajayi, Michael",Out,G League - Two-Way,,,0
+2026-11-28 06:15,2026-11-28,06:00 (ET),BKN@CHA,Charlotte Hornets,"Allen, Grayson",Questionable,Concussion Protocol,26.6,17.5,0
+2026-11-28 06:15,2026-11-28,06:00 (ET),BKN@CHA,Charlotte Hornets,"Boswell, Kylan",Out,G League - Two-Way,,,0
+2026-11-28 06:15,2026-11-28,06:00 (ET),BKN@CHA,Charlotte Hornets,"Hall, PJ",Out,G League - Two-Way Injury/Illness - Left Hip Soreness /,5.5,1.4,0
+2026-11-28 06:15,2026-11-28,06:00 (ET),BKN@CHA,Charlotte Hornets,"Kalkbrenner, Ryan",Probable,Tightness,18.8,17.2,0
+2026-11-28 06:15,2026-11-28,06:00 (ET),BKN@CHA,Charlotte Hornets,"Knueppel, Kon",Out,Injury/Illness - Left Hamstring Strain,6.0,-2.5,0
+2026-11-28 06:15,2026-11-28,06:00 (ET),BKN@CHA,Charlotte Hornets,"Schroder, Dennis",Out,Injury/Illness - Left Hamstring Strain,29.9,7.1,0
+2026-11-28 06:15,2026-11-28,08:00 (ET),IND@CHI,Indiana Pacers,,NOT YET SUBMITTED,,,,0
+2026-11-28 06:15,2026-11-28,08:00 (ET),IND@CHI,Chicago Bulls,"Awaka, Tobe",Out,G League - Two-Way,10.2,18.5,0
+2026-11-28 06:15,2026-11-28,08:00 (ET),IND@CHI,Chicago Bulls,"Essengue, Noa",Probable,Injury/Illness - Right Thumb Sprain,13.8,9.1,0
+2026-11-28 06:15,2026-11-28,08:00 (ET),IND@CHI,Chicago Bulls,"Powell, Norman",Out,Injury/Illness - Right Hamstring Strain,28.8,15.8,0
+2026-11-28 06:15,2026-11-28,08:00 (ET),IND@CHI,Chicago Bulls,"Sellers, Jaylin",Out,G League - Two-Way,8.0,13.0,0
+2026-11-28 06:15,2026-11-28,08:00 (ET),IND@CHI,Chicago Bulls,"Smith, Jalen",Probable,Injury/Illness - Gastrointestinal Illness,24.0,20.0,0
+2026-11-28 06:15,2026-11-28,08:00 (ET),IND@CHI,Chicago Bulls,"Swain, Dailyn",Out,G League - On Assignment Injury/Illness - Right Metacarpal,9.5,5.7,0
+2026-11-28 06:15,2026-11-28,08:00 (ET),IND@CHI,Chicago Bulls,"Wilson, Caleb",Out,Fracture Injury/Illness - Right Knee/ Injury,30.8,14.9,0
+2026-11-28 06:15,2026-11-28,08:00 (ET),OKC@MIL,Oklahoma City Thunder,"Holmgren, Chet",Out,Recovery,30.0,19.2,1
+2026-11-28 06:15,2026-11-28,08:00 (ET),OKC@MIL,Oklahoma City Thunder,"Mara, Aday",Out,Injury/Illness - Right Shin Contusion,21.2,16.9,0
+2026-11-28 06:15,2026-11-28,08:00 (ET),OKC@MIL,Oklahoma City Thunder,"Sorber, Thomas",Out,Injury/Illness - Right Knee Surgery,,,0
+2026-11-28 06:15,2026-11-28,08:00 (ET),OKC@MIL,Oklahoma City Thunder,"Topic, Nikola",Out,Injury/Illness - Left Hip Strain,,,0
+2026-11-28 06:15,2026-11-28,08:00 (ET),OKC@MIL,Oklahoma City Thunder,"Wallace, Cason",Out,Injury/Illness - Left Shoulder Surgery,16.3,13.1,0
+2026-11-28 06:15,2026-11-28,08:00 (ET),OKC@MIL,Oklahoma City Thunder,"Williams, Jalen",Out,Injury/Illness - Left Ankle Surgery,31.7,11.4,0
+2026-11-28 06:15,2026-11-28,08:00 (ET),OKC@MIL,Oklahoma City Thunder,"Williams, Jaylin",Out,Injury/Illness - Low Back Spasms,18.4,4.3,0
+2026-11-28 06:15,2026-11-28,08:00 (ET),OKC@MIL,Milwaukee Bucks,,NOT YET SUBMITTED,,,,0
+2026-11-28 06:15,2026-11-28,08:30 (ET),PHI@HOU,Philadelphia 76ers,,NOT YET SUBMITTED,,,,0
+2026-11-28 06:15,2026-11-28,08:30 (ET),PHI@HOU,Houston Rockets,"Adams, Steven",Questionable,Pain,8.0,20.8,0
+2026-11-28 06:15,2026-11-28,08:30 (ET),PHI@HOU,Houston Rockets,"Copeland, Quadir",Out,G League - Two-Way,,,0
+2026-11-28 06:15,2026-11-28,08:30 (ET),PHI@HOU,Houston Rockets,"Phillips, Julian",Out,G League - Two-Way,,,0
+2026-11-28 06:15,2026-11-29,03:30 (ET),MIA@CLE,Miami Heat,,NOT YET SUBMITTED,,,,0
+2026-11-28 06:15,2026-11-29,03:30 (ET),MIA@CLE,Cleveland Cavaliers,,NOT YET SUBMITTED,,,,0
+2026-11-28 06:15,2026-11-29,04:00 (ET),BOS@SAS,Boston Celtics,,NOT YET SUBMITTED,,,,0
+2026-11-28 06:15,2026-11-29,04:00 (ET),BOS@SAS,San Antonio Spurs,,NOT YET SUBMITTED,,,,0
+2026-11-28 06:15,2026-11-29,04:00 (ET),LAL@MEM,Los Angeles Lakers,,NOT YET SUBMITTED,,,,0
+2026-11-28 06:15,2026-11-29,04:00 (ET),LAL@MEM,Memphis Grizzlies,,NOT YET SUBMITTED,,,,0
+2026-11-28 06:15,2026-11-29,05:00 (ET),PHX@UTA,Phoenix Suns,,NOT YET SUBMITTED,,,,0
+2026-11-28 06:15,2026-11-29,05:00 (ET),PHX@UTA,Utah Jazz,,NOT YET SUBMITTED,,,,0
+2026-11-28 06:15,2026-11-29,06:00 (ET),ATL@NYK,Atlanta Hawks,,NOT YET SUBMITTED,,,,0
+2026-11-28 06:15,2026-11-29,06:00 (ET),ATL@NYK,New York Knicks,,NOT YET SUBMITTED,,,,0
+2026-11-28 06:15,2026-11-29,06:00 (ET),DEN@TOR,Denver Nuggets,,NOT YET SUBMITTED,,,,0
+2026-11-28 06:15,2026-11-29,06:00 (ET),DEN@TOR,Toronto Raptors,,NOT YET SUBMITTED,,,,0
+2026-11-28 06:15,2026-11-29,06:00 (ET),NOP@POR,New Orleans Pelicans,,NOT YET SUBMITTED,,,,0
+2026-11-28 06:15,2026-11-29,06:00 (ET),NOP@POR,Portland Trail Blazers,,NOT YET SUBMITTED,,,,0
+2026-11-28 06:15,2026-11-29,06:00 (ET),ORL@DET,Orlando Magic,,NOT YET SUBMITTED,,,,0
+2026-11-28 06:15,2026-11-29,06:00 (ET),ORL@DET,Detroit Pistons,,NOT YET SUBMITTED,,,,0
+2026-11-28 06:15,2026-11-29,08:30 (ET),LAC@GSW,LA Clippers,,NOT YET SUBMITTED,,,,0
+2026-11-28 06:15,2026-11-29,08:30 (ET),LAC@GSW,Golden State Warriors,,NOT YET SUBMITTED,,,,0
+2026-11-28 06:15,2026-11-29,09:00 (ET),MIN@SAC,Minnesota Timberwolves,,NOT YET SUBMITTED,,,,0
+2026-11-28 06:15,2026-11-29,09:00 (ET),MIN@SAC,Sacramento Kings,,NOT YET SUBMITTED,,,,0
